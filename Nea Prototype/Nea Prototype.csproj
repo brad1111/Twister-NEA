@@ -55,16 +55,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Algorithms\Rotation.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Characters\BotPlayer.cs" />
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Characters\PlayerOne.cs" />
+    <Compile Include="Characters\PlayerTwo.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\Side.cs" />
+    <Compile Include="GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Grid\CharacterItem.cs" />
+    <Compile Include="Grid\GameGrid.cs" />
+    <Compile Include="Grid\GridItem.cs" />
+    <Compile Include="Grid\IGridItem.cs" />
+    <Compile Include="Grid\NonWalkable.cs" />
+    <Compile Include="Grid\Position.cs" />
+    <Compile Include="Grid\Walkable.cs" />
+    <Compile Include="Level\ExitPlacement.cs" />
+    <Compile Include="Level\Level.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -96,8 +119,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

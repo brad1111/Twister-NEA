@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using Nea_Prototype.Enums;
 
 namespace Nea_Prototype.Characters
 {
@@ -7,9 +10,13 @@ namespace Nea_Prototype.Characters
         public PlayerOne()
         {
             weight = 1;
-            sprite = new Image();
+            sprite = new CachedBitmap(new BitmapImage(new Uri("PlayerOne.png")), BitmapCreateOptions.None,
+                BitmapCacheOption.Default);
         }
 
-        
+        public void Move(Direction direction)
+        {
+
+        }
     }
 }

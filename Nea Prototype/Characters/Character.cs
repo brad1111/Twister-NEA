@@ -1,24 +1,32 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Media;
+using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Characters
 {
-    public class Character
+    public class Character : IGridItem
     {
         protected int weight;
-        protected Image sprite;
+        protected ImageSource sprite;
         protected int score;
+        private Position location;
 
         /// <summary>
         /// Checks for collisions
         /// </summary>
         /// <param name=""></param>
-        public void Collide(int x, int y)
+        public virtual void Collide(int x, int y)
         {
 
         }
 
         public int GetWeight => weight;
-        public Image GetSprite => sprite;
+
+        public ImageSource GetSprite()
+        {
+            return sprite;
+        }
+    
 
         public int GetScore
         {
@@ -26,5 +34,6 @@ namespace Nea_Prototype.Characters
             set => score = value;
         }
 
+        public Position GetPosition => location;
     }
 }
