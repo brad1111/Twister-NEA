@@ -13,26 +13,30 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Nea_Prototype
+namespace Nea_Prototype.Grid
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GridItem.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GridItem : UserControl, IGridItem
     {
-        GamePage page = new GamePage();
-
-        public MainWindow()
+        public GridItem()
         {
             InitializeComponent();
-            Frame naviFrame = new Frame();
-            this.Content = naviFrame;
-            naviFrame.Navigate(page);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        protected ImageSource sprite;
+        protected Position position;
+
+        public ImageSource GetSprite()
         {
-            page.Page_KeyDown(sender, e);
+            //return sprite;
+            return new BitmapImage(new Uri("PlayerOne.png", UriKind.Relative));
+        }
+
+        public Position GetPosition()
+        {
+            return position;
         }
     }
 }

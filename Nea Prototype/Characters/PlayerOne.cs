@@ -10,7 +10,7 @@ namespace Nea_Prototype.Characters
         public PlayerOne()
         {
             weight = 1;
-            sprite = new CachedBitmap(new BitmapImage(new Uri("PlayerOne.png")), BitmapCreateOptions.None,
+            sprite = new CachedBitmap(new BitmapImage(new Uri("PlayerOne.png", UriKind.Relative)), BitmapCreateOptions.None,
                 BitmapCacheOption.Default);
         }
 

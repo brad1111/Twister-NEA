@@ -59,6 +59,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Grid\GridItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -81,11 +85,15 @@
     </Compile>
     <Compile Include="Grid\CharacterItem.cs" />
     <Compile Include="Grid\GameGrid.cs" />
-    <Compile Include="Grid\GridItem.cs" />
+    <Compile Include="Grid\GridItem.xaml.cs">
+      <DependentUpon>GridItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Grid\LegacyGridItem.cs" />
     <Compile Include="Grid\IGridItem.cs" />
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Position.cs" />
     <Compile Include="Grid\Walkable.cs" />
+    <Compile Include="KeyBindings.cs" />
     <Compile Include="Level\ExitPlacement.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -119,6 +127,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="PlayerOne.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

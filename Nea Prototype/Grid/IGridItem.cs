@@ -7,5 +7,6 @@ namespace Nea_Prototype.Grid
     public interface IGridItem
     {
         ImageSource GetSprite();
+        Position GetPosition();
     }
 }

@@ -31,9 +31,10 @@ namespace Nea_Prototype.Algorithms
 
                 int moment = posFromCentre * character.GetWeight;
 
-                totalMomentFromCentre += moment
+                totalMomentFromCentre += moment;
             }
 
+            return (totalMomentFromCentre / Math.Abs(totalMomentFromCentre));
         }
     }
 }
