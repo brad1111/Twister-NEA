@@ -88,7 +88,6 @@
     <Compile Include="Grid\GridItem.xaml.cs">
       <DependentUpon>GridItem.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Grid\LegacyGridItem.cs" />
     <Compile Include="Grid\IGridItem.cs" />
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Position.cs" />
@@ -129,7 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PlayerOne.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

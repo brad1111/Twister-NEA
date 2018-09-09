@@ -4,7 +4,7 @@ using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Characters
 {
-    public class Character : IGridItem
+    public class Character
     {
         protected int weight;
         protected ImageSource sprite;

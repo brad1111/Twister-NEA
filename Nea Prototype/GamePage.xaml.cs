@@ -24,7 +24,7 @@ namespace Nea_Prototype
     public partial class GamePage : Page
     {
         private DispatcherTimer timer;
-        private GridItem character = new GridItem();
+        private CharacterItem character = new CharacterItem(new PlayerOne());
 
         public GamePage()
         {

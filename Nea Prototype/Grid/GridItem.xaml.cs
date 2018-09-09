@@ -23,7 +23,10 @@ namespace Nea_Prototype.Grid
         public GridItem()
         {
             InitializeComponent();
+            imgGridImg.Source = GetSprite();
+            
         }
+        
 
         protected ImageSource sprite;
         protected Position position;
@@ -31,7 +34,7 @@ namespace Nea_Prototype.Grid
         public ImageSource GetSprite()
         {
             //return sprite;
-            return new BitmapImage(new Uri("PlayerOne.png", UriKind.Relative));
+            return new BitmapImage(new Uri("component/PlayerOne.png"));
         }
 
         public Position GetPosition()

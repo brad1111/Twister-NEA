@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Nea_Prototype.Grid"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="40" Height="40" Width="40">
-    <Image x:Name="imgGridImg" Source="../PlayerOne.png"/>
+    <Image x:Name="imgGridImg"/>
 </UserControl>
