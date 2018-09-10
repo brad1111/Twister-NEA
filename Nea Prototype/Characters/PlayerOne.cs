@@ -10,8 +10,13 @@ namespace Nea_Prototype.Characters
         public PlayerOne()
         {
             weight = 1;
-            sprite = new CachedBitmap(new BitmapImage(new Uri("PlayerOne.png", UriKind.Relative)), BitmapCreateOptions.None,
-                BitmapCacheOption.Default);
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri("PlayerOne.png", UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            sprite = src;
+
         }
 
         public void Move(Direction direction)

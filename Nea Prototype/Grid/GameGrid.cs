@@ -5,7 +5,7 @@ namespace Nea_Prototype.Grid
     public class GameGrid
     {
         private Character[] characters;
-        private GridItem[] gridItems;
+        private GridItemView[] gridItems;
 
         public GameGrid()
         {

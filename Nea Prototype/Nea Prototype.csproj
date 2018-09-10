@@ -59,7 +59,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Grid\GridItem.xaml">
+    <Page Include="Grid\GridItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,10 +85,11 @@
     </Compile>
     <Compile Include="Grid\CharacterItem.cs" />
     <Compile Include="Grid\GameGrid.cs" />
-    <Compile Include="Grid\GridItem.xaml.cs">
-      <DependentUpon>GridItem.xaml</DependentUpon>
+    <Compile Include="Grid\GridItem.cs" />
+    <Compile Include="Grid\GridItemView.xaml.cs">
+      <DependentUpon>GridItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Grid\IGridItem.cs" />
+    <Compile Include="Grid\GridItemViewModel.cs" />
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Position.cs" />
     <Compile Include="Grid\Walkable.cs" />
@@ -101,6 +102,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -127,9 +129,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PlayerOne.png">
+    <Content Include="PlayerOne.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,10 +25,12 @@ namespace Nea_Prototype
     {
         private DispatcherTimer timer;
         private CharacterItem character = new CharacterItem(new PlayerOne());
+        private GridItemView characterView;
 
         public GamePage()
         {
             InitializeComponent();
+            characterView = new GridItemView(character);
             timer = new DispatcherTimer()
             {
                 //Every ~1/60 of a second update
@@ -37,9 +39,9 @@ namespace Nea_Prototype
             timer.Tick += (s, e) => TimerTick();
             Loaded += (s, e) =>
             {
-                cvsPlayArea.Children.Add(character);
-                Canvas.SetLeft(character, 40);
-                Canvas.SetTop(character, 40);
+                cvsPlayArea.Children.Add(characterView);
+                Canvas.SetLeft(characterView, 40);
+                Canvas.SetTop(characterView, 40);
 
                 //Canvas.SetLeft(character, 40);
                 //Canvas.SetTop(character, 40);
@@ -60,20 +62,20 @@ namespace Nea_Prototype
             switch (e.Key)
             {
                 case Key.Right:
-                    getLeft = Canvas.GetLeft(character);
-                    Canvas.SetLeft(character, getLeft + Constants.KEYPRESS_PX_MOVED);
+                    getLeft = Canvas.GetLeft(characterView);
+                    Canvas.SetLeft(characterView, getLeft + Constants.KEYPRESS_PX_MOVED);
                     break;
                 case Key.Left:
-                    getLeft = Canvas.GetLeft(character);
-                    Canvas.SetLeft(character, getLeft - Constants.KEYPRESS_PX_MOVED);
+                    getLeft = Canvas.GetLeft(characterView);
+                    Canvas.SetLeft(characterView, getLeft - Constants.KEYPRESS_PX_MOVED);
                     break;
                 case Key.Up:
-                    getUp = Canvas.GetTop(character);
-                    Canvas.SetTop(character, getUp - Constants.KEYPRESS_PX_MOVED);
+                    getUp = Canvas.GetTop(characterView);
+                    Canvas.SetTop(characterView, getUp - Constants.KEYPRESS_PX_MOVED);
                     break;
                 case Key.Down:
-                    getUp = Canvas.GetTop(character);
-                    Canvas.SetTop(character, getUp + Constants.KEYPRESS_PX_MOVED);
+                    getUp = Canvas.GetTop(characterView);
+                    Canvas.SetTop(characterView, getUp + Constants.KEYPRESS_PX_MOVED);
                     break;
                 default:
                     break;
