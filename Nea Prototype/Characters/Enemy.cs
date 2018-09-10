@@ -10,7 +10,12 @@ namespace Nea_Prototype.Characters
         public Enemy()
         {
             weight = 1;
-            sprite = new CachedBitmap(new BitmapImage(new Uri("Enemy.png")), BitmapCreateOptions.None, BitmapCacheOption.Default);
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri("Enemy.png", UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            sprite = src;
         }
 
         public override void Collide(int x, int y)

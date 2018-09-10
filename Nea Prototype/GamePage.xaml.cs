@@ -26,11 +26,14 @@ namespace Nea_Prototype
         private DispatcherTimer timer;
         private CharacterItem character = new CharacterItem(new PlayerOne());
         private GridItemView characterView;
+        private CharacterItem enemy = new CharacterItem(new PlayerTwo());
+        private GridItemView enemyView;
 
         public GamePage()
         {
             InitializeComponent();
             characterView = new GridItemView(character);
+            enemyView = new GridItemView(enemy);
             timer = new DispatcherTimer()
             {
                 //Every ~1/60 of a second update
@@ -43,6 +46,9 @@ namespace Nea_Prototype
                 Canvas.SetLeft(characterView, 40);
                 Canvas.SetTop(characterView, 40);
 
+                cvsPlayArea.Children.Add(enemyView);
+                Canvas.SetRight(enemyView, 40);
+                Canvas.SetBottom(enemyView, 40);
                 //Canvas.SetLeft(character, 40);
                 //Canvas.SetTop(character, 40);
 
