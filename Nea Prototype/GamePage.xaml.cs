@@ -31,6 +31,7 @@ namespace Nea_Prototype
         private GridItemView enemyView;
         private NonWalkable nonWalkableTile = new NonWalkable();
         private GridItemView nonwalkableView;
+        private Storyboard rotationStoryboard = null;
 
         public GamePage()
         {
@@ -66,18 +67,23 @@ namespace Nea_Prototype
 
         private void StoryBoardRotation()
         {
-            Storyboard storyboard = new Storyboard();
-            storyboard.Duration = new Duration(new TimeSpan(0,0,1));
-            DoubleAnimation animation = new DoubleAnimation(){
-                From = 0,
-                To = 360,
-                Duration = storyboard.Duration
-            };
-            storyboard.Children.Add(animation);
-            Storyboard.SetTarget(animation, cvsPlayArea);
-            Storyboard.SetTargetProperty(animation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+            if (rotationStoryboard is null || rotationStoryboard?.GetCurrentProgress() == 1.0)
+            {
+                rotationStoryboard = new Storyboard();
+                rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 1));
+                DoubleAnimation animation = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = 30,
+                    Duration = rotationStoryboard.Duration
+                };
+                rotationStoryboard.Children.Add(animation);
+                Storyboard.SetTarget(animation, cvsPlayArea);
+                Storyboard.SetTargetProperty(animation,
+                    new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
 
-            storyboard.Begin();
+                rotationStoryboard.Begin();
+            }
         }
 
         private void TimerTick()
@@ -110,6 +116,7 @@ namespace Nea_Prototype
                 default:
                     break;
             }
+            
             StoryBoardRotation();
         }
     }
