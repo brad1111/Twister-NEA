@@ -132,6 +132,9 @@
     <Content Include="Enemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="NonWalkable.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="PlayerOne.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
