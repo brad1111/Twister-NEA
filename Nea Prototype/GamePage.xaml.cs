@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -62,6 +63,23 @@ namespace Nea_Prototype
             };
         }
 
+
+        private void StoryBoardRotation()
+        {
+            Storyboard storyboard = new Storyboard();
+            storyboard.Duration = new Duration(new TimeSpan(0,0,1));
+            DoubleAnimation animation = new DoubleAnimation(){
+                From = 0,
+                To = 360,
+                Duration = storyboard.Duration
+            };
+            storyboard.Children.Add(animation);
+            Storyboard.SetTarget(animation, cvsPlayArea);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+
+            storyboard.Begin();
+        }
+
         private void TimerTick()
         {
 
@@ -92,7 +110,7 @@ namespace Nea_Prototype
                 default:
                     break;
             }
-
+            StoryBoardRotation();
         }
     }
 }
