@@ -12,7 +12,7 @@ namespace Nea_Prototype
     /// </summary>
     public partial class GamePage : Page
     {
-        private DispatcherTimer timer;
+        private DispatcherTimer keyboardInputTimer;
         private CharacterItem character = new CharacterItem(new PlayerOne());
         private GridItemView characterView;
         private CharacterItem enemy = new CharacterItem(new PlayerTwo());
@@ -29,12 +29,12 @@ namespace Nea_Prototype
             enemyView = new GridItemView(enemy);
             nonwalkableView = new GridItemView(nonWalkableTile);
             walkableView = new GridItemView(walkableTile);
-            timer = new DispatcherTimer()
+            keyboardInputTimer = new DispatcherTimer()
             {
-                //Every ~1/60 of a second update
-                Interval = new TimeSpan(0, 0, 0, 0, 17)
+                //Every ~1/1000 of a second update
+                Interval = new TimeSpan(0, 0, 0, 0, 1)
             };
-            timer.Tick += TimerTick;
+            keyboardInputTimer.Tick += KeyboardInputTimerTick;
             
             Loaded += (s, e) =>
             {
@@ -55,11 +55,11 @@ namespace Nea_Prototype
                 cvsPlayArea.Children.Add(walkableView);
                 Canvas.SetTop(walkableView, 40);
                 Canvas.SetRight(walkableView,40);
-                timer.Start();
+                keyboardInputTimer.Start();
             };
         }
 
-        private void TimerTick(object sender, EventArgs e)
+        private void KeyboardInputTimerTick(object sender, EventArgs e)
         {
             //Timer is used for keyboard inputs so that the user can press two directions
             //and go diagonally, and so 2 players can play at once
