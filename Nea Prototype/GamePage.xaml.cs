@@ -30,6 +30,8 @@ namespace Nea_Prototype
         private GridItemView enemyView;
         private NonWalkable nonWalkableTile = new NonWalkable();
         private GridItemView nonwalkableView;
+        private Walkable walkableTile = new Walkable();
+        private GridItemView walkableView;
 
         public GamePage()
         {
@@ -37,6 +39,7 @@ namespace Nea_Prototype
             characterView = new GridItemView(character);
             enemyView = new GridItemView(enemy);
             nonwalkableView = new GridItemView(nonWalkableTile);
+            walkableView = new GridItemView(walkableTile);
             timer = new DispatcherTimer()
             {
                 //Every ~1/60 of a second update
@@ -59,6 +62,9 @@ namespace Nea_Prototype
                 Canvas.SetBottom(nonwalkableView, 40);
                 Canvas.SetLeft(nonwalkableView, 40);
 
+                cvsPlayArea.Children.Add(walkableView);
+                Canvas.SetTop(walkableView, 40);
+                Canvas.SetRight(walkableView,40);
             };
         }
 

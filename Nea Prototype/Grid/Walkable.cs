@@ -7,8 +7,7 @@ namespace Nea_Prototype.Grid
     {
         public Walkable()
         {
-            sprite = new CachedBitmap(new BitmapImage(new Uri("Walkable.png")), BitmapCreateOptions.None,
-                BitmapCacheOption.Default);
+            SetupSprite("Walkable.png");
         }        
     }
 }
