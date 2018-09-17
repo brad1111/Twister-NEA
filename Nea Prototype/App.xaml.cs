@@ -15,10 +15,20 @@ namespace Nea_Prototype
     public partial class App : Application
     {
         [STAThread]
-        public static void Main()
+        public static void Main(params string[] inputStrings)
         {
-            LevelIO.CreateJSON();
-            LevelIO.ReadJSON("testing.json");
+            //Creates a new json file
+            if (inputStrings.Length > 0 && inputStrings[0] == "create")
+            {
+                LevelIO.CreateJSON();
+            }
+            else
+            {
+                //starts the WPF UI
+                Nea_Prototype.App app = new App();
+                app.InitializeComponent();
+                app.Run();
+            }
         }
     }
 }
