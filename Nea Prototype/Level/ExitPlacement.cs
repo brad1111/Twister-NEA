@@ -4,24 +4,32 @@ namespace Nea_Prototype.Level
 {
     public class ExitPlacement
     {
+        public ExitPlacement(int heightFromAnchor, Side sideplaced, int length)
+        {
+            this.heightFromAnchor = heightFromAnchor;
+            this.sidePlaced = sideplaced;
+            this.length = length;
+        }
+
+
         private int heightFromAnchor;
         private Side sidePlaced;
         private int length;
 
 
-        public int GetHeightFromAnchor()
+        public int HeightFromAnchor
         {
-            return heightFromAnchor;
+            get => heightFromAnchor;
         }
 
-        public Side GetSidePlaced()
+        public Side SidePlaced
         {
-            return sidePlaced;
+            get => sidePlaced;
         }
 
-        public int GetLength()
+        public int Length
         {
-            return length;
+            get => length;
         }
     }
 }
