@@ -12,7 +12,6 @@ namespace Nea_Prototype.Grid
         protected ImageSource sprite;
         protected Position location;
 
-
         public ImageSource Sprite
         {
             get => sprite;

@@ -5,5 +5,6 @@
         public const int GRID_TILES_XY = 10;
         public const int CENTRE_TILE_XY = 5;
         public const int KEYPRESS_PX_MOVED = 1;
+        public const int GRID_ITEM_WIDTH = 40;
     }
 }

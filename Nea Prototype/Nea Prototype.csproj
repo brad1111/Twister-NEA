@@ -82,6 +82,7 @@
     <Compile Include="Characters\PlayerTwo.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\EnemyType.cs" />
     <Compile Include="Enums\Side.cs" />
     <Compile Include="GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
