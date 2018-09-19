@@ -155,11 +155,11 @@ namespace Nea_Prototype.Level
             {
                 case Direction.Up:
                     topPos = Canvas.GetTop(itemView);
-                    Canvas.SetLeft(itemView, topPos - Constants.KEYPRESS_PX_MOVED);
+                    Canvas.SetTop(itemView, topPos - Constants.KEYPRESS_PX_MOVED);
                     break;
                 case Direction.Down:
                     topPos = Canvas.GetTop(itemView);
-                    Canvas.SetLeft(itemView, topPos + Constants.KEYPRESS_PX_MOVED);
+                    Canvas.SetTop(itemView, topPos + Constants.KEYPRESS_PX_MOVED);
                     break;
                 case Direction.Left:
                     leftPos = Canvas.GetLeft(itemView);
