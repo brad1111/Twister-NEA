@@ -112,7 +112,7 @@ namespace Nea_Prototype
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
-
+            KeyboardInputTimerTick(sender, e);
         }
     }
 }
