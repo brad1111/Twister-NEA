@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Xml.Schema;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
@@ -10,14 +12,21 @@ namespace Nea_Prototype.Level
 {
     public class Level
     {
-        [JsonIgnore]
-        private GameGrid grid;
+        [JsonIgnore] private GameGrid grid;
 
-        [JsonIgnore] 
-        private EnemyType enemyType;
-        [JsonProperty("StartLocations")]
-        public int[,] gridStartLocations { get; set; }
-        public ExitPlacement ExitLocation { get; set; }
+        [JsonIgnore] private EnemyType enemyType;
+        [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
+        public ExitPlacement ExitLocation { get; internal set; }
+
+        private int yLength()
+        {
+            return gridStartLocations.GetLength(0);
+        }
+
+        private int xLength()
+        {
+            return gridStartLocations.GetLength(1); 
+        }
 
         /// <summary>
         /// Only used for LevelIO.CreateJSON()
@@ -31,7 +40,7 @@ namespace Nea_Prototype.Level
         /// Normal usage of create level with the gridStartLocations
         /// </summary>
         /// <param name="gridStartLocations">The locations where all the items on the grid start</param>
-        public Level(int[,] gridStartLocations, EnemyType enemyType)
+        public Level(EnemyType enemyType)
         {
             this.gridStartLocations = gridStartLocations;
             this.enemyType = enemyType;
@@ -39,20 +48,26 @@ namespace Nea_Prototype.Level
 
         public void SetupGrid(ref Canvas gameCanvas)
         {
-
+            DecodeGridStartLocations();
+            for (int y = 0; y < gridStartLocations.GetLength(0); y++)
+            {
+                for (int x = 0; x < gridStartLocations.GetLength(1); x++)
+                {
+                    gameCanvas.Children.Add(grid.GridItemsViews[y, x]);
+                    MoveItemToPlace(ref grid.GridItemsViews[y,x], grid.GridItems[y,x].Position);
+                }
+            }
         }
 
         private void DecodeGridStartLocations()
         {
-            int yLength = gridStartLocations.GetLength(0);
-            int xLength = gridStartLocations.GetLength(1);
-
-            GridItem[,] gridItems = new GridItem[yLength, xLength];
-            GridItemView[,] gridItemsViews = new GridItemView[yLength, xLength];
+            GridItem[,] gridItems = new GridItem[yLength(), xLength()];
+            GridItemView[,] gridItemsViews = new GridItemView[yLength(), xLength()];
             Character[] characters = new Character[2];
-            for (int y = 0; y < yLength; y++)
+            GridItemView[] charactersView = new GridItemView[2];
+            for (int y = 0; y < yLength(); y++)
             {
-                for (int x = 0; x < xLength; x++)
+                for (int x = 0; x < xLength(); x++)
                 {
                     switch (gridStartLocations[y,x])
                     {
@@ -85,7 +100,7 @@ namespace Nea_Prototype.Level
                               };
                               GridItemView playerOneView = new GridItemView(playerOneItem);
                               gridItems[y, x] = playerOneItem;
-                              gridItemsViews[y, x] = playerOneView;
+                              charactersView[0] = gridItemsViews[y, x] = playerOneView;
                               characters[0] = playerOne;
                               break;
                           //Enemy
@@ -109,7 +124,7 @@ namespace Nea_Prototype.Level
                               };
                               GridItemView enemyView = new GridItemView(enemyItem);
                               gridItems[y, x] = enemyItem;
-                              gridItemsViews[y, x] = enemyView;
+                              charactersView[1] = gridItemsViews[y, x] = enemyView;
                               characters[1] = enemy;
                               break;
                           default:
@@ -117,12 +132,61 @@ namespace Nea_Prototype.Level
                     }
                 }
             }
-            grid = new GameGrid(characters, gridItemsViews, gridItems);
+            grid = new GameGrid(characters, charactersView, gridItemsViews, gridItems);
         }
 
-        private void MoveItemToPlace(ref GridItemView itemView, Position location)
+        public void MoveItemToPlace(ref GridItemView itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
+            Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
+        }
+
+        public void MoveCharacter(int characterNo, Direction dir)
+        {
+            MoveCharacterInternal(GetCharacterView(characterNo), dir);
+        }
+
+        private void MoveCharacterInternal(GridItemView itemView, Direction dir)
+        {
+            double leftPos = 0;
+            double topPos = 0;
+
+            switch (dir)
+            {
+                case Direction.Up:
+                    topPos = Canvas.GetTop(itemView);
+                    Canvas.SetLeft(itemView, topPos - Constants.KEYPRESS_PX_MOVED);
+                    break;
+                case Direction.Down:
+                    topPos = Canvas.GetTop(itemView);
+                    Canvas.SetLeft(itemView, topPos + Constants.KEYPRESS_PX_MOVED);
+                    break;
+                case Direction.Left:
+                    leftPos = Canvas.GetLeft(itemView);
+                    Canvas.SetLeft(itemView, leftPos - Constants.KEYPRESS_PX_MOVED);
+                    break;
+                case Direction.Right:
+                    leftPos = Canvas.GetLeft(itemView);
+                    Canvas.SetLeft(itemView, leftPos + Constants.KEYPRESS_PX_MOVED);
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        $"Direction '{nameof(dir)}' is not implemented in Level.Level.MoveCharacter()");
+            }
+        }
+
+        public GridItemView GetCharacterView(int characterNo)
+        {
+            switch (characterNo)
+            {
+                case 1:
+                    return grid.CharactersViews[0];
+                case 2:
+                    return grid.CharactersViews[1];
+                default:
+                    throw new NotImplementedException(
+                        $"Player {characterNo} is not implemented in Level.Level.GetCharactersView()");
+            }
         }
     }
 }
