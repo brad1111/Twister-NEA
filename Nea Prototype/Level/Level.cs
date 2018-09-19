@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 using System.Xml.Schema;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Enums;
@@ -143,10 +146,16 @@ namespace Nea_Prototype.Level
 
         public void MoveCharacter(int characterNo, Direction dir)
         {
-            MoveCharacterInternal(GetCharacterView(characterNo), dir);
+            //MoveCharacterInternal(GetCharacterView(characterNo), dir);
+            GridItemView characterView = GetCharacterView(characterNo);
+            //If character won't collide with the wall
+            if (!WallCollisionDetection(ref characterView, dir))
+            {
+                MoveCharacterInternal(ref characterView, dir);
+            }
         }
 
-        private void MoveCharacterInternal(GridItemView itemView, Direction dir)
+        private void MoveCharacterInternal(ref GridItemView itemView, Direction dir)
         {
             double leftPos = 0;
             double topPos = 0;
@@ -173,6 +182,90 @@ namespace Nea_Prototype.Level
                     throw new NotImplementedException(
                         $"Direction '{nameof(dir)}' is not implemented in Level.Level.MoveCharacter()");
             }
+        }
+        
+        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
+        {
+            double x, y = 0;
+            x = Canvas.GetLeft(characterView);
+            y = Canvas.GetTop(characterView);
+            int xApprox, yApprox = 0;
+            const double half_GRID_ITEM_WIDTH = Constants.GRID_ITEM_WIDTH / 2;
+            Queue<GridItemView> ItemsToCheckForCollision = new Queue<GridItemView>(3);
+            switch (movementDirection)
+            {
+                case Direction.Up:
+                    
+
+                    //Get approx co-ords
+                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    
+                    //get three possible collisionable items above
+                    if (yApprox == 0)
+                    {
+                        //then can't look any higher so look for distance from top wall
+                        // (if y is smaller than 4 then it will collide, otherwise it wont).
+                        return (y <= 4);
+                    }
+                    else
+                    {
+                        //Get above to the left if valid
+                        GridItemView AboveLeft = (xApprox > 0) ? (grid.GridItemsViews[yApprox - 1,xApprox - 1]) : null;
+                        //Get above
+                        GridItemView Above = grid.GridItemsViews[yApprox - 1, xApprox];
+                        //Get above to the right if valid
+                        GridItemView AboveRight = (xApprox < Constants.GRID_TILES_XY) ? (grid.GridItemsViews[yApprox - 1, xApprox + 1]) : null;
+
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            //Check for above left, above and above right, and if they are non-walkable
+                            if (grid.GridItems[yApprox - 1, xApprox + i].GetType() == typeof(NonWalkable))
+                            {
+                                //Then add to the queue
+                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox - 1, xApprox + i]);
+                            }
+                        }
+
+                        ////Create rectangles for collision detection
+                        //Rect AboveLeftRect = new Rect(Canvas.GetLeft(AboveLeft), Canvas.GetTop(AboveLeft) - 4, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+                        //Rect AboveRect = new Rect(Canvas.GetLeft(Above), Canvas.GetTop(Above) - 4, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+                        //Rect AboveRightRect = new Rect(Canvas.GetLeft(AboveRight) - 4, Canvas.GetTop(AboveRight), Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+                        //Rect characterRect = new Rect(x,y,Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+                        ////If character intersects with a rectangle then return
+                        //bool intersects = (characterRect.IntersectsWith(AboveLeftRect) ||
+                        //        characterRect.IntersectsWith(AboveRect) ||
+                        //        characterRect.IntersectsWith(AboveRightRect));
+                        
+                        //Override y to be the moved value so that they can be checked for intersection
+                        y -= 4;
+                    }
+                    break;
+                case Direction.Down:
+                    //break;
+                case Direction.Left:
+                    //break;
+                case Direction.Right:
+                    //break;
+                default:
+                    throw new NotImplementedException($"Direction value of {nameof(movementDirection)} is not implemented in Level.WallCollisionDetection()");
+            }
+
+            //Rectangle variable is to check to see if it intersects
+            Rect characterRect = new Rect(x, y, Constants.GRID_ITEM_WIDTH , Constants.GRID_ITEM_WIDTH);
+            bool collision = false;
+
+            while (ItemsToCheckForCollision.Count > 0)
+            {
+                GridItemView tempItem = ItemsToCheckForCollision.Dequeue();
+                Rect nonWalkableRect = new Rect(Canvas.GetLeft(tempItem), Canvas.GetTop(tempItem), Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+                if (nonWalkableRect.IntersectsWith(characterRect) || collision /*== true*/)
+                {
+                    collision = true;
+                }
+            }
+
+            return collision;
         }
 
         public GridItemView GetCharacterView(int characterNo)
