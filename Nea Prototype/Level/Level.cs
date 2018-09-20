@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Schema;
 using Nea_Prototype.Characters;
@@ -144,12 +145,12 @@ namespace Nea_Prototype.Level
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
         }
 
-        public void MoveCharacter(int characterNo, Direction dir)
+        public void MoveCharacter(int characterNo, Direction dir, ref Canvas canvas)
         {
             //MoveCharacterInternal(GetCharacterView(characterNo), dir);
             GridItemView characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
-            if (!WallCollisionDetection(ref characterView, dir))
+            if (!WallCollisionDetection(ref characterView, dir, ref canvas))
             {
                 MoveCharacterInternal(ref characterView, dir);
             }
@@ -183,9 +184,14 @@ namespace Nea_Prototype.Level
                         $"Direction '{nameof(dir)}' is not implemented in Level.Level.MoveCharacter()");
             }
         }
-        
-        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
+
+        private int previousLeftOvers = 0; 
+
+        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection, ref Canvas canvas)
         {
+            canvas.Children.RemoveRange(canvas.Children.Count - previousLeftOvers - 1, previousLeftOvers);
+            previousLeftOvers = 0;
+
             double x, y = 0;
             x = Canvas.GetLeft(characterView);
             y = Canvas.GetTop(characterView);
@@ -230,7 +236,7 @@ namespace Nea_Prototype.Level
                 case Direction.Down:
                     //Get approx co-ords
                     xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    yApprox = (int) Math.Ceiling((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
                     
                     //get three possible collisionable items below
                     if (yApprox == yLength())
@@ -263,10 +269,44 @@ namespace Nea_Prototype.Level
                     }
                     break;
                 case Direction.Left:
-                    //break;
+                    //Get approx co-ords
+                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    
+                    //get three possible collisionable items below
+                    if (xApprox == xLength())
+                    {
+                        //then can't look any higher so look for distance from top wall
+                        // (if x is greater than 396 then it will collide, otherwise it wont).
+                        return (x >= Constants.KEYPRESS_PX_MOVED);
+                    }
+                    else
+                    {
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            //If outside the grid
+                            if (xApprox - 1 < 0 || yApprox + i < 0 || xApprox - 1 > (Constants.GRID_TILES_XY - 1) ||
+                                yApprox + i > (Constants.GRID_TILES_XY - 1))
+                            {
+                                break;
+                            }
+
+                            //Check for right-above, right and right-below, and if they are non-walkable
+                            if (grid.GridItems[yApprox + i, xApprox - 1].GetType() == typeof(NonWalkable))
+                            {
+                                //Then add to the queue
+                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + i, xApprox - 1]);
+                            }
+                        }
+
+                        //Override x to be the moved value so that they can be checked for intersection
+                        x -= Constants.KEYPRESS_PX_MOVED;
+                    }
+
+                    break;
                 case Direction.Right:
                     //Get approx co-ords
-                    xApprox = (int) Math.Ceiling((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
                     yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
                     
                     //get three possible collisionable items below
@@ -304,6 +344,19 @@ namespace Nea_Prototype.Level
 
             //Rectangle variable is to check to see if it intersects
             Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
+            Rectangle charcterRectangle = new Rectangle()
+            {
+                Width = characterRect.Width,
+                Height = characterRect.Height,
+                Fill = new SolidColorBrush(Colors.Blue)
+            };
+            
+            canvas.Children.Add(charcterRectangle);
+            Canvas.SetLeft(charcterRectangle, characterRect.Left);
+            Canvas.SetTop(charcterRectangle, characterRect.Top);
+
+            previousLeftOvers = ItemsToCheckForCollision.Count + 1;
+
             bool collision = false;
 
             while (ItemsToCheckForCollision.Count > 0)
@@ -314,6 +367,15 @@ namespace Nea_Prototype.Level
                 {
                     collision = true;
                 }
+                Rectangle nonwalkableRectangle = new Rectangle()
+                {
+                    Width = characterRect.Width,
+                    Height = characterRect.Height,
+                    Fill = new SolidColorBrush(Colors.Blue)
+                };
+                canvas.Children.Add(nonwalkableRectangle);
+                Canvas.SetLeft(nonwalkableRectangle, nonWalkableRect.Left);
+                Canvas.SetTop(nonwalkableRectangle, nonWalkableRect.Top);
             }
 
             return collision;
