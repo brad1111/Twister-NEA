@@ -252,7 +252,7 @@ namespace Nea_Prototype.Level
             }
 
             //Rectangle variable is to check to see if it intersects
-            Rect characterRect = new Rect(x, y, Constants.GRID_ITEM_WIDTH , Constants.GRID_ITEM_WIDTH);
+            Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
             bool collision = false;
 
             while (ItemsToCheckForCollision.Count > 0)
