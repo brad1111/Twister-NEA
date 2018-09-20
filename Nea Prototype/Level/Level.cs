@@ -195,8 +195,6 @@ namespace Nea_Prototype.Level
             switch (movementDirection)
             {
                 case Direction.Up:
-                    
-
                     //Get approx co-ords
                     xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
                     yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
@@ -206,19 +204,18 @@ namespace Nea_Prototype.Level
                     {
                         //then can't look any higher so look for distance from top wall
                         // (if y is smaller than 4 then it will collide, otherwise it wont).
-                        return (y <= 4);
+                        return (y <= Constants.KEYPRESS_PX_MOVED);
                     }
                     else
                     {
-                        //Get above to the left if valid
-                        GridItemView AboveLeft = (xApprox > 0) ? (grid.GridItemsViews[yApprox - 1,xApprox - 1]) : null;
-                        //Get above
-                        GridItemView Above = grid.GridItemsViews[yApprox - 1, xApprox];
-                        //Get above to the right if valid
-                        GridItemView AboveRight = (xApprox < Constants.GRID_TILES_XY) ? (grid.GridItemsViews[yApprox - 1, xApprox + 1]) : null;
-
                         for (int i = -1; i <= 1; i++)
                         {
+                            //If outside the grid
+                            if (xApprox + i < 0 || yApprox - 1 < 0 || xApprox + i > (Constants.GRID_TILES_XY - 1) ||
+                                yApprox - 1 > (Constants.GRID_TILES_XY - 1))
+                            {
+                                break;
+                            }
                             //Check for above left, above and above right, and if they are non-walkable
                             if (grid.GridItems[yApprox - 1, xApprox + i].GetType() == typeof(NonWalkable))
                             {
@@ -226,27 +223,81 @@ namespace Nea_Prototype.Level
                                 ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox - 1, xApprox + i]);
                             }
                         }
-
-                        ////Create rectangles for collision detection
-                        //Rect AboveLeftRect = new Rect(Canvas.GetLeft(AboveLeft), Canvas.GetTop(AboveLeft) - 4, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
-                        //Rect AboveRect = new Rect(Canvas.GetLeft(Above), Canvas.GetTop(Above) - 4, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
-                        //Rect AboveRightRect = new Rect(Canvas.GetLeft(AboveRight) - 4, Canvas.GetTop(AboveRight), Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
-                        //Rect characterRect = new Rect(x,y,Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
-                        ////If character intersects with a rectangle then return
-                        //bool intersects = (characterRect.IntersectsWith(AboveLeftRect) ||
-                        //        characterRect.IntersectsWith(AboveRect) ||
-                        //        characterRect.IntersectsWith(AboveRightRect));
-                        
                         //Override y to be the moved value so that they can be checked for intersection
-                        y -= 4;
+                        y -= Constants.KEYPRESS_PX_MOVED;
                     }
                     break;
                 case Direction.Down:
-                    //break;
+                    //Get approx co-ords
+                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    yApprox = (int) Math.Ceiling((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    
+                    //get three possible collisionable items below
+                    if (yApprox == yLength())
+                    {
+                        //then can't look any higher so look for distance from top wall
+                        // (if y is greater than 396 then it will collide, otherwise it wont).
+                        return (y >= Constants.GRID_WIDTH - Constants.KEYPRESS_PX_MOVED);
+                    }
+                    else
+                    {
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            //If outside the grid
+                            if (xApprox + i < 0 || yApprox + 1 < 0 || xApprox + i > (Constants.GRID_TILES_XY - 1) ||
+                                yApprox + 1 > (Constants.GRID_TILES_XY - 1))
+                            {
+                                break;
+                            }
+
+                            //Check for below left, below and below right, and if they are non-walkable
+                            if (grid.GridItems[yApprox + 1, xApprox + i].GetType() == typeof(NonWalkable))
+                            {
+                                //Then add to the queue
+                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + 1, xApprox + i]);
+                            }
+                        }
+
+                        //Override y to be the moved value so that they can be checked for intersection
+                        y += Constants.KEYPRESS_PX_MOVED;
+                    }
+                    break;
                 case Direction.Left:
                     //break;
                 case Direction.Right:
-                    //break;
+                    //Get approx co-ords
+                    xApprox = (int) Math.Ceiling((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+                    
+                    //get three possible collisionable items below
+                    if (xApprox == xLength())
+                    {
+                        //then can't look any higher so look for distance from top wall
+                        // (if x is greater than 396 then it will collide, otherwise it wont).
+                        return (x >= Constants.GRID_WIDTH - Constants.KEYPRESS_PX_MOVED);
+                    }
+                    else
+                    {
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            //If outside the grid
+                            if (xApprox + 1 < 0 || yApprox + i < 0 || xApprox + 1 > (Constants.GRID_TILES_XY - 1) ||
+                                yApprox + i > (Constants.GRID_TILES_XY - 1))
+                            {
+                                break;
+                            }
+                            //Check for right-above, right and right-below, and if they are non-walkable
+                            if (grid.GridItems[yApprox + i, xApprox + 1].GetType() == typeof(NonWalkable))
+                            {
+                                //Then add to the queue
+                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + i, xApprox + 1]);
+                            }
+                        }
+
+                        //Override x to be the moved value so that they can be checked for intersection
+                        x += Constants.KEYPRESS_PX_MOVED;
+                    }
+                    break;
                 default:
                     throw new NotImplementedException($"Direction value of {nameof(movementDirection)} is not implemented in Level.WallCollisionDetection()");
             }
