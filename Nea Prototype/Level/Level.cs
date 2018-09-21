@@ -22,6 +22,8 @@ namespace Nea_Prototype.Level
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
         public ExitPlacement ExitLocation { get; internal set; }
 
+        [JsonIgnore] public bool WallCollisionRectangles { get; set; }
+
         private int yLength()
         {
             return gridStartLocations.GetLength(0);
@@ -154,6 +156,10 @@ namespace Nea_Prototype.Level
             {
                 MoveCharacterInternal(ref characterView, dir);
             }
+            else
+            {
+                
+            }
         }
 
         private void MoveCharacterInternal(ref GridItemView itemView, Direction dir)
@@ -187,9 +193,19 @@ namespace Nea_Prototype.Level
 
         private int previousLeftOvers = 0; 
 
+        /// <summary>
+        /// Checks whether 
+        /// </summary>
+        /// <param name="characterView"></param>
+        /// <param name="movementDirection"></param>
+        /// <param name="canvas"></param>
+        /// <returns></returns>
         private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection, ref Canvas canvas)
         {
-            canvas.Children.RemoveRange(canvas.Children.Count - previousLeftOvers - 1, previousLeftOvers);
+            if (WallCollisionRectangles)
+            {
+                canvas.Children.RemoveRange(canvas.Children.Count - previousLeftOvers - 1, previousLeftOvers);
+            }
             previousLeftOvers = 0;
 
             double x, y = 0;
@@ -198,13 +214,12 @@ namespace Nea_Prototype.Level
             int xApprox, yApprox = 0;
             const double half_GRID_ITEM_WIDTH = Constants.GRID_ITEM_WIDTH / 2;
             Queue<GridItemView> ItemsToCheckForCollision = new Queue<GridItemView>(3);
+            //Get approx co-ords
+            xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
+            yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
             switch (movementDirection)
             {
                 case Direction.Up:
-                    //Get approx co-ords
-                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    
                     //get three possible collisionable items above
                     if (yApprox == 0)
                     {
@@ -214,30 +229,12 @@ namespace Nea_Prototype.Level
                     }
                     else
                     {
-                        for (int i = -1; i <= 1; i++)
-                        {
-                            //If outside the grid
-                            if (xApprox + i < 0 || yApprox - 1 < 0 || xApprox + i > (Constants.GRID_TILES_XY - 1) ||
-                                yApprox - 1 > (Constants.GRID_TILES_XY - 1))
-                            {
-                                break;
-                            }
-                            //Check for above left, above and above right, and if they are non-walkable
-                            if (grid.GridItems[yApprox - 1, xApprox + i].GetType() == typeof(NonWalkable))
-                            {
-                                //Then add to the queue
-                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox - 1, xApprox + i]);
-                            }
-                        }
+                        ItemsToCheckForCollision = QueuingLocationsToCheck(ref xApprox, ref yApprox, 0 , -1);
                         //Override y to be the moved value so that they can be checked for intersection
                         y -= Constants.KEYPRESS_PX_MOVED;
                     }
                     break;
                 case Direction.Down:
-                    //Get approx co-ords
-                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    
                     //get three possible collisionable items below
                     if (yApprox == yLength())
                     {
@@ -247,32 +244,13 @@ namespace Nea_Prototype.Level
                     }
                     else
                     {
-                        for (int i = -1; i <= 1; i++)
-                        {
-                            //If outside the grid
-                            if (xApprox + i < 0 || yApprox + 1 < 0 || xApprox + i > (Constants.GRID_TILES_XY - 1) ||
-                                yApprox + 1 > (Constants.GRID_TILES_XY - 1))
-                            {
-                                break;
-                            }
-
-                            //Check for below left, below and below right, and if they are non-walkable
-                            if (grid.GridItems[yApprox + 1, xApprox + i].GetType() == typeof(NonWalkable))
-                            {
-                                //Then add to the queue
-                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + 1, xApprox + i]);
-                            }
-                        }
+                        ItemsToCheckForCollision = QueuingLocationsToCheck(ref xApprox, ref yApprox, 0 , 1);
 
                         //Override y to be the moved value so that they can be checked for intersection
                         y += Constants.KEYPRESS_PX_MOVED;
                     }
                     break;
                 case Direction.Left:
-                    //Get approx co-ords
-                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    
                     //get three possible collisionable items below
                     if (xApprox == xLength())
                     {
@@ -282,22 +260,7 @@ namespace Nea_Prototype.Level
                     }
                     else
                     {
-                        for (int i = -1; i <= 1; i++)
-                        {
-                            //If outside the grid
-                            if (xApprox - 1 < 0 || yApprox + i < 0 || xApprox - 1 > (Constants.GRID_TILES_XY - 1) ||
-                                yApprox + i > (Constants.GRID_TILES_XY - 1))
-                            {
-                                break;
-                            }
-
-                            //Check for right-above, right and right-below, and if they are non-walkable
-                            if (grid.GridItems[yApprox + i, xApprox - 1].GetType() == typeof(NonWalkable))
-                            {
-                                //Then add to the queue
-                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + i, xApprox - 1]);
-                            }
-                        }
+                        ItemsToCheckForCollision = QueuingLocationsToCheck(ref xApprox, ref yApprox, -1 , 0);
 
                         //Override x to be the moved value so that they can be checked for intersection
                         x -= Constants.KEYPRESS_PX_MOVED;
@@ -305,10 +268,6 @@ namespace Nea_Prototype.Level
 
                     break;
                 case Direction.Right:
-                    //Get approx co-ords
-                    xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
-                    
                     //get three possible collisionable items below
                     if (xApprox == xLength())
                     {
@@ -318,21 +277,7 @@ namespace Nea_Prototype.Level
                     }
                     else
                     {
-                        for (int i = -1; i <= 1; i++)
-                        {
-                            //If outside the grid
-                            if (xApprox + 1 < 0 || yApprox + i < 0 || xApprox + 1 > (Constants.GRID_TILES_XY - 1) ||
-                                yApprox + i > (Constants.GRID_TILES_XY - 1))
-                            {
-                                break;
-                            }
-                            //Check for right-above, right and right-below, and if they are non-walkable
-                            if (grid.GridItems[yApprox + i, xApprox + 1].GetType() == typeof(NonWalkable))
-                            {
-                                //Then add to the queue
-                                ItemsToCheckForCollision.Enqueue(grid.GridItemsViews[yApprox + i, xApprox + 1]);
-                            }
-                        }
+                        ItemsToCheckForCollision = QueuingLocationsToCheck(ref xApprox, ref yApprox, 1, 0);
 
                         //Override x to be the moved value so that they can be checked for intersection
                         x += Constants.KEYPRESS_PX_MOVED;
@@ -344,16 +289,21 @@ namespace Nea_Prototype.Level
 
             //Rectangle variable is to check to see if it intersects
             Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
-            Rectangle charcterRectangle = new Rectangle()
+
+            //Only display the rectangles if they are wanted
+            if (WallCollisionRectangles)
             {
-                Width = characterRect.Width,
-                Height = characterRect.Height,
-                Fill = new SolidColorBrush(Colors.Blue)
-            };
-            
-            canvas.Children.Add(charcterRectangle);
-            Canvas.SetLeft(charcterRectangle, characterRect.Left);
-            Canvas.SetTop(charcterRectangle, characterRect.Top);
+                Rectangle charcterRectangle = new Rectangle()
+                {
+                    Width = characterRect.Width,
+                    Height = characterRect.Height,
+                    Fill = new SolidColorBrush(Colors.Blue)
+                };
+
+                canvas.Children.Add(charcterRectangle);
+                Canvas.SetLeft(charcterRectangle, characterRect.Left);
+                Canvas.SetTop(charcterRectangle, characterRect.Top);
+            }
 
             previousLeftOvers = ItemsToCheckForCollision.Count + 1;
 
@@ -367,18 +317,59 @@ namespace Nea_Prototype.Level
                 {
                     collision = true;
                 }
-                Rectangle nonwalkableRectangle = new Rectangle()
+
+                //Only display rectangles if they are wanted to debug
+                if (WallCollisionRectangles)
                 {
-                    Width = characterRect.Width,
-                    Height = characterRect.Height,
-                    Fill = new SolidColorBrush(Colors.Blue)
-                };
-                canvas.Children.Add(nonwalkableRectangle);
-                Canvas.SetLeft(nonwalkableRectangle, nonWalkableRect.Left);
-                Canvas.SetTop(nonwalkableRectangle, nonWalkableRect.Top);
+                    Rectangle nonwalkableRectangle = new Rectangle()
+                    {
+                        Width = characterRect.Width,
+                        Height = characterRect.Height,
+                        Fill = new SolidColorBrush(Colors.Blue)
+                    };
+                    canvas.Children.Add(nonwalkableRectangle);
+                    Canvas.SetLeft(nonwalkableRectangle, nonWalkableRect.Left);
+                    Canvas.SetTop(nonwalkableRectangle, nonWalkableRect.Top);
+                }
             }
 
             return collision;
+        }
+
+        private Queue<GridItemView> QueuingLocationsToCheck(ref int xApprox, ref int yApprox, int xcheck, int ycheck)
+        {
+            Queue<GridItemView> queue = new Queue<GridItemView>(3);
+            //If xCheck is 0 then it should be replaced by i, otherwise yCheck should shouldnt
+            bool xCheckIsi = xcheck == 0;
+            for (int i = -1; i <= 1; i++)
+            {
+                //If xcheck is the variable value (i.e. the direction you want to check for multiple items, e.g. if you're checking up you want to check for up,
+                //up-left, up-right etc so xcheck changes, same with down). Otherwise ycheck is the variable (when moving left or right)
+                switch (xCheckIsi)
+                {
+                       case true:
+                           xcheck = i;
+                           break;
+                       case false:
+                           ycheck = i;
+                           break;
+                }
+
+                //If outside the grid
+                if (xApprox + xcheck < 0 || yApprox + ycheck < 0 || xApprox + xcheck > (Constants.GRID_TILES_XY - 1) ||
+                    yApprox + ycheck > (Constants.GRID_TILES_XY - 1))
+                {
+                    break;
+                }
+                //Check for right-above, right and right-below, and if they are non-walkable
+                if (grid.GridItems[yApprox + ycheck, xApprox + xcheck].GetType() == typeof(NonWalkable))
+                {
+                    //Then add to the queue
+                    queue.Enqueue(grid.GridItemsViews[yApprox + ycheck, xApprox + xcheck]);
+                }
+            }
+
+            return queue;
         }
 
         public GridItemView GetCharacterView(int characterNo)
