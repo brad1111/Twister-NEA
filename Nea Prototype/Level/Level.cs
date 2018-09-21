@@ -55,6 +55,7 @@ namespace Nea_Prototype.Level
         public void SetupGrid(ref Canvas gameCanvas)
         {
             DecodeGridStartLocations();
+            //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
@@ -62,6 +63,14 @@ namespace Nea_Prototype.Level
                     gameCanvas.Children.Add(grid.GridItemsViews[y, x]);
                     MoveItemToPlace(ref grid.GridItemsViews[y,x], grid.GridItems[y,x].Position);
                 }
+            }
+
+            //Add character
+            for (int i = 0; i < 2; i++)
+            {
+                gameCanvas.Children.Add(grid.CharactersViews[i]);
+                //grid.Characters[i].Position = 
+                MoveItemToPlace(ref grid.CharactersViews[i], grid.Characters[i].Position);
             }
         }
 
@@ -99,38 +108,49 @@ namespace Nea_Prototype.Level
                               break;
                           //player 1
                           case 2:
-                              PlayerOne playerOne = new PlayerOne();
-                              CharacterItem playerOneItem = new CharacterItem(playerOne)
+                              PlayerOne playerOne = new PlayerOne()
                               {
                                   Position = new Position(x, y)
                               };
+                              CharacterItem playerOneItem = new CharacterItem(playerOne);
                               GridItemView playerOneView = new GridItemView(playerOneItem);
-                              gridItems[y, x] = playerOneItem;
-                              charactersView[0] = gridItemsViews[y, x] = playerOneView;
+                              //gridItems[y, x] = playerOneItem;
+                              gridItems[y, x] = new Walkable()
+                              {
+                                  Position = new Position(x, y)
+                              };
+                              gridItemsViews[y, x] = new GridItemView(gridItems[y, x]);
+                              charactersView[0] = playerOneView;
                               characters[0] = playerOne;
                               break;
                           //Enemy
                           case 3:
-                                 //Choose which type of Enemy:
-                                Enemy enemy = null;
-                                switch (enemyType)
-                                {
-                                    case EnemyType.Local:
-                                        enemy = new PlayerTwo();
-                                        break;
-                                    case EnemyType.AI:
-                                        enemy = new BotPlayer();
-                                        break;
-                                    case EnemyType.Remote:
-                                        throw new NotImplementedException("Remote players are not implemented");
-                                }
-                               CharacterItem enemyItem = new CharacterItem(enemy)
+                              //Choose which type of Enemy:
+                              Enemy enemy = null;
+                              switch (enemyType)
+                              {
+                                  case EnemyType.Local:
+                                      enemy = new PlayerTwo();
+                                      break;
+                                  case EnemyType.AI:
+                                      enemy = new BotPlayer();
+                                      break;
+                                  case EnemyType.Remote:
+                                  default:
+                                      throw new NotImplementedException(
+                                          $"{nameof(enemyType)} players are not implemented");
+                              }
+
+                              enemy.Position = new Position(x, y);
+                              var enemyItem = new CharacterItem(enemy);
+
+                              var enemyView = new GridItemView(enemyItem);
+                              gridItems[y, x] = new Walkable
                               {
                                   Position = new Position(x, y)
                               };
-                              GridItemView enemyView = new GridItemView(enemyItem);
-                              gridItems[y, x] = enemyItem;
-                              charactersView[1] = gridItemsViews[y, x] = enemyView;
+                              gridItemsViews[y, x] = new GridItemView(gridItems[y, x]);
+                              charactersView[1] = enemyView;
                               characters[1] = enemy;
                               break;
                           default:
@@ -155,10 +175,6 @@ namespace Nea_Prototype.Level
             if (!WallCollisionDetection(ref characterView, dir, ref canvas))
             {
                 MoveCharacterInternal(ref characterView, dir);
-            }
-            else
-            {
-                
             }
         }
 
@@ -194,12 +210,12 @@ namespace Nea_Prototype.Level
         private int previousLeftOvers = 0; 
 
         /// <summary>
-        /// Checks whether 
+        /// Checks whether a character will collide into a wall with their movement
         /// </summary>
-        /// <param name="characterView"></param>
-        /// <param name="movementDirection"></param>
-        /// <param name="canvas"></param>
-        /// <returns></returns>
+        /// <param name="characterView">The actual characters view</param>
+        /// <param name="movementDirection">The direction the character would move</param>
+        /// <param name="canvas">The canvas to draw rectangles on if visualising the collision detection</param>
+        /// <returns>Whether the character will collide</returns>
         private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection, ref Canvas canvas)
         {
             if (WallCollisionRectangles)
