@@ -18,16 +18,16 @@ namespace Nea_Prototype.Algorithms
             foreach (Character character in characters)
             {
                 //The distance from the centre line of the board relative to the rotation
-                int relativeDistanceFromPivot = character.GetPosition.x - 5;
+                int relativeDistanceFromPivot = character.Position.x - 5;
                 //The distance from the centre of the board in the x direction no matter the rotation
                 double fixedDistanceFromPivot = 0;
 
                 if (-90 < rotationAngle && rotationAngle < 90)
                 {   
-                    fixedDistanceFromPivot = character.GetPosition.x * Math.Sin((Math.PI / 2)-rotationAngleRadians);
+                    fixedDistanceFromPivot = character.Position.x * Math.Sin((Math.PI / 2)-rotationAngleRadians);
                 }
 
-                int posFromCentre = (character.GetPosition.x + 1) - Constants.CENTRE_TILE_XY;
+                int posFromCentre = (character.Position.x + 1) - Constants.CENTRE_TILE_XY;
 
                 int moment = posFromCentre * character.GetWeight;
 

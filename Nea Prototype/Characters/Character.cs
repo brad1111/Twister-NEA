@@ -34,6 +34,10 @@ namespace Nea_Prototype.Characters
             set => score = value;
         }
 
-        public Position GetPosition => location;
+        public Position Position
+        {
+            get => location; 
+            set => location = value;
+        }
     }
 }

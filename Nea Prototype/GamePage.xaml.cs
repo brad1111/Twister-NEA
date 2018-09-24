@@ -75,38 +75,38 @@ namespace Nea_Prototype
             double getUp;
             if (Keyboard.IsKeyDown(KeyBindings.Player1_right))
             {
-                level.MoveCharacter(1, Direction.Right);
+                level.MoveCharacter(1, Direction.Right, ref cvsPlayArea);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player1_left))
             {
-                level.MoveCharacter(1, Direction.Left);
+                level.MoveCharacter(1, Direction.Left, ref cvsPlayArea);
             }
             
             if (Keyboard.IsKeyDown(KeyBindings.Player1_up))
             {
-                level.MoveCharacter(1, Direction.Up);
+                level.MoveCharacter(1, Direction.Up, ref cvsPlayArea);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player1_down))
             {
-                level.MoveCharacter(1, Direction.Down);
+                level.MoveCharacter(1, Direction.Down, ref cvsPlayArea);
             }
 
             if (Keyboard.IsKeyDown(KeyBindings.Player2_right))
             {
-                level.MoveCharacter(2, Direction.Right);
+                level.MoveCharacter(2, Direction.Right, ref cvsPlayArea);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player2_left))
             {
-                level.MoveCharacter(2, Direction.Left);
+                level.MoveCharacter(2, Direction.Left, ref cvsPlayArea);
             }
             
             if (Keyboard.IsKeyDown(KeyBindings.Player2_up))
             {
-                level.MoveCharacter(2, Direction.Up);
+                level.MoveCharacter(2, Direction.Up, ref cvsPlayArea);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player2_down))
             {
-                level.MoveCharacter(2, Direction.Down);
+                level.MoveCharacter(2, Direction.Down, ref cvsPlayArea);
             }
         }
 
