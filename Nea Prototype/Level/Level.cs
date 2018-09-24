@@ -22,7 +22,13 @@ namespace Nea_Prototype.Level
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
         public ExitPlacement ExitLocation { get; internal set; }
 
+        #region Debugging Variables
+
         [JsonIgnore] public bool WallCollisionRectangles { get; set; }
+        [JsonIgnore] public bool EnemyCollisionRectangles { get; set; }
+
+        #endregion
+        
 
         private int yLength()
         {
@@ -39,7 +45,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         public Level()
         {
-            
+
         }
 
         /// <summary>
@@ -176,6 +182,11 @@ namespace Nea_Prototype.Level
             {
                 MoveCharacterInternal(ref characterView, dir);
             }
+
+            if (EnemyCollisionDetection(ref canvas))
+            {
+                MessageBox.Show("Enemy killed you.");
+            }
         }
 
         private void MoveCharacterInternal(ref GridItemView itemView, Direction dir)
@@ -207,7 +218,7 @@ namespace Nea_Prototype.Level
             }
         }
 
-        private int previousLeftOvers = 0; 
+        private int wallDetectionPreviousLeftOvers = 0; 
 
         /// <summary>
         /// Checks whether a character will collide into a wall with their movement
@@ -220,9 +231,9 @@ namespace Nea_Prototype.Level
         {
             if (WallCollisionRectangles)
             {
-                canvas.Children.RemoveRange(canvas.Children.Count - previousLeftOvers - 1, previousLeftOvers);
+                canvas.Children.RemoveRange(canvas.Children.Count - wallDetectionPreviousLeftOvers - 1, wallDetectionPreviousLeftOvers);
             }
-            previousLeftOvers = 0;
+            wallDetectionPreviousLeftOvers = 0;
 
             double x, y = 0;
             x = Canvas.GetLeft(characterView);
@@ -321,7 +332,7 @@ namespace Nea_Prototype.Level
                 Canvas.SetTop(charcterRectangle, characterRect.Top);
             }
 
-            previousLeftOvers = ItemsToCheckForCollision.Count + 1;
+            wallDetectionPreviousLeftOvers = ItemsToCheckForCollision.Count + 1;
 
             bool collision = false;
 
@@ -386,6 +397,52 @@ namespace Nea_Prototype.Level
             }
 
             return queue;
+        }
+
+        private int enemyDetectionPreviousLeftovers = 0;
+        public bool EnemyCollisionDetection(ref Canvas canvas)
+        {
+            //If the debugging view is open and there are items left over then delete them
+            if (EnemyCollisionRectangles)
+            {
+                canvas.Children.RemoveRange(canvas.Children.Count - enemyDetectionPreviousLeftovers - 1, enemyDetectionPreviousLeftovers);
+            }
+
+            //Get the characters views
+            GridItemView characterOneView = GetCharacterView(1);
+            GridItemView characterTwoView = GetCharacterView(2);
+            //Create both character rectangles
+            Rect char1Rect = new Rect(Canvas.GetLeft(characterOneView) + 1, Canvas.GetTop(characterOneView) + 1, characterOneView.ActualWidth - 2, characterOneView.ActualHeight - 2);
+            Rect char2Rect = new Rect(Canvas.GetLeft(characterTwoView) + 1, Canvas.GetTop(characterTwoView) + 1, characterTwoView.ActualWidth - 2, characterTwoView.ActualHeight - 2);
+
+            
+            if (EnemyCollisionRectangles)
+            {
+                Rectangle char1Rectangle = new Rectangle()
+                {
+                    Width = char1Rect.Width,
+                    Height = char1Rect.Height,
+                    Fill = new SolidColorBrush(Colors.DarkMagenta)
+                };
+                Rectangle char2Rectangle = new Rectangle()
+                {
+                    Width = char2Rect.Width,
+                    Height = char2Rect.Height,
+                    Fill = new SolidColorBrush(Colors.DarkMagenta)
+                };
+
+                canvas.Children.Add(char1Rectangle);
+                canvas.Children.Add(char2Rectangle);
+
+                Canvas.SetLeft(char1Rectangle, char1Rect.Left);
+                Canvas.SetLeft(char2Rectangle, char2Rect.Left);
+
+                Canvas.SetTop(char1Rectangle, char1Rect.Top);
+                Canvas.SetTop(char2Rectangle, char2Rect.Top);
+                enemyDetectionPreviousLeftovers = 2;
+            }
+            //Returns whether they intersect.
+            return char1Rect.IntersectsWith(char2Rect);
         }
 
         public GridItemView GetCharacterView(int characterNo)
