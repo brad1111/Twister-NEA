@@ -89,7 +89,7 @@
     </Compile>
     <Compile Include="Grid\CharacterItem.cs" />
     <Compile Include="Grid\Exitable.cs" />
-    <Compile Include="Grid\GameGrid.cs" />
+    <Compile Include="Grid\GameGridManager.cs" />
     <Compile Include="Grid\GridItem.cs" />
     <Compile Include="Grid\GridItemView.xaml.cs">
       <DependentUpon>GridItemView.xaml</DependentUpon>

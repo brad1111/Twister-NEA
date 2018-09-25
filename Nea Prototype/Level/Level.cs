@@ -16,7 +16,7 @@ namespace Nea_Prototype.Level
 {
     public class Level
     {
-        [JsonIgnore] private GameGrid grid;
+        [JsonIgnore] private GameGridManager _gridManager;
 
         [JsonIgnore] private EnemyType enemyType;
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
@@ -51,7 +51,7 @@ namespace Nea_Prototype.Level
         /// <summary>
         /// Normal usage of create level with the gridStartLocations
         /// </summary>
-        /// <param name="gridStartLocations">The locations where all the items on the grid start</param>
+        /// <param name="gridStartLocations">The locations where all the items on the _gridManager start</param>
         public Level(EnemyType enemyType)
         {
             this.gridStartLocations = gridStartLocations;
@@ -61,22 +61,22 @@ namespace Nea_Prototype.Level
         public void SetupGrid(ref Canvas gameCanvas)
         {
             DecodeGridStartLocations();
-            //Add grid items
+            //Add _gridManager items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
                 {
-                    gameCanvas.Children.Add(grid.GridItemsViews[y, x]);
-                    MoveItemToPlace(ref grid.GridItemsViews[y,x], grid.GridItems[y,x].Position);
+                    gameCanvas.Children.Add(_gridManager.GridItemsViews[y, x]);
+                    MoveItemToPlace(ref _gridManager.GridItemsViews[y,x], _gridManager.GridItems[y,x].Position);
                 }
             }
 
             //Add character
             for (int i = 0; i < 2; i++)
             {
-                gameCanvas.Children.Add(grid.CharactersViews[i]);
-                //grid.Characters[i].Position = 
-                MoveItemToPlace(ref grid.CharactersViews[i], grid.Characters[i].Position);
+                gameCanvas.Children.Add(_gridManager.CharactersViews[i]);
+                //_gridManager.Characters[i].Position = 
+                MoveItemToPlace(ref _gridManager.CharactersViews[i], _gridManager.Characters[i].Position);
             }
         }
 
@@ -174,7 +174,7 @@ namespace Nea_Prototype.Level
                     }
                 }
             }
-            grid = new GameGrid(characters, charactersView, gridItemsViews, gridItems);
+            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems);
         }
 
         public void MoveItemToPlace(ref GridItemView itemView, Position location)
@@ -392,17 +392,17 @@ namespace Nea_Prototype.Level
                            break;
                 }
 
-                //If outside the grid
+                //If outside the _gridManager
                 if (xApprox + xcheck < 0 || yApprox + ycheck < 0 || xApprox + xcheck > (Constants.GRID_TILES_XY - 1) ||
                     yApprox + ycheck > (Constants.GRID_TILES_XY - 1))
                 {
                     break;
                 }
                 //Check for right-above, right and right-below, and if they are non-walkable
-                if (grid.GridItems[yApprox + ycheck, xApprox + xcheck].GetType() == typeof(NonWalkable))
+                if (_gridManager.GridItems[yApprox + ycheck, xApprox + xcheck].GetType() == typeof(NonWalkable))
                 {
                     //Then add to the queue
-                    queue.Enqueue(grid.GridItemsViews[yApprox + ycheck, xApprox + xcheck]);
+                    queue.Enqueue(_gridManager.GridItemsViews[yApprox + ycheck, xApprox + xcheck]);
                 }
             }
 
@@ -462,9 +462,9 @@ namespace Nea_Prototype.Level
             switch (characterNo)
             {
                 case 1:
-                    return grid.CharactersViews[0];
+                    return _gridManager.CharactersViews[0];
                 case 2:
-                    return grid.CharactersViews[1];
+                    return _gridManager.CharactersViews[1];
                 default:
                     throw new NotImplementedException(
                         $"Player {characterNo} is not implemented in Level.Level.GetCharactersView()");
