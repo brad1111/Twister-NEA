@@ -159,6 +159,16 @@ namespace Nea_Prototype.Level
                               charactersView[1] = enemyView;
                               characters[1] = enemy;
                               break;
+                          //Exitable block
+                          case 5:
+                              Exitable exitable = new Exitable()
+                              {
+                                  Position = new Position(x, y)
+                              };
+                              GridItemView exitableView = new GridItemView(exitable);
+                              gridItems[y, x] = exitable;
+                              gridItemsViews[y, x] = exitableView;
+                              break;
                           default:
                               throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
@@ -444,6 +454,8 @@ namespace Nea_Prototype.Level
             //Returns whether they intersect.
             return char1Rect.IntersectsWith(char2Rect);
         }
+
+        
 
         public GridItemView GetCharacterView(int characterNo)
         {

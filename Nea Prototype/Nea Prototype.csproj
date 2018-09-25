@@ -88,6 +88,7 @@
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Grid\CharacterItem.cs" />
+    <Compile Include="Grid\Exitable.cs" />
     <Compile Include="Grid\GameGrid.cs" />
     <Compile Include="Grid\GridItem.cs" />
     <Compile Include="Grid\GridItemView.xaml.cs">
@@ -140,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Enemy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Exitable.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="NonWalkable.png">
