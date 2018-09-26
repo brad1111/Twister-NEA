@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using Nea_Prototype.Characters;
+using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
 {
@@ -53,6 +54,13 @@ namespace Nea_Prototype.Grid
             get => gridItems;
         }
 
-        
+        public int DebuggingCanvasLeftovers { get; set; }
+
+        #region Debugging Variables
+
+        public bool WallCollisionRectangles { get; set; }
+        public bool EnemyCollisionRectangles { get; set; }
+
+        #endregion
     }
 }

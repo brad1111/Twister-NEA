@@ -35,6 +35,8 @@ namespace Nea_Prototype
             //walkableView = new GridItemView(walkableTile);
             level.SetupGrid(ref cvsPlayArea);
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
+            GameGridManager.GetGameGrid().EnemyCollisionRectangles = true;
+            GameGridManager.GetGameGrid().WallCollisionRectangles = true;
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
@@ -76,38 +78,38 @@ namespace Nea_Prototype
             double getUp;
             if (Keyboard.IsKeyDown(KeyBindings.Player1_right))
             {
-                level.MoveCharacter(1, Direction.Right, ref cvsPlayArea);
+                level.MoveCharacter(1, Direction.Right);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player1_left))
             {
-                level.MoveCharacter(1, Direction.Left, ref cvsPlayArea);
+                level.MoveCharacter(1, Direction.Left);
             }
             
             if (Keyboard.IsKeyDown(KeyBindings.Player1_up))
             {
-                level.MoveCharacter(1, Direction.Up, ref cvsPlayArea);
+                level.MoveCharacter(1, Direction.Up);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player1_down))
             {
-                level.MoveCharacter(1, Direction.Down, ref cvsPlayArea);
+                level.MoveCharacter(1, Direction.Down);
             }
 
             if (Keyboard.IsKeyDown(KeyBindings.Player2_right))
             {
-                level.MoveCharacter(2, Direction.Right, ref cvsPlayArea);
+                level.MoveCharacter(2, Direction.Right);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player2_left))
             {
-                level.MoveCharacter(2, Direction.Left, ref cvsPlayArea);
+                level.MoveCharacter(2, Direction.Left);
             }
             
             if (Keyboard.IsKeyDown(KeyBindings.Player2_up))
             {
-                level.MoveCharacter(2, Direction.Up, ref cvsPlayArea);
+                level.MoveCharacter(2, Direction.Up);
             }
             else if (Keyboard.IsKeyDown(KeyBindings.Player2_down))
             {
-                level.MoveCharacter(2, Direction.Down, ref cvsPlayArea);
+                level.MoveCharacter(2, Direction.Down);
             }
         }
 

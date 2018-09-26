@@ -21,13 +21,6 @@ namespace Nea_Prototype.Level
         [JsonIgnore] private EnemyType enemyType;
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
         public ExitPlacement ExitLocation { get; internal set; }
-
-        #region Debugging Variables
-
-        [JsonIgnore] public bool WallCollisionRectangles { get; set; }
-        [JsonIgnore] public bool EnemyCollisionRectangles { get; set; }
-
-        #endregion
         
 
         private int yLength()
@@ -45,8 +38,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         public Level()
         {
-            //EnemyCollisionRectangles = true;
-            WallCollisionRectangles = true;
+            
         }
 
         /// <summary>
@@ -57,8 +49,6 @@ namespace Nea_Prototype.Level
         {
             this.gridStartLocations = gridStartLocations;
             this.enemyType = enemyType;
-            //EnemyCollisionRectangles = true;
-            WallCollisionRectangles = true;
         }
 
         public void SetupGrid(ref Canvas gameCanvas)
@@ -186,9 +176,17 @@ namespace Nea_Prototype.Level
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
         }
 
-        public void MoveCharacter(int characterNo, Direction dir, ref Canvas canvas)
+        public void MoveCharacter(int characterNo, Direction dir)
         {
-            //MoveCharacterInternal(GetCharacterView(characterNo), dir);
+            //Cleanup canvas if using a debugging mode
+            if (_gridManager.DebuggingCanvasLeftovers > 0)
+            {
+                UIElementCollection canvasItems = _gridManager.GameCanvas.Children;
+                canvasItems.RemoveRange(canvasItems.Count - _gridManager.DebuggingCanvasLeftovers - 1, _gridManager.DebuggingCanvasLeftovers);
+                _gridManager.DebuggingCanvasLeftovers = 0;
+            }
+
+
             GridItemView characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
             if (!WallCollisionDetection(ref characterView, dir))
@@ -229,9 +227,7 @@ namespace Nea_Prototype.Level
                     throw new NotImplementedException(
                         $"Direction '{nameof(dir)}' is not implemented in Level.Level.MoveCharacter()");
             }
-        }
-
-        private int wallDetectionPreviousLeftOvers = 0; 
+        } 
 
         /// <summary>
         /// Checks whether a character will collide into a wall with their movement
@@ -242,14 +238,6 @@ namespace Nea_Prototype.Level
         /// <returns>Whether the character will collide</returns>
         private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
         {
-            Canvas canvas = null;
-            if (WallCollisionRectangles)
-            {
-                canvas = _gridManager.GameCanvas;
-                canvas.Children.RemoveRange(canvas.Children.Count - wallDetectionPreviousLeftOvers - 1, wallDetectionPreviousLeftOvers);
-            }
-            wallDetectionPreviousLeftOvers = 0;
-
             double x, y = 0;
             x = Canvas.GetLeft(characterView);
             y = Canvas.GetTop(characterView);
@@ -333,8 +321,9 @@ namespace Nea_Prototype.Level
             Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
 
             //Only display the rectangles if they are wanted
-            if (WallCollisionRectangles)
+            if (_gridManager.WallCollisionRectangles)
             {
+                Canvas canvas = _gridManager.GameCanvas;
                 Rectangle charcterRectangle = new Rectangle()
                 {
                     Width = characterRect.Width,
@@ -347,7 +336,7 @@ namespace Nea_Prototype.Level
                 Canvas.SetTop(charcterRectangle, characterRect.Top);
             }
 
-            wallDetectionPreviousLeftOvers = ItemsToCheckForCollision.Count + 1;
+            _gridManager.DebuggingCanvasLeftovers += ItemsToCheckForCollision.Count + 1;
 
             bool collision = false;
 
@@ -361,7 +350,7 @@ namespace Nea_Prototype.Level
                 }
 
                 //Only display rectangles if they are wanted to debug
-                if (WallCollisionRectangles)
+                if (_gridManager.WallCollisionRectangles)
                 {
                     Rectangle nonwalkableRectangle = new Rectangle()
                     {
@@ -369,7 +358,7 @@ namespace Nea_Prototype.Level
                         Height = characterRect.Height,
                         Fill = new SolidColorBrush(Colors.Blue)
                     };
-                    canvas.Children.Add(nonwalkableRectangle);
+                    _gridManager.GameCanvas.Children.Add(nonwalkableRectangle);
                     Canvas.SetLeft(nonwalkableRectangle, nonWalkableRect.Left);
                     Canvas.SetTop(nonwalkableRectangle, nonWalkableRect.Top);
                 }
@@ -414,16 +403,8 @@ namespace Nea_Prototype.Level
             return queue;
         }
 
-        private int enemyDetectionPreviousLeftovers = 0;
         public bool EnemyCollisionDetection()
         {
-            Canvas canvas = null;
-            //If the debugging view is open and there are items left over then delete them
-            if (EnemyCollisionRectangles)
-            {
-                canvas = _gridManager.GameCanvas;
-                canvas.Children.RemoveRange(canvas.Children.Count - enemyDetectionPreviousLeftovers - 1, enemyDetectionPreviousLeftovers);
-            }
 
             //Get the characters views
             GridItemView characterOneView = GetCharacterView(1);
@@ -433,8 +414,9 @@ namespace Nea_Prototype.Level
             Rect char2Rect = new Rect(Canvas.GetLeft(characterTwoView) + 1, Canvas.GetTop(characterTwoView) + 1, characterTwoView.ActualWidth - 2, characterTwoView.ActualHeight - 2);
 
             
-            if (EnemyCollisionRectangles)
+            if (_gridManager.EnemyCollisionRectangles)
             {
+                Canvas canvas = _gridManager.GameCanvas;
                 Rectangle char1Rectangle = new Rectangle()
                 {
                     Width = char1Rect.Width,
@@ -456,7 +438,7 @@ namespace Nea_Prototype.Level
 
                 Canvas.SetTop(char1Rectangle, char1Rect.Top);
                 Canvas.SetTop(char2Rectangle, char2Rect.Top);
-                enemyDetectionPreviousLeftovers = 2;
+                _gridManager.DebuggingCanvasLeftovers += 2;
             }
             //Returns whether they intersect.
             return char1Rect.IntersectsWith(char2Rect);
