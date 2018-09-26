@@ -16,8 +16,8 @@
             </LinearGradientBrush>
         </Grid.Background>
         <StackPanel>
-            <CheckBox Click="WallToggleButton_OnClick" IsTabStop="False">Wall Collision Rectangles</CheckBox>
-            <CheckBox Click="EnemyToggleButton_OnClick" IsTabStop="False">Enemy Collision Rectangles</CheckBox>
+            <CheckBox x:Name="WallToggleButton" Click="WallToggleButton_OnClick" IsTabStop="False">Wall Collision Rectangles</CheckBox>
+            <CheckBox x:Name="EnemyToggleButton" Click="EnemyToggleButton_OnClick" IsTabStop="False">Enemy Collision Rectangles</CheckBox>
             <Label IsTabStop="False">Exitable Items</Label>
             <StackPanel x:Name="pnlExitableItems">
 

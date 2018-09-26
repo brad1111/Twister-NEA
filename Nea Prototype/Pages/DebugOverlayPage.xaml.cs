@@ -28,6 +28,8 @@ namespace Nea_Prototype.Pages
             Loaded += (s, e) =>
             {
                 int count = 0;
+                WallToggleButton.IsChecked = GameGridManager.GetGameGrid().WallCollisionRectangles;
+                EnemyToggleButton.IsChecked = GameGridManager.GetGameGrid().EnemyCollisionRectangles;
                 foreach (Exitable exitableItem in GameGridManager.GetGameGrid().ExitLocations)
                 {
                     pnlExitableItems.Children.Add(new CheckBox()
