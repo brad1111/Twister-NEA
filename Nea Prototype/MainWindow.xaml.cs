@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Nea_Prototype.Pages;
 
 namespace Nea_Prototype
 {
@@ -25,13 +26,26 @@ namespace Nea_Prototype
         public MainWindow()
         {
             InitializeComponent();
-            Frame naviFrame = new Frame();
-            this.Content = naviFrame;
-            naviFrame.Navigate(page);
+            frmMainFrame.Navigate(page);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            if (Keyboard.Modifiers == KeyBindings.DebugOverlayModifier &&
+                e.Key == KeyBindings.DebugOverlayKey)
+            {
+                if (frmOverlay.Content?.GetType() == typeof(DebugOverlayPage))
+                {
+                    //Goto a new null page
+                    frmOverlay.Navigate(new Page());
+                    frmOverlay.NavigationService.RemoveBackEntry();
+                }
+                else
+                {
+                    frmOverlay.Navigate(new DebugOverlayPage());
+                }
+            }
+
             page.Page_KeyDown(sender, e);
         }
     }

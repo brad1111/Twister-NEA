@@ -184,7 +184,7 @@ namespace Nea_Prototype.Level
             if (_gridManager.DebuggingCanvasLeftovers > 0)
             {
                 UIElementCollection canvasItems = _gridManager.GameCanvas.Children;
-                canvasItems.RemoveRange(canvasItems.Count - _gridManager.DebuggingCanvasLeftovers - 1, _gridManager.DebuggingCanvasLeftovers);
+                canvasItems.RemoveRange(canvasItems.Count - _gridManager.DebuggingCanvasLeftovers, _gridManager.DebuggingCanvasLeftovers);
                 _gridManager.DebuggingCanvasLeftovers = 0;
             }
 
@@ -336,9 +336,10 @@ namespace Nea_Prototype.Level
                 canvas.Children.Add(charcterRectangle);
                 Canvas.SetLeft(charcterRectangle, characterRect.Left);
                 Canvas.SetTop(charcterRectangle, characterRect.Top);
+                _gridManager.DebuggingCanvasLeftovers += ItemsToCheckForCollision.Count + 1;
             }
 
-            _gridManager.DebuggingCanvasLeftovers += ItemsToCheckForCollision.Count + 1;
+            
 
             bool collision = false;
 

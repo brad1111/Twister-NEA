@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Nea_Prototype.Enums;
 
-namespace Nea_Prototype
+namespace Nea_Prototype.Pages
 {
     /// <summary>
     /// Interaction logic for GamePage.xaml
