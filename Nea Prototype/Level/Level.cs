@@ -45,17 +45,20 @@ namespace Nea_Prototype.Level
         /// </summary>
         public Level()
         {
-
+            //EnemyCollisionRectangles = true;
+            WallCollisionRectangles = true;
         }
 
         /// <summary>
         /// Normal usage of create level with the gridStartLocations
         /// </summary>
-        /// <param name="gridStartLocations">The locations where all the items on the _gridManager start</param>
+        /// <param name="gridStartLocations">The locations where all the items on the grid start</param>
         public Level(EnemyType enemyType)
         {
             this.gridStartLocations = gridStartLocations;
             this.enemyType = enemyType;
+            //EnemyCollisionRectangles = true;
+            WallCollisionRectangles = true;
         }
 
         public void SetupGrid(ref Canvas gameCanvas)
@@ -188,12 +191,12 @@ namespace Nea_Prototype.Level
             //MoveCharacterInternal(GetCharacterView(characterNo), dir);
             GridItemView characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
-            if (!WallCollisionDetection(ref characterView, dir, ref canvas))
+            if (!WallCollisionDetection(ref characterView, dir))
             {
                 MoveCharacterInternal(ref characterView, dir);
             }
 
-            if (EnemyCollisionDetection(ref canvas))
+            if (EnemyCollisionDetection())
             {
                 MessageBox.Show("Enemy killed you.");
             }
@@ -237,10 +240,12 @@ namespace Nea_Prototype.Level
         /// <param name="movementDirection">The direction the character would move</param>
         /// <param name="canvas">The canvas to draw rectangles on if visualising the collision detection</param>
         /// <returns>Whether the character will collide</returns>
-        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection, ref Canvas canvas)
+        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
         {
+            Canvas canvas = null;
             if (WallCollisionRectangles)
             {
+                canvas = _gridManager.GameCanvas;
                 canvas.Children.RemoveRange(canvas.Children.Count - wallDetectionPreviousLeftOvers - 1, wallDetectionPreviousLeftOvers);
             }
             wallDetectionPreviousLeftOvers = 0;
@@ -410,11 +415,13 @@ namespace Nea_Prototype.Level
         }
 
         private int enemyDetectionPreviousLeftovers = 0;
-        public bool EnemyCollisionDetection(ref Canvas canvas)
+        public bool EnemyCollisionDetection()
         {
+            Canvas canvas = null;
             //If the debugging view is open and there are items left over then delete them
             if (EnemyCollisionRectangles)
             {
+                canvas = _gridManager.GameCanvas;
                 canvas.Children.RemoveRange(canvas.Children.Count - enemyDetectionPreviousLeftovers - 1, enemyDetectionPreviousLeftovers);
             }
 

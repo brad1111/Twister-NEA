@@ -34,6 +34,7 @@ namespace Nea_Prototype
             //nonwalkableView = new GridItemView(nonWalkableTile);
             //walkableView = new GridItemView(walkableTile);
             level.SetupGrid(ref cvsPlayArea);
+            GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
