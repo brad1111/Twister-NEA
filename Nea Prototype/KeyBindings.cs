@@ -35,7 +35,24 @@ namespace Nea_Prototype
         public static Key Player2_down { get => player2_down; set => player2_down = value; }
         public static Key Player2_left { get => player2_left; set => player2_left = value; }
         public static Key Player2_right { get => player2_right; set => player2_right = value; }
-        #endregion
+
         
+
+        #endregion
+
+        #region Overlay bindings
+
+        private static ModifierKeys debugOverlayModifier = ModifierKeys.Shift;
+        private static Key debugOverlayKey = Key.Tab;
+
+        #endregion
+
+        #region Overlay encapsulation
+
+        public static ModifierKeys DebugOverlayModifier{ get => debugOverlayModifier; set => debugOverlayModifier = value; }
+
+        public static Key DebugOverlayKey { get => debugOverlayKey; set => debugOverlayKey = value; }
+
+        #endregion
     }
 }
