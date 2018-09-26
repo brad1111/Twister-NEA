@@ -394,8 +394,9 @@ namespace Nea_Prototype.Level
                 {
                     break;
                 }
-                //Check for right-above, right and right-below, and if they are non-walkable
-                if (_gridManager.GridItems[yApprox + ycheck, xApprox + xcheck].GetType() == typeof(NonWalkable))
+                //Check for right-above, right and right-below, and if they are non-walkable or they are a closed exit
+                GridItem item = _gridManager.GridItems[yApprox + ycheck, xApprox + xcheck];
+                if (item.GetType() == typeof(NonWalkable) || (item.GetType() == typeof(Exitable) && !(item as Exitable).CanExit))
                 {
                     //Then add to the queue
                     queue.Enqueue(_gridManager.GridItemsViews[yApprox + ycheck, xApprox + xcheck]);
