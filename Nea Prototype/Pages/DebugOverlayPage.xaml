@@ -9,13 +9,32 @@
       Title="DebugOverlayPage">
 
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#7F999898" Offset="1"/>
+                <GradientStop Color="#80FFFFFF"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <StackPanel>
             <CheckBox Click="WallToggleButton_OnClick" IsTabStop="False">Wall Collision Rectangles</CheckBox>
             <CheckBox Click="EnemyToggleButton_OnClick" IsTabStop="False">Enemy Collision Rectangles</CheckBox>
             <Label IsTabStop="False">Exitable Items</Label>
             <StackPanel x:Name="pnlExitableItems">
-                
+
             </StackPanel>
         </StackPanel>
+        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe UI Black" FontSize="50" Foreground="#7F000000" RenderTransformOrigin="0.5,0.5" TextAlignment="Center">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-30"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+            DEV
+            <LineBreak></LineBreak>
+            MENU
+        </TextBlock>
     </Grid>
 </Page>
