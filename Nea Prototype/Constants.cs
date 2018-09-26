@@ -1,5 +1,9 @@
 ﻿namespace Nea_Prototype
 {
+    /// <summary>
+    /// The values that stay constant within the game that I don't want to keep repeating
+    /// to make it easier to change and easier to understand
+    /// </summary>
     public static class Constants
     {
         public const int GRID_TILES_XY = 20;

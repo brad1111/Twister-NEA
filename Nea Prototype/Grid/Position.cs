@@ -1,5 +1,8 @@
 ﻿namespace Nea_Prototype.Grid
 {
+    /// <summary>
+    /// The position of a grid item within the maze
+    /// </summary>
     public class Position
     {
 

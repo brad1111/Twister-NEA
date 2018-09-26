@@ -11,62 +11,45 @@ namespace Nea_Prototype.Pages
 {
     /// <summary>
     /// Interaction logic for GamePage.xaml
+    /// The main page that is used for the game
     /// </summary>
     public partial class GamePage : Page
     {
+        //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
-        //private CharacterItem character = new CharacterItem(new PlayerOne());
-        //private GridItemView characterView;
-        //private CharacterItem enemy = new CharacterItem(new PlayerTwo());
-        //private GridItemView enemyView;
-        //private NonWalkable nonWalkableTile = new NonWalkable();
-        //private GridItemView nonwalkableView;
-        //private Walkable walkableTile = new Walkable();
-        //private GridItemView walkableView;
 
+        //The storage for level information
         private Level.Level level = LevelIO.ReadJSON("testing.json");
 
         public GamePage()
         {
             InitializeComponent();
-            //characterView = new GridItemView(character);
-            //enemyView = new GridItemView(enemy);
-            //nonwalkableView = new GridItemView(nonWalkableTile);
-            //walkableView = new GridItemView(walkableTile);
+            
+            //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, EnemyType.Local);
+            //Set the canvas of the singleton for easier access to the canvas (so the canvas does
+            //not need to be referneced every tick for the collision detection visualisation to work)
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
                 Interval = new TimeSpan(0, 0, 0, 0, 1)
             };
+            //Have the timer use the timertick event
             keyboardInputTimer.Tick += KeyboardInputTimerTick;
             
+            //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
-                //cvsPlayArea.Children.Add(characterView);
-                //Canvas.SetLeft(characterView, 40);
-                //Canvas.SetTop(characterView, 40);
-
-                //cvsPlayArea.Children.Add(enemyView);
-                //Canvas.SetLeft(enemyView, 360);
-                //Canvas.SetTop(enemyView, 360);
-                ////Canvas.SetLeft(character, 40);
-                ////Canvas.SetTop(character, 40);
-
-                //cvsPlayArea.Children.Add(nonwalkableView);
-                //Canvas.SetBottom(nonwalkableView, 40);
-                //Canvas.SetLeft(nonwalkableView, 40);
-
-                //cvsPlayArea.Children.Add(walkableView);
-                //Canvas.SetTop(walkableView, 40);
-                //Canvas.SetRight(walkableView,40);
-                
-
                 keyboardInputTimer.Start();
             };
         }
 
+        /// <summary>
+        /// Everytime the timer ticks check for keyboard input
+        /// </summary>
+        /// <param name="sender">The timer</param>
+        /// <param name="e">The event arguments</param>
         private void KeyboardInputTimerTick(object sender, EventArgs e)
         {
             //Timer is used for keyboard inputs so that the user can press two directions
@@ -111,6 +94,12 @@ namespace Nea_Prototype.Pages
             }
         }
 
+        /// <summary>
+        /// When a key is pressed also run the same code for the timer (this is so that
+        /// when a user presses a key once very quickly it still moves the player
+        /// </summary>
+        /// <param name="sender">Keydown event</param>
+        /// <param name="e">The arguments to do with the key pressed</param>
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             KeyboardInputTimerTick(sender, e);

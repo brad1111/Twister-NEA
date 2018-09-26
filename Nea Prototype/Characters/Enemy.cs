@@ -5,6 +5,9 @@ using System.Windows.Media.Imaging;
 
 namespace Nea_Prototype.Characters
 {
+    /// <summary>
+    /// The enemy attempts to prevent charcater 1 from reaching the exit
+    /// </summary>
     public class Enemy : Character
     {
         public Enemy()
@@ -18,9 +21,5 @@ namespace Nea_Prototype.Characters
             sprite = src;
         }
 
-        public override void Collide(int x, int y)
-        {
-            base.Collide(x, y);
-        }
     }
 }

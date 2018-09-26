@@ -7,6 +7,9 @@ namespace Nea_Prototype.Level
 {
     public class LevelIO
     {
+        /// <summary>
+        /// Makes a sample json file for testing purpose from a sample level object
+        /// </summary>
         public static void CreateJSON()
         {
             StreamWriter sw = new StreamWriter("testing.json");
@@ -32,6 +35,11 @@ namespace Nea_Prototype.Level
             sw.Close();
         }
 
+        /// <summary>
+        /// Reads a json file and converts it to a level object
+        /// </summary>
+        /// <param name="fileToRead">The json file to be read</param>
+        /// <returns>A level object</returns>
         public static Level ReadJSON(string fileToRead)
         {
             StreamReader sr = new StreamReader(fileToRead);

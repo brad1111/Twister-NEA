@@ -14,6 +14,11 @@ namespace Nea_Prototype
     /// </summary>
     public partial class App : Application
     {
+
+        /// <summary>
+        /// Overriding main so that you can use parameters to launch the program
+        /// </summary>
+        /// <param name="inputStrings"></param>
         [STAThread]
         public static void Main(params string[] inputStrings)
         {

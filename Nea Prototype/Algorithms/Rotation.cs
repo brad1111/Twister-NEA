@@ -6,9 +6,9 @@ namespace Nea_Prototype.Algorithms
     public class Rotation
     {
         /// <summary>
-        /// 
+        /// Finds out the direction that the rotation will be
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
         public static int RotationMultiplier(Character[] characters, ref double rotationAngle)
         {
             int totalMomentFromCentre = 0;

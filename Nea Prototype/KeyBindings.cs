@@ -2,6 +2,9 @@
 
 namespace Nea_Prototype
 {
+    /// <summary>
+    /// Contains the defaults and variables for keybindings
+    /// </summary>
     public static class KeyBindings
     {
         #region Player 1 Keybindings

@@ -5,6 +5,9 @@ using Nea_Prototype.Enums;
 
 namespace Nea_Prototype.Characters
 {
+    /// <summary>
+    /// Player 1 attempts to avoid the enemy and get to the exit
+    /// </summary>
     public class PlayerOne : Character
     {
         public PlayerOne()

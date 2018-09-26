@@ -1,5 +1,8 @@
 ﻿namespace Nea_Prototype.Grid
 {
+    /// <summary>
+    /// An item that a character can only walk on if open
+    /// </summary>
     public class Exitable : Walkable
     {
         public Exitable()

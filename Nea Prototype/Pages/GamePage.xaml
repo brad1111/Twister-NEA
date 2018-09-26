@@ -26,7 +26,7 @@
             </Canvas>
         </Grid>
         <Grid Grid.Row="2">
-
+            <!--Other interactions with the game-->
         </Grid>
     </Grid>
 </Page>

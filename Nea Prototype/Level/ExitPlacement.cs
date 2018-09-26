@@ -11,9 +11,11 @@ namespace Nea_Prototype.Level
             this.length = length;
         }
 
-
+        //How high to place the external exit
         private int heightFromAnchor;
+        //Which side to place the external exit
         private Side sidePlaced;
+        //How big the external exit is
         private int length;
 
 

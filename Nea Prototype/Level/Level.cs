@@ -16,41 +16,52 @@ namespace Nea_Prototype.Level
 {
     public class Level
     {
+        /// <summary>
+        /// The singleton that stores everything to do with the game grid
+        /// </summary>
         [JsonIgnore] private GameGridManager _gridManager;
 
         //These need to be public properties so that JSON.net can fill these values from the json file.
+        /// <summary>
+        /// The integer array which represents the layout of the grid
+        /// </summary>
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
+        /// <summary>
+        /// The location of the exit
+        /// </summary>
         public ExitPlacement ExitLocation { get; internal set; }
         
 
+        /// <summary>
+        ///  y
+        /// </summary>
+        /// <returns>The yLength of the gridStartLocations array</returns>
         private int yLength()
         {
             return gridStartLocations.GetLength(0);
         }
 
+        /// <summary>
+        /// x
+        /// </summary>
+        /// <returns>The yLength of the gridStartLocations array</returns>
         private int xLength()
         {
             return gridStartLocations.GetLength(1); 
         }
 
-        /// <summary>
-        /// Only used for LevelIO.CreateJSON()
-        /// </summary>
+       
         public Level()
         {
             
         }
 
-        ///// <summary>
-        ///// Normal usage of create level with the gridStartLocations
-        ///// </summary>
-        ///// <param name="gridStartLocations">The locations where all the items on the grid start</param>
-        //public Level(EnemyType enemyType)
-        //{
-        //    this.gridStartLocations = gridStartLocations;
-        //    _gridManager.EnemyType = enemyType;
-        //}
-
+        /// <summary>
+        /// Sets up the grid in terms of decoding the integer array into items
+        /// and sets up the canvas.
+        /// </summary>
+        /// <param name="gameCanvas">The canvas reference is needed</param>
+        /// <param name="enemyType"></param>
         public void SetupGrid(ref Canvas gameCanvas, EnemyType enemyType)
         {
             DecodeGridStartLocations(enemyType);
@@ -73,6 +84,10 @@ namespace Nea_Prototype.Level
             }
         }
 
+        /// <summary>
+        /// Converts the integer array for the start locations into the grid items, grid views, characters, characters' views, and exitable items
+        /// </summary>
+        /// <param name="enemyType">The type of enemy to instatiate</param>
         private void DecodeGridStartLocations(EnemyType enemyType)
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
@@ -172,12 +187,23 @@ namespace Nea_Prototype.Level
             _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray());
         }
 
+        /// <summary>
+        /// Moves an item of certain position to that location on the canvas
+        /// </summary>
+        /// <param name="itemView">The item to move</param>
+        /// <param name="location">Where to move it</param>
         public void MoveItemToPlace(ref GridItemView itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
         }
 
+        /// <summary>
+        /// Moves a character from a position up, down, left, or right depending on whether
+        /// it is able to move to that position
+        /// </summary>
+        /// <param name="characterNo">The character to move</param>
+        /// <param name="dir">The direction to move the character in</param>
         public void MoveCharacter(int characterNo, Direction dir)
         {
             //Cleanup canvas if using a debugging mode
@@ -202,6 +228,11 @@ namespace Nea_Prototype.Level
             }
         }
 
+        /// <summary>
+        /// Where the character is actually moved (no checks on whether it can be done, just does it)
+        /// </summary>
+        /// <param name="itemView"></param>
+        /// <param name="dir"></param>
         private void MoveCharacterInternal(ref GridItemView itemView, Direction dir)
         {
             double leftPos = 0;
@@ -370,6 +401,14 @@ namespace Nea_Prototype.Level
             return collision;
         }
 
+        /// <summary>
+        /// Creates a queue of locations to check whether the items intersect
+        /// </summary>
+        /// <param name="xApprox">Reference the approximate x value the character is currently in</param>
+        /// <param name="yApprox">Reference the approximate y value the character is currently in</param>
+        /// <param name="xcheck">The x value to check either a fixed value (-1 or 1) or i from a for loop</param>
+        /// <param name="ycheck">The y value to check either a fixed value (-1 or 1) or i from a for loop</param>
+        /// <returns>A queue of items in that direction that need checking for intersection</returns>
         private Queue<GridItemView> QueuingLocationsToCheck(ref int xApprox, ref int yApprox, int xcheck, int ycheck)
         {
             Queue<GridItemView> queue = new Queue<GridItemView>(3);
@@ -407,6 +446,10 @@ namespace Nea_Prototype.Level
             return queue;
         }
 
+        /// <summary>
+        /// Detects whether the two characters intersect
+        /// </summary>
+        /// <returns>Whether the enemy has collided with Player 1</returns>
         public bool EnemyCollisionDetection()
         {
 
@@ -417,7 +460,7 @@ namespace Nea_Prototype.Level
             Rect char1Rect = new Rect(Canvas.GetLeft(characterOneView) + 1, Canvas.GetTop(characterOneView) + 1, characterOneView.ActualWidth - 2, characterOneView.ActualHeight - 2);
             Rect char2Rect = new Rect(Canvas.GetLeft(characterTwoView) + 1, Canvas.GetTop(characterTwoView) + 1, characterTwoView.ActualWidth - 2, characterTwoView.ActualHeight - 2);
 
-            
+            //Visualise the intersection
             if (_gridManager.EnemyCollisionRectangles)
             {
                 Canvas canvas = _gridManager.GameCanvas;
@@ -448,6 +491,11 @@ namespace Nea_Prototype.Level
             return char1Rect.IntersectsWith(char2Rect);
         }
 
+        /// <summary>
+        /// Converts a charcater number into their respective CharacterView
+        /// </summary>
+        /// <param name="characterNo">The characters number, either player 1 or player 2</param>
+        /// <returns>The characters' view</returns>
         public GridItemView GetCharacterView(int characterNo)
         {
             switch (characterNo)

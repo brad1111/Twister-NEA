@@ -2,6 +2,9 @@
 
 namespace Nea_Prototype.Grid
 {
+    /// <summary>
+    /// The chracter's grid item (the one that connects the character to the characterview)
+    /// </summary>
     public class CharacterItem : GridItem
     {
         private Character character;

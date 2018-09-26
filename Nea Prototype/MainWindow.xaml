@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" KeyDown="Window_KeyDown">
     <Grid>
+        <!--The frame for the game/menus-->
         <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden" IsTabStop="False"/>
+        <!--The frame for overlays such as debug overlay or pause menu-->
         <Frame x:Name="frmOverlay" NavigationUIVisibility="Hidden" IsTabStop="False"/>
     </Grid>
 </Window>

@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
 {
+    /// <summary>
+    /// Singleton that manages all data in relation to the grid
+    /// </summary>
     public class GameGridManager
     {
         private Character[] characters;
@@ -19,7 +22,16 @@ namespace Nea_Prototype.Grid
         {
             
         }
-
+        
+        /// <summary>
+        /// Creates a new grid (replacing an old one)
+        /// </summary>
+        /// <param name="characters">The characters to store<param>
+        /// <param name="charactersView">The views of the characters to store</param>
+        /// <param name="gridItemsViews">The views of all of the grid items to store</param>
+        /// <param name="gridItems">The non-view part of the grid items to store</param>
+        /// <param name="exitableLocations">The non-view part of the internal exitable locations</param>
+        /// <returns>The instance of the new singleton</returns>
         public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations)
         {
             gameGridStorage.characters = characters;
@@ -30,28 +42,47 @@ namespace Nea_Prototype.Grid
             return gameGridStorage;
         }
 
+        /// <summary>
+        /// Gets the current instance of the singleton
+        /// </summary>
+        /// <returns>The current instance of the signleton</returns>
         public static GameGridManager GetGameGrid()
         {
             return gameGridStorage;
         }
 
+        /// <summary>
+        /// The canvas used by the game
+        /// </summary>
         public Canvas GameCanvas { get; set; }
 
+        /// <summary>
+        /// All of the characters
+        /// </summary>
         public Character[] Characters
         {
             get => characters;
         }
 
+        /// <summary>
+        /// All of the characters views
+        /// </summary>
         public GridItemView[] CharactersViews
         {
             get => charactersView;
         }
 
+        /// <summary>
+        /// All of the views of the grid items
+        /// </summary>
         public GridItemView[,] GridItemsViews
         {
             get => gridItemsViews;
         }
 
+        /// <summary>
+        /// All of the exit locations
+        /// </summary>
         public Exitable[] ExitLocations
         {
             get => exitLocations;

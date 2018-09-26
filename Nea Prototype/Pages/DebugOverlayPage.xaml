@@ -9,12 +9,14 @@
       Title="DebugOverlayPage">
 
     <Grid>
+        <!--Makes the background look nice -->
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#7F999898" Offset="1"/>
                 <GradientStop Color="#80FFFFFF"/>
             </LinearGradientBrush>
         </Grid.Background>
+        <!--All of the options in the dev menu-->
         <StackPanel>
             <CheckBox x:Name="WallToggleButton" Click="WallToggleButton_OnClick" IsTabStop="False">Wall Collision Rectangles</CheckBox>
             <CheckBox x:Name="EnemyToggleButton" Click="EnemyToggleButton_OnClick" IsTabStop="False">Enemy Collision Rectangles</CheckBox>

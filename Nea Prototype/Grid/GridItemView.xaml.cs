@@ -26,12 +26,6 @@ namespace Nea_Prototype.Grid
         {
             InitializeComponent();
             DataContext = viewModel = new GridItemViewModel(gridItem);
-            //BitmapImage src = new BitmapImage();
-            //src.BeginInit();
-            //src.UriSource = new Uri("PlayerOne.png", UriKind.Relative);
-            //src.CacheOption = BitmapCacheOption.OnLoad;
-            //src.EndInit();
-            //imgGridImg.Source = viewModel.Sprite;
             imgGridImg.Height = Constants.GRID_ITEM_WIDTH;
             imgGridImg.Width = Constants.GRID_ITEM_WIDTH;
         }
@@ -39,16 +33,5 @@ namespace Nea_Prototype.Grid
 
         protected ImageSource sprite;
         protected Position position;
-
-        //public ImageSource GetSprite()
-        //{
-        //    //return sprite;
-        //    return new BitmapImage(new Uri("PlayerOne.png", UriKind.Relative));
-        //}
-
-        //public Position GetPosition()
-        //{
-        //    return position;
-        //}
     }
 }
