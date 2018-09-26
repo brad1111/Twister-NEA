@@ -35,8 +35,6 @@ namespace Nea_Prototype.Pages
             //walkableView = new GridItemView(walkableTile);
             level.SetupGrid(ref cvsPlayArea, EnemyType.Local);
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
-            GameGridManager.GetGameGrid().EnemyCollisionRectangles = true;
-            GameGridManager.GetGameGrid().WallCollisionRectangles = true;
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
