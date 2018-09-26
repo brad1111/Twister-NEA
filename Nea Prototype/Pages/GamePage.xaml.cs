@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Nea_Prototype.Enums;
 
-namespace Nea_Prototype
+namespace Nea_Prototype.Pages
 {
     /// <summary>
     /// Interaction logic for GamePage.xaml
@@ -35,8 +35,6 @@ namespace Nea_Prototype
             //walkableView = new GridItemView(walkableTile);
             level.SetupGrid(ref cvsPlayArea, EnemyType.Local);
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
-            GameGridManager.GetGameGrid().EnemyCollisionRectangles = true;
-            GameGridManager.GetGameGrid().WallCollisionRectangles = true;
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
