@@ -33,7 +33,7 @@ namespace Nea_Prototype
             //enemyView = new GridItemView(enemy);
             //nonwalkableView = new GridItemView(nonWalkableTile);
             //walkableView = new GridItemView(walkableTile);
-            level.SetupGrid(ref cvsPlayArea);
+            level.SetupGrid(ref cvsPlayArea, EnemyType.Local);
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
             GameGridManager.GetGameGrid().EnemyCollisionRectangles = true;
             GameGridManager.GetGameGrid().WallCollisionRectangles = true;

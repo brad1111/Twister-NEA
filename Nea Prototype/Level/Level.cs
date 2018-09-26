@@ -41,20 +41,20 @@ namespace Nea_Prototype.Level
             
         }
 
-        /// <summary>
-        /// Normal usage of create level with the gridStartLocations
-        /// </summary>
-        /// <param name="gridStartLocations">The locations where all the items on the grid start</param>
-        public Level(EnemyType enemyType)
-        {
-            this.gridStartLocations = gridStartLocations;
-            _gridManager.EnemyType = enemyType;
-        }
+        ///// <summary>
+        ///// Normal usage of create level with the gridStartLocations
+        ///// </summary>
+        ///// <param name="gridStartLocations">The locations where all the items on the grid start</param>
+        //public Level(EnemyType enemyType)
+        //{
+        //    this.gridStartLocations = gridStartLocations;
+        //    _gridManager.EnemyType = enemyType;
+        //}
 
-        public void SetupGrid(ref Canvas gameCanvas)
+        public void SetupGrid(ref Canvas gameCanvas, EnemyType enemyType)
         {
-            DecodeGridStartLocations();
-            //Add _gridManager items
+            DecodeGridStartLocations(enemyType);
+            //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
@@ -73,12 +73,13 @@ namespace Nea_Prototype.Level
             }
         }
 
-        private void DecodeGridStartLocations()
+        private void DecodeGridStartLocations(EnemyType enemyType)
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
             GridItemView[,] gridItemsViews = new GridItemView[yLength(), xLength()];
             Character[] characters = new Character[2];
             GridItemView[] charactersView = new GridItemView[2];
+            List<Exitable> exitables = new List<Exitable>();
             for (int y = 0; y < yLength(); y++)
             {
                 for (int x = 0; x < xLength(); x++)
@@ -126,7 +127,7 @@ namespace Nea_Prototype.Level
                           case 3:
                               //Choose which type of Enemy:
                               Enemy enemy = null;
-                              switch (_gridManager.EnemyType)
+                              switch (enemyType)
                               {
                                   case EnemyType.Local:
                                       enemy = new PlayerTwo();
@@ -137,7 +138,7 @@ namespace Nea_Prototype.Level
                                   case EnemyType.Remote:
                                   default:
                                       throw new NotImplementedException(
-                                          $"{nameof(_gridManager.EnemyType)} players are not implemented");
+                                          $"{nameof(enemyType)} players are not implemented");
                               }
 
                               enemy.Position = new Position(x, y);
@@ -161,13 +162,14 @@ namespace Nea_Prototype.Level
                               GridItemView exitableView = new GridItemView(exitable);
                               gridItems[y, x] = exitable;
                               gridItemsViews[y, x] = exitableView;
+                              exitables.Add(exitable);
                               break;
                           default:
                               throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
                 }
             }
-            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems);
+            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray());
         }
 
         public void MoveItemToPlace(ref GridItemView itemView, Position location)
@@ -443,8 +445,6 @@ namespace Nea_Prototype.Level
             //Returns whether they intersect.
             return char1Rect.IntersectsWith(char2Rect);
         }
-
-        
 
         public GridItemView GetCharacterView(int characterNo)
         {
