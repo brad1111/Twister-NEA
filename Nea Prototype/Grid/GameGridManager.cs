@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using Nea_Prototype.Characters;
+using Nea_Prototype.Enums;
 using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
@@ -55,6 +56,8 @@ namespace Nea_Prototype.Grid
         }
 
         public int DebuggingCanvasLeftovers { get; set; }
+
+        public EnemyType EnemyType { get; set; }
 
         #region Debugging Variables
 
