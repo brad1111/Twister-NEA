@@ -32,6 +32,8 @@ namespace Nea_Prototype.Grid
             //src.CacheOption = BitmapCacheOption.OnLoad;
             //src.EndInit();
             //imgGridImg.Source = viewModel.Sprite;
+            imgGridImg.Height = Constants.GRID_ITEM_WIDTH;
+            imgGridImg.Width = Constants.GRID_ITEM_WIDTH;
         }
         
 
