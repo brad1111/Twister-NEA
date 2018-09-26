@@ -1,5 +1,7 @@
 ﻿using System.Windows.Controls;
 using Nea_Prototype.Characters;
+using Nea_Prototype.Enums;
+using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
 {
@@ -9,7 +11,8 @@ namespace Nea_Prototype.Grid
         private GridItemView[] charactersView;
         private GridItemView[,] gridItemsViews;
         private GridItem[,] gridItems;
-
+        private Exitable[] exitLocations;
+        
         private static readonly GameGridManager gameGridStorage = new GameGridManager();
 
         private GameGridManager()
@@ -17,12 +20,13 @@ namespace Nea_Prototype.Grid
             
         }
 
-        public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems)
+        public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations)
         {
             gameGridStorage.characters = characters;
             gameGridStorage.charactersView = charactersView;
             gameGridStorage.gridItemsViews = gridItemsViews;
             gameGridStorage.gridItems = gridItems;
+            gameGridStorage.exitLocations = exitableLocations;
             return gameGridStorage;
         }
 
@@ -48,11 +52,27 @@ namespace Nea_Prototype.Grid
             get => gridItemsViews;
         }
 
+        public Exitable[] ExitLocations
+        {
+            get => exitLocations;
+        }
+
+        
+
         public GridItem[,] GridItems
         {
             get => gridItems;
         }
 
-        
+        public int DebuggingCanvasLeftovers { get; set; }
+
+        public EnemyType EnemyType { get; set; }
+
+        #region Debugging Variables
+
+        public bool WallCollisionRectangles { get; set; }
+        public bool EnemyCollisionRectangles { get; set; }
+
+        #endregion
     }
 }

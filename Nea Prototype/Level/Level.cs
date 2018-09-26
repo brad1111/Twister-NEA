@@ -18,16 +18,9 @@ namespace Nea_Prototype.Level
     {
         [JsonIgnore] private GameGridManager _gridManager;
 
-        [JsonIgnore] private EnemyType enemyType;
+        //These need to be public properties so that JSON.net can fill these values from the json file.
         [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
         public ExitPlacement ExitLocation { get; internal set; }
-
-        #region Debugging Variables
-
-        [JsonIgnore] public bool WallCollisionRectangles { get; set; }
-        [JsonIgnore] public bool EnemyCollisionRectangles { get; set; }
-
-        #endregion
         
 
         private int yLength()
@@ -45,23 +38,23 @@ namespace Nea_Prototype.Level
         /// </summary>
         public Level()
         {
-
+            
         }
 
-        /// <summary>
-        /// Normal usage of create level with the gridStartLocations
-        /// </summary>
-        /// <param name="gridStartLocations">The locations where all the items on the _gridManager start</param>
-        public Level(EnemyType enemyType)
-        {
-            this.gridStartLocations = gridStartLocations;
-            this.enemyType = enemyType;
-        }
+        ///// <summary>
+        ///// Normal usage of create level with the gridStartLocations
+        ///// </summary>
+        ///// <param name="gridStartLocations">The locations where all the items on the grid start</param>
+        //public Level(EnemyType enemyType)
+        //{
+        //    this.gridStartLocations = gridStartLocations;
+        //    _gridManager.EnemyType = enemyType;
+        //}
 
-        public void SetupGrid(ref Canvas gameCanvas)
+        public void SetupGrid(ref Canvas gameCanvas, EnemyType enemyType)
         {
-            DecodeGridStartLocations();
-            //Add _gridManager items
+            DecodeGridStartLocations(enemyType);
+            //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
@@ -80,12 +73,13 @@ namespace Nea_Prototype.Level
             }
         }
 
-        private void DecodeGridStartLocations()
+        private void DecodeGridStartLocations(EnemyType enemyType)
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
             GridItemView[,] gridItemsViews = new GridItemView[yLength(), xLength()];
             Character[] characters = new Character[2];
             GridItemView[] charactersView = new GridItemView[2];
+            List<Exitable> exitables = new List<Exitable>();
             for (int y = 0; y < yLength(); y++)
             {
                 for (int x = 0; x < xLength(); x++)
@@ -139,8 +133,8 @@ namespace Nea_Prototype.Level
                                       enemy = new PlayerTwo();
                                       break;
                                   case EnemyType.AI:
-                                      enemy = new BotPlayer();
-                                      break;
+                                      //enemy = new BotPlayer();
+                                      //break;
                                   case EnemyType.Remote:
                                   default:
                                       throw new NotImplementedException(
@@ -168,13 +162,14 @@ namespace Nea_Prototype.Level
                               GridItemView exitableView = new GridItemView(exitable);
                               gridItems[y, x] = exitable;
                               gridItemsViews[y, x] = exitableView;
+                              exitables.Add(exitable);
                               break;
                           default:
                               throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
                 }
             }
-            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems);
+            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray());
         }
 
         public void MoveItemToPlace(ref GridItemView itemView, Position location)
@@ -183,17 +178,25 @@ namespace Nea_Prototype.Level
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
         }
 
-        public void MoveCharacter(int characterNo, Direction dir, ref Canvas canvas)
+        public void MoveCharacter(int characterNo, Direction dir)
         {
-            //MoveCharacterInternal(GetCharacterView(characterNo), dir);
+            //Cleanup canvas if using a debugging mode
+            if (_gridManager.DebuggingCanvasLeftovers > 0)
+            {
+                UIElementCollection canvasItems = _gridManager.GameCanvas.Children;
+                canvasItems.RemoveRange(canvasItems.Count - _gridManager.DebuggingCanvasLeftovers - 1, _gridManager.DebuggingCanvasLeftovers);
+                _gridManager.DebuggingCanvasLeftovers = 0;
+            }
+
+
             GridItemView characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
-            if (!WallCollisionDetection(ref characterView, dir, ref canvas))
+            if (!WallCollisionDetection(ref characterView, dir))
             {
                 MoveCharacterInternal(ref characterView, dir);
             }
 
-            if (EnemyCollisionDetection(ref canvas))
+            if (EnemyCollisionDetection())
             {
                 MessageBox.Show("Enemy killed you.");
             }
@@ -226,9 +229,7 @@ namespace Nea_Prototype.Level
                     throw new NotImplementedException(
                         $"Direction '{nameof(dir)}' is not implemented in Level.Level.MoveCharacter()");
             }
-        }
-
-        private int wallDetectionPreviousLeftOvers = 0; 
+        } 
 
         /// <summary>
         /// Checks whether a character will collide into a wall with their movement
@@ -237,14 +238,8 @@ namespace Nea_Prototype.Level
         /// <param name="movementDirection">The direction the character would move</param>
         /// <param name="canvas">The canvas to draw rectangles on if visualising the collision detection</param>
         /// <returns>Whether the character will collide</returns>
-        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection, ref Canvas canvas)
+        private bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
         {
-            if (WallCollisionRectangles)
-            {
-                canvas.Children.RemoveRange(canvas.Children.Count - wallDetectionPreviousLeftOvers - 1, wallDetectionPreviousLeftOvers);
-            }
-            wallDetectionPreviousLeftOvers = 0;
-
             double x, y = 0;
             x = Canvas.GetLeft(characterView);
             y = Canvas.GetTop(characterView);
@@ -328,8 +323,9 @@ namespace Nea_Prototype.Level
             Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
 
             //Only display the rectangles if they are wanted
-            if (WallCollisionRectangles)
+            if (_gridManager.WallCollisionRectangles)
             {
+                Canvas canvas = _gridManager.GameCanvas;
                 Rectangle charcterRectangle = new Rectangle()
                 {
                     Width = characterRect.Width,
@@ -342,7 +338,7 @@ namespace Nea_Prototype.Level
                 Canvas.SetTop(charcterRectangle, characterRect.Top);
             }
 
-            wallDetectionPreviousLeftOvers = ItemsToCheckForCollision.Count + 1;
+            _gridManager.DebuggingCanvasLeftovers += ItemsToCheckForCollision.Count + 1;
 
             bool collision = false;
 
@@ -356,7 +352,7 @@ namespace Nea_Prototype.Level
                 }
 
                 //Only display rectangles if they are wanted to debug
-                if (WallCollisionRectangles)
+                if (_gridManager.WallCollisionRectangles)
                 {
                     Rectangle nonwalkableRectangle = new Rectangle()
                     {
@@ -364,7 +360,7 @@ namespace Nea_Prototype.Level
                         Height = characterRect.Height,
                         Fill = new SolidColorBrush(Colors.Blue)
                     };
-                    canvas.Children.Add(nonwalkableRectangle);
+                    _gridManager.GameCanvas.Children.Add(nonwalkableRectangle);
                     Canvas.SetLeft(nonwalkableRectangle, nonWalkableRect.Left);
                     Canvas.SetTop(nonwalkableRectangle, nonWalkableRect.Top);
                 }
@@ -409,14 +405,8 @@ namespace Nea_Prototype.Level
             return queue;
         }
 
-        private int enemyDetectionPreviousLeftovers = 0;
-        public bool EnemyCollisionDetection(ref Canvas canvas)
+        public bool EnemyCollisionDetection()
         {
-            //If the debugging view is open and there are items left over then delete them
-            if (EnemyCollisionRectangles)
-            {
-                canvas.Children.RemoveRange(canvas.Children.Count - enemyDetectionPreviousLeftovers - 1, enemyDetectionPreviousLeftovers);
-            }
 
             //Get the characters views
             GridItemView characterOneView = GetCharacterView(1);
@@ -426,8 +416,9 @@ namespace Nea_Prototype.Level
             Rect char2Rect = new Rect(Canvas.GetLeft(characterTwoView) + 1, Canvas.GetTop(characterTwoView) + 1, characterTwoView.ActualWidth - 2, characterTwoView.ActualHeight - 2);
 
             
-            if (EnemyCollisionRectangles)
+            if (_gridManager.EnemyCollisionRectangles)
             {
+                Canvas canvas = _gridManager.GameCanvas;
                 Rectangle char1Rectangle = new Rectangle()
                 {
                     Width = char1Rect.Width,
@@ -449,13 +440,11 @@ namespace Nea_Prototype.Level
 
                 Canvas.SetTop(char1Rectangle, char1Rect.Top);
                 Canvas.SetTop(char2Rectangle, char2Rect.Top);
-                enemyDetectionPreviousLeftovers = 2;
+                _gridManager.DebuggingCanvasLeftovers += 2;
             }
             //Returns whether they intersect.
             return char1Rect.IntersectsWith(char2Rect);
         }
-
-        
 
         public GridItemView GetCharacterView(int characterNo)
         {

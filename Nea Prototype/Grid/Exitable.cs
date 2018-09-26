@@ -6,5 +6,8 @@
         {
             SetupSprite("Exitable.png");
         }
+
+        //By default can't exit
+        public bool CanExit { get; set; }
     }
 }
