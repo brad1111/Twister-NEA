@@ -29,9 +29,10 @@ namespace Nea_Prototype.Grid
             imgGridImg.Height = Constants.GRID_ITEM_WIDTH;
             imgGridImg.Width = Constants.GRID_ITEM_WIDTH;
         }
-        
 
-        protected ImageSource sprite;
-        protected Position position;
+        public void Update()
+        {
+            imgGridImg.Source = viewModel.Sprite;
+        }
     }
 }

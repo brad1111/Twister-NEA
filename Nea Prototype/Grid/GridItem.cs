@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
@@ -15,7 +16,7 @@ namespace Nea_Prototype.Grid
         protected ImageSource sprite;
         protected Position location;
 
-        public ImageSource Sprite
+        public virtual ImageSource Sprite
         {
             get => sprite;
         }
@@ -25,30 +26,17 @@ namespace Nea_Prototype.Grid
             get => location;
             set
             {
-                location = value;
-                OnPropertyChanged("Position");
+                location = value;                
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        /// <summary>
-        /// Tell the UI thread that a property has been changed and that it needs to update any
-        /// data bound values
-        /// </summary>
-        /// <param name="propertyName">The name of the property that has been updated</param>
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        
 
         /// <summary>
         /// Converts a relative string into a bitmap that is stored in sprite
         /// </summary>
         /// <param name="relativeLocation">The relative location where the bitmap file is stored</param>
-        protected void SetupSprite(string relativeLocation)
+        protected ImageSource SetupSprite(string relativeLocation)
         {
             BitmapImage src = new BitmapImage();
             src.BeginInit();
@@ -56,7 +44,15 @@ namespace Nea_Prototype.Grid
             src.CacheOption = BitmapCacheOption.OnLoad;
             src.EndInit();
             CachedBitmap cachedSrc = new CachedBitmap(src, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-            sprite = cachedSrc;
+            return cachedSrc;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

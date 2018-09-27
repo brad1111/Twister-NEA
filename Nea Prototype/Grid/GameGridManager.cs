@@ -15,6 +15,7 @@ namespace Nea_Prototype.Grid
         private GridItemView[,] gridItemsViews;
         private GridItem[,] gridItems;
         private Exitable[] exitLocations;
+        private GridItemView[] exitLocationsViews;
         
         private static readonly GameGridManager gameGridStorage = new GameGridManager();
 
@@ -32,13 +33,14 @@ namespace Nea_Prototype.Grid
         /// <param name="gridItems">The non-view part of the grid items to store</param>
         /// <param name="exitableLocations">The non-view part of the internal exitable locations</param>
         /// <returns>The instance of the new singleton</returns>
-        public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations)
+        public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations, GridItemView[] exitLocationsViews)
         {
             gameGridStorage.characters = characters;
             gameGridStorage.charactersView = charactersView;
             gameGridStorage.gridItemsViews = gridItemsViews;
             gameGridStorage.gridItems = gridItems;
             gameGridStorage.exitLocations = exitableLocations;
+            gameGridStorage.exitLocationsViews = exitLocationsViews;
             return gameGridStorage;
         }
 
@@ -95,6 +97,11 @@ namespace Nea_Prototype.Grid
             get => gridItems;
         }
 
+        public GridItemView[] ExitLocationsViews
+        {
+            get => exitLocationsViews;
+        }
+
         public int DebuggingCanvasLeftovers { get; set; }
 
         public EnemyType EnemyType { get; set; }
@@ -103,6 +110,7 @@ namespace Nea_Prototype.Grid
 
         public bool WallCollisionRectangles { get; set; }
         public bool EnemyCollisionRectangles { get; set; }
+        
 
         #endregion
     }

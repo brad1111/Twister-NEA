@@ -18,5 +18,7 @@ namespace Nea_Prototype.Grid
         public ImageSource Sprite => gridItem.Sprite;
 
         public Position Position => gridItem.Position;
+
+
     }
 }

@@ -10,7 +10,7 @@ namespace Nea_Prototype.Grid
     {
         public NonWalkable()
         {
-            SetupSprite("NonWalkable.png");
+            sprite = SetupSprite("NonWalkable.png");
         }
     }
 }

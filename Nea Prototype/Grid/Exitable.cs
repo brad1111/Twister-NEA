@@ -1,16 +1,44 @@
-﻿namespace Nea_Prototype.Grid
+﻿using System.ComponentModel;
+using System.Windows.Media;
+
+namespace Nea_Prototype.Grid
 {
     /// <summary>
     /// An item that a character can only walk on if open
     /// </summary>
     public class Exitable : Walkable
     {
-        public Exitable()
+        private ImageSource closedSprite;
+        private ImageSource openSprite;
+        private int arrayIndex;
+
+        public Exitable(int arrayIndex)
         {
-            SetupSprite("Exitable.png");
+            this.arrayIndex = arrayIndex;
+            closedSprite = SetupSprite("ExitableClosed.png");
+            openSprite = SetupSprite("ExitableOpen.png");
         }
 
+        public override ImageSource Sprite
+        {
+            get
+            {
+                //if you can exit show open if you cant show closed
+                return (CanExit ? openSprite : closedSprite);
+            }
+        }
+
+        private bool canExit = false;
+
         //By default can't exit
-        public bool CanExit { get; set; }
+        public bool CanExit
+        {
+            get => canExit;
+            set
+            {
+                canExit = value;
+                GameGridManager.GetGameGrid().ExitLocationsViews[arrayIndex].Update();
+            }
+        }
     }
 }

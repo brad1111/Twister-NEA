@@ -95,6 +95,8 @@ namespace Nea_Prototype.Level
             Character[] characters = new Character[2];
             GridItemView[] charactersView = new GridItemView[2];
             List<Exitable> exitables = new List<Exitable>();
+            List<GridItemView> exitableViews = new List<GridItemView>();
+            int exitableIndex = 0;
             for (int y = 0; y < yLength(); y++)
             {
                 for (int x = 0; x < xLength(); x++)
@@ -170,7 +172,8 @@ namespace Nea_Prototype.Level
                               break;
                           //Exitable block
                           case 5:
-                              Exitable exitable = new Exitable()
+                              //Set the array index to the correct value and immedietly increment
+                              Exitable exitable = new Exitable(exitableIndex++)
                               {
                                   Position = new Position(x, y)
                               };
@@ -178,13 +181,14 @@ namespace Nea_Prototype.Level
                               gridItems[y, x] = exitable;
                               gridItemsViews[y, x] = exitableView;
                               exitables.Add(exitable);
+                              exitableViews.Add(exitableView);
                               break;
                           default:
                               throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
                 }
             }
-            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray());
+            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray(), exitableViews.ToArray());
         }
 
         /// <summary>
