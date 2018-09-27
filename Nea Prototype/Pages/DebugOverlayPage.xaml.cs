@@ -35,13 +35,14 @@ namespace Nea_Prototype.Pages
                 foreach (Exitable exitableItem in GameGridManager.GetGameGrid().ExitLocations)
                 {
                     //Place all of the exitable items in a list
-                    pnlExitableItems.Children.Add(new CheckBox()
+                    CheckBox exitableCheckBox = new CheckBox()
                     {
                         Content = count,
                         IsTabStop = false,
                         IsChecked = exitableItem.CanExit,
-
-                    });
+                    };
+                    exitableCheckBox.Click += ExitableToggleButton_OnClick;
+                    pnlExitableItems.Children.Add(exitableCheckBox);
                     count++;
                 }
             };
