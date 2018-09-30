@@ -30,6 +30,11 @@ namespace Nea_Prototype.Pages
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referneced every tick for the collision detection visualisation to work)
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
+
+            //Set canvas width and height
+            cvsPlayArea.Width = Constants.GRID_WIDTH;
+            cvsPlayArea.Height = Constants.GRID_WIDTH;
+
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
