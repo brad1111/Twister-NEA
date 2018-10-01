@@ -2,8 +2,10 @@
 using Nea_Prototype.Grid;
 using Nea_Prototype.Level;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Nea_Prototype.Enums;
 
@@ -20,6 +22,8 @@ namespace Nea_Prototype.Pages
 
         //The storage for level information
         private Level.Level level = LevelIO.ReadJSON("testing.json");
+
+        private Storyboard rotationStoryboard = null;
 
         public GamePage()
         {
@@ -43,6 +47,27 @@ namespace Nea_Prototype.Pages
             {
                 keyboardInputTimer.Start();
             };
+        }
+
+        private void StoryBoardRotation()
+        {
+            if (rotationStoryboard is null || rotationStoryboard?.GetCurrentProgress() == 1.0)
+            {
+                rotationStoryboard = new Storyboard();
+                rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 1));
+                DoubleAnimation animation = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = 30,
+                    Duration = rotationStoryboard.Duration
+                };
+                rotationStoryboard.Children.Add(animation);
+                Storyboard.SetTarget(animation, cvsPlayArea);
+                Storyboard.SetTargetProperty(animation,
+                    new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+
+                rotationStoryboard.Begin();
+            }
         }
 
         /// <summary>
@@ -92,6 +117,7 @@ namespace Nea_Prototype.Pages
             {
                 level.MoveCharacter(2, Direction.Down);
             }
+
         }
 
         /// <summary>
