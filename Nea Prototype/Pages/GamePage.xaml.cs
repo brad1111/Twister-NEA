@@ -106,7 +106,10 @@ namespace Nea_Prototype.Pages
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             KeyboardInputTimerTick(sender, e);
-            GameGridManager.RotateStoryBoard(30);
+
+            
+            GameGridManager.RotateStoryBoard(rng.Next(-45,45));
         }
+        static Random rng = new Random();
     }
 }
