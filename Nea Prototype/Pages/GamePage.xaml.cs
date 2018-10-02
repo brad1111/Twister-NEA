@@ -107,8 +107,12 @@ namespace Nea_Prototype.Pages
         {
             KeyboardInputTimerTick(sender, e);
 
-            
-            GameGridManager.RotateStoryBoard(rng.Next(-45,45));
+            double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
+            double randomRotation = rng.Next(45) *
+                                 Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
+                                     ref rotationAbs);
+
+            GameGridManager.RotateStoryBoard((int)randomRotation);
         }
         static Random rng = new Random();
     }

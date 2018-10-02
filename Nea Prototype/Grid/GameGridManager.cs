@@ -20,7 +20,7 @@ namespace Nea_Prototype.Grid
         private Exitable[] exitLocations;
         private GridItemView[] exitLocationsViews;
         private Storyboard rotationStoryboard = null;
-        private int previousAngle = 0;
+        public int PreviousAngle { get; set; }
         
         private static readonly GameGridManager gameGridStorage = new GameGridManager();
 
@@ -65,8 +65,8 @@ namespace Nea_Prototype.Grid
                 GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 1));
                 DoubleAnimation animation = new DoubleAnimation()
                 {
-                    From = GetGameGrid().previousAngle,
-                    To = GetGameGrid().previousAngle += angleDiff,
+                    From = GetGameGrid().PreviousAngle,
+                    To = GetGameGrid().PreviousAngle += angleDiff,
                     Duration = GetGameGrid().rotationStoryboard.Duration
                 };
                 GetGameGrid().rotationStoryboard.Children.Add(animation);
