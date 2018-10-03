@@ -65,12 +65,6 @@ namespace Nea_Prototype.Algorithms
                 totalDeltaRadians += (velocity * time) / radiusFromCentre;
             }
 
-            if (totalDeltaRadians == 0)
-            {
-                Console.WriteLine("Sup");
-            }
-
-
             return Math.Abs(totalDeltaRadians / Math.PI)*180;
         }
     }
