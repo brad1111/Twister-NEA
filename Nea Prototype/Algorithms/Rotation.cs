@@ -58,14 +58,14 @@ namespace Nea_Prototype.Algorithms
 
             for (int i = 0; i < charViews.Length; i++)
             {
-                double radiusFromCentrex = Math.Abs(200 - Canvas.GetLeft(charViews[i]));
-                double radiusFromCentrey = Math.Abs(200 - Canvas.GetTop(charViews[i]));
+                double radiusFromCentrex = 200 - Canvas.GetLeft(charViews[i]);
+                //double radiusFromCentrey = 200 - Canvas.GetTop(charViews[i]);
                 //c=sqrt(a^2+b^2) (pythagoras)
-                double radiusFromCentre = Math.Sqrt(Math.Pow(radiusFromCentrex, 2) + Math.Pow(radiusFromCentrey, 2));
-                totalDeltaRadians += (velocity * time) / radiusFromCentre;
+                //double radiusFromCentre = Math.Sqrt(Math.Pow(radiusFromCentrex, 2) + Math.Pow(radiusFromCentrey, 2));
+                totalDeltaRadians += (velocity * time) / radiusFromCentrex;
             }
 
-            return (totalDeltaRadians / Math.PI)*180;
+            return Math.Abs(totalDeltaRadians / Math.PI)*180;
         }
     }
 }

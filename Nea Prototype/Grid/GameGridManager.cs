@@ -59,7 +59,7 @@ namespace Nea_Prototype.Grid
 
         public static void RotateStoryBoard(int angleDiff)
         {
-            if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0.8)
+            if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
             {
                 GetGameGrid().rotationStoryboard = new Storyboard();
                 GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 1));
