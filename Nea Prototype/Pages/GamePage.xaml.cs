@@ -19,6 +19,7 @@ namespace Nea_Prototype.Pages
     {
         //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
+        private DispatcherTimer rotationTimer;
 
         //The storage for level information
         private Level.Level level = LevelIO.ReadJSON("testing.json");
@@ -40,10 +41,26 @@ namespace Nea_Prototype.Pages
             //Have the timer use the timertick event
             keyboardInputTimer.Tick += KeyboardInputTimerTick;
             
+            rotationTimer = new DispatcherTimer()
+            {
+                //Update every half second
+                Interval = new TimeSpan(0,0,0,0,500)
+            };
+            rotationTimer.Tick += (s, e) =>
+            {
+
+                double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
+                double randomRotation = rng.Next(45) *
+                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
+                                            ref rotationAbs);
+
+                GameGridManager.RotateStoryBoard((int) randomRotation);
+            };
             //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
                 keyboardInputTimer.Start();
+                rotationTimer.Start();
             };
         }
 
@@ -106,13 +123,6 @@ namespace Nea_Prototype.Pages
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             KeyboardInputTimerTick(sender, e);
-
-            double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
-            double randomRotation = rng.Next(45) *
-                                 Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
-                                     ref rotationAbs);
-
-            GameGridManager.RotateStoryBoard((int)randomRotation);
         }
         static Random rng = new Random();
     }
