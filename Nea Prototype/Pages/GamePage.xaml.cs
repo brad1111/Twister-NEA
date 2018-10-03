@@ -43,8 +43,8 @@ namespace Nea_Prototype.Pages
             
             rotationTimer = new DispatcherTimer()
             {
-                //Update every half second
-                Interval = new TimeSpan(0,0,0,1)
+                //Update every 1/4 second
+                Interval = new TimeSpan(0,0,0,0, 250)
             };
             rotationTimer.Tick += (s, e) =>
             {

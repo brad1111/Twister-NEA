@@ -62,7 +62,7 @@ namespace Nea_Prototype.Grid
             if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
             {
                 GetGameGrid().rotationStoryboard = new Storyboard();
-                GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 1));
+                GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 250));
                 DoubleAnimation animation = new DoubleAnimation()
                 {
                     From = GetGameGrid().PreviousAngle,
