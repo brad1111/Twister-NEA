@@ -47,5 +47,25 @@ namespace Nea_Prototype.Algorithms
                 return -(totalMomentFromCentre / Math.Abs(totalMomentFromCentre));
             }
         }
+
+        public static double AbsAngleDelta()
+        {
+            double velocity = 9.8; //Assume velocity = acceleration * time = 1
+            int time = 1;
+            double totalDeltaRadians = 0;
+            //Get characters views
+            GridItemView[] charViews = GameGridManager.GetGameGrid().CharactersViews;
+
+            for (int i = 0; i < charViews.Length; i++)
+            {
+                double radiusFromCentrex = Math.Abs(200 - Canvas.GetLeft(charViews[i]));
+                double radiusFromCentrey = Math.Abs(200 - Canvas.GetTop(charViews[i]));
+                //c=sqrt(a^2+b^2) (pythagoras)
+                double radiusFromCentre = Math.Sqrt(Math.Pow(radiusFromCentrex, 2) + Math.Pow(radiusFromCentrey, 2));
+                totalDeltaRadians += (velocity * time) / radiusFromCentre;
+            }
+
+            return (totalDeltaRadians / Math.PI)*180;
+        }
     }
 }

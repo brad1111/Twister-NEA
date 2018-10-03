@@ -50,11 +50,11 @@ namespace Nea_Prototype.Pages
             {
 
                 double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
-                double randomRotation = rng.Next(45) *
+                double rotation = Algorithms.Rotation.AbsAngleDelta() *
                                         Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
                                             ref rotationAbs);
 
-                GameGridManager.RotateStoryBoard((int) randomRotation);
+                GameGridManager.RotateStoryBoard((int) rotation);
             };
             //When the page has loaded start the timer
             Loaded += (s, e) =>
