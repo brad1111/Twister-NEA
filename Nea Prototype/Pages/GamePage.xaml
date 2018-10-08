@@ -8,7 +8,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="GamePage" KeyDown="Page_KeyDown">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -20,7 +19,11 @@
         </Grid>
         <Grid Grid.Row="1">
             <!--PlayArea-->
-            <Canvas x:Name="cvsPlayArea"  Height="400" Width="400" Background="Black">
+            <Canvas x:Name="cvsPlayArea"  Height="400" Width="400" Background="Black" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <RotateTransform/>
+                </Canvas.RenderTransform>
+                
                 <!--Where griditems are manually placed-->
 
             </Canvas>

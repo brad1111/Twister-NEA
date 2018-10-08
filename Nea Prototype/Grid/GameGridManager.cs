@@ -1,4 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Enums;
 using Newtonsoft.Json;
@@ -16,12 +19,13 @@ namespace Nea_Prototype.Grid
         private GridItem[,] gridItems;
         private Exitable[] exitLocations;
         private GridItemView[] exitLocationsViews;
+        private Storyboard rotationStoryboard = null;
+        public int PreviousAngle { get; set; }
         
         private static readonly GameGridManager gameGridStorage = new GameGridManager();
 
         private GameGridManager()
         {
-            
         }
         
         /// <summary>
@@ -52,6 +56,43 @@ namespace Nea_Prototype.Grid
         {
             return gameGridStorage;
         }
+
+        public static void RotateStoryBoard(int angleDiff)
+        {
+            int newAngle = GetGameGrid().PreviousAngle + angleDiff;
+            if (newAngle >= 90)
+            {
+
+
+                newAngle = 90;
+                //Should ideally change the time but dont bother yet
+            }
+            else if (newAngle <= -90)
+            {
+                newAngle = -90;
+            }
+
+            if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
+            {
+                GetGameGrid().rotationStoryboard = new Storyboard();
+                GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 250));
+                DoubleAnimation animation = new DoubleAnimation()
+                {
+                    From = GetGameGrid().PreviousAngle,
+                    To = newAngle,
+                    Duration = GetGameGrid().rotationStoryboard.Duration
+                };
+                GetGameGrid().rotationStoryboard.Children.Add(animation);
+                Storyboard.SetTarget(animation, GetGameGrid().GameCanvas);
+                Storyboard.SetTargetProperty(animation,
+                    new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
+
+                GetGameGrid().rotationStoryboard.Begin();
+
+                GetGameGrid().PreviousAngle = newAngle;
+            }
+        }
+
 
         /// <summary>
         /// The canvas used by the game
@@ -105,6 +146,7 @@ namespace Nea_Prototype.Grid
         public int DebuggingCanvasLeftovers { get; set; }
 
         public EnemyType EnemyType { get; set; }
+        
 
         #region Debugging Variables
 

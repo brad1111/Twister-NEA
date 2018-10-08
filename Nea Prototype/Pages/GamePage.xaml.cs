@@ -2,8 +2,10 @@
 using Nea_Prototype.Grid;
 using Nea_Prototype.Level;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Nea_Prototype.Enums;
 
@@ -17,6 +19,7 @@ namespace Nea_Prototype.Pages
     {
         //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
+        private DispatcherTimer rotationTimer;
 
         //The storage for level information
         private Level.Level level = LevelIO.ReadJSON("testing.json");
@@ -38,10 +41,26 @@ namespace Nea_Prototype.Pages
             //Have the timer use the timertick event
             keyboardInputTimer.Tick += KeyboardInputTimerTick;
             
+            rotationTimer = new DispatcherTimer()
+            {
+                //Update every 1/4 second
+                Interval = new TimeSpan(0,0,0,0, 250)
+            };
+            rotationTimer.Tick += (s, e) =>
+            {
+
+                double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
+                double rotation = Algorithms.Rotation.AbsAngleDelta() *
+                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
+                                            ref rotationAbs);
+
+                GameGridManager.RotateStoryBoard((int) rotation);
+            };
             //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
                 keyboardInputTimer.Start();
+                rotationTimer.Start();
             };
         }
 
@@ -92,6 +111,7 @@ namespace Nea_Prototype.Pages
             {
                 level.MoveCharacter(2, Direction.Down);
             }
+
         }
 
         /// <summary>
@@ -104,5 +124,6 @@ namespace Nea_Prototype.Pages
         {
             KeyboardInputTimerTick(sender, e);
         }
+        static Random rng = new Random();
     }
 }
