@@ -59,6 +59,19 @@ namespace Nea_Prototype.Grid
 
         public static void RotateStoryBoard(int angleDiff)
         {
+            int newAngle = GetGameGrid().PreviousAngle + angleDiff;
+            if (newAngle >= 90)
+            {
+
+
+                newAngle = 90;
+                //Should ideally change the time but dont bother yet
+            }
+            else if (newAngle <= -90)
+            {
+                newAngle = -90;
+            }
+
             if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
             {
                 GetGameGrid().rotationStoryboard = new Storyboard();
@@ -66,7 +79,7 @@ namespace Nea_Prototype.Grid
                 DoubleAnimation animation = new DoubleAnimation()
                 {
                     From = GetGameGrid().PreviousAngle,
-                    To = GetGameGrid().PreviousAngle += angleDiff,
+                    To = newAngle,
                     Duration = GetGameGrid().rotationStoryboard.Duration
                 };
                 GetGameGrid().rotationStoryboard.Children.Add(animation);
@@ -75,6 +88,8 @@ namespace Nea_Prototype.Grid
                     new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
 
                 GetGameGrid().rotationStoryboard.Begin();
+
+                GetGameGrid().PreviousAngle = newAngle;
             }
         }
 
