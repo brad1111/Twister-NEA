@@ -495,6 +495,12 @@ namespace Nea_Prototype.Level
             return char1Rect.IntersectsWith(char2Rect);
         }
 
+        public Position[] ExitRectanglePlacement()
+        {
+            Position[] internalArray = new Position[2];
+            
+        } 
+
         /// <summary>
         /// Converts a charcater number into their respective CharacterView
         /// </summary>

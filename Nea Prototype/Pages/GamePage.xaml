@@ -24,6 +24,10 @@
                 <!--Where griditems are manually placed-->
 
             </Canvas>
+            <Canvas x:Name="cvsExitArea" Height="500" Width="500">
+                <!--Where the exit item is manually placed-->
+                
+            </Canvas>
         </Grid>
         <Grid Grid.Row="2">
             <!--Other interactions with the game-->
