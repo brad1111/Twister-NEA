@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Newtonsoft.Json;
 
-namespace Nea_Prototype
+namespace Nea_Prototype.Keybindings
 {
     /// <summary>
     /// Contains the defaults and variables for keybindings

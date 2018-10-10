@@ -27,12 +27,12 @@ namespace Nea_Prototype.Pages
 
         private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            MainFrameManager.FrameManager.MainFrame.Navigate(new GamePage());
+            throw new NotImplementedException();
         }
 
         private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MainFrameManager.FrameManager.MainFrame.Navigate(new GamePage());
         }
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            MainFrameManager.FrameManager.MainFrame.Navigate(new SettingsPage());
         }
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)

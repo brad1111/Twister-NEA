@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Nea_Prototype.Keybindings;
 using Nea_Prototype.Pages;
 
 namespace Nea_Prototype

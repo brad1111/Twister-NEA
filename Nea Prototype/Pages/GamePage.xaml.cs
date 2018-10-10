@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Nea_Prototype.Enums;
+using Nea_Prototype.Keybindings;
 
 namespace Nea_Prototype.Pages
 {
@@ -115,11 +116,11 @@ namespace Nea_Prototype.Pages
         }
 
         /// <summary>
-        /// When a key is pressed also run the same code for the timer (this is so that
-        /// when a user presses a key once very quickly it still moves the player
+        /// When a Key is pressed also run the same code for the timer (this is so that
+        /// when a user presses a Key once very quickly it still moves the player
         /// </summary>
         /// <param name="sender">Keydown event</param>
-        /// <param name="e">The arguments to do with the key pressed</param>
+        /// <param name="e">The arguments to do with the Key pressed</param>
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             KeyboardInputTimerTick(sender, e);

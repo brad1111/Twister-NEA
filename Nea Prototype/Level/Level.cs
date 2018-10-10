@@ -22,7 +22,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         [JsonIgnore] private GameGridManager _gridManager;
 
-        //These need to be public properties so that JSON.net can fill these values from the json file.
+        //These need to be public Properties so that JSON.net can fill these values from the json file.
         /// <summary>
         /// The integer array which represents the layout of the grid
         /// </summary>

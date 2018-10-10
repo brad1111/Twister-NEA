@@ -89,6 +89,8 @@
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\EnemyType.cs" />
     <Compile Include="Enums\Side.cs" />
+    <Compile Include="Keybindings\KeybindingProperty.cs" />
+    <Compile Include="Keybindings\KeybindingsProperties.cs" />
     <Compile Include="MainFrameManager.cs" />
     <Compile Include="Pages\DebugOverlayPage.xaml.cs">
       <DependentUpon>DebugOverlayPage.xaml</DependentUpon>
@@ -107,7 +109,7 @@
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Position.cs" />
     <Compile Include="Grid\Walkable.cs" />
-    <Compile Include="KeyBindingsManager.cs" />
+    <Compile Include="Keybindings\KeyBindingsManager.cs" />
     <Compile Include="Level\ExitPlacement.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelIO.cs" />
@@ -119,11 +121,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pages\IKeyboardInputs.cs" />
     <Compile Include="Pages\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

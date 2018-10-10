@@ -941,7 +941,7 @@ namespace Nea_Prototype.Annotations
   /// <summary>
   /// XAML attribute. Indicates the property of some <c>BindingBase</c>-derived type, that
   /// is used to bind some item of <c>ItemsControl</c>-derived type. This annotation will
-  /// enable the <c>DataContext</c> type resolve for XAML bindings for such properties.
+  /// enable the <c>DataContext</c> type resolve for XAML bindings for such Properties.
   /// </summary>
   /// <remarks>
   /// Property should have the tree ancestor of the <c>ItemsControl</c> type or
