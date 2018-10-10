@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace Nea_Prototype.Pages
             Loaded += (s, e) =>
             {
                 lstKeybindingsList.ItemsSource = KeybindingsProperties.Properties;
+                DataContext = KeybindingsProperties.Properties;
             };
         }
         private Key keyStored { get; set; }
@@ -53,8 +55,9 @@ namespace Nea_Prototype.Pages
             {
                 await Task.Delay(1000);
             }
-
-            KeybindingProperty keybindingToChange = (sender as Button).DataContext as KeybindingProperty;
+            Button btnSender = sender as Button;
+            KeybindingProperty keybindingToChange = btnSender?.DataContext as KeybindingProperty;
+            keybindingToChange.Key = keyStored;
             switch (keybindingToChange.BindingName)
             {
                 case "Player 1 Up":
@@ -88,6 +91,7 @@ namespace Nea_Prototype.Pages
                     return;
             }
             KeyBindingsManager.SaveKeybindings(KeyBindingsManager.KeyBindings);
+            btnSender.Content = keyStored;
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Nea_Prototype.Keybindings
 {
     public static class KeybindingsProperties
     {
-        public static List<KeybindingProperty> Properties { get; } = new List<KeybindingProperty>()
+        public static ObservableCollection<KeybindingProperty> Properties { get; } = new ObservableCollection<KeybindingProperty>()
         {
             new KeybindingProperty(KeyBindingsManager.KeyBindings.Player1_up,    "Player 1 Up"),
             new KeybindingProperty(KeyBindingsManager.KeyBindings.Player1_down,  "Player 1 Down"),
