@@ -21,12 +21,13 @@ namespace Nea_Prototype
     /// </summary>
     public partial class MainWindow : Window
     {
-        GamePage page = new GamePage();
+        MainMenu menu = new MainMenu();
 
         public MainWindow()
         {
             InitializeComponent();
-            frmMainFrame.Navigate(page);
+            MainFrameManager.FrameManager.MainFrame = frmMainFrame;
+            frmMainFrame.Navigate(menu);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -36,7 +37,7 @@ namespace Nea_Prototype
             {
                 if (frmOverlay.Content?.GetType() == typeof(DebugOverlayPage))
                 {
-                    //Goto a new null page
+                    //Goto a new null menu
                     frmOverlay.Navigate(new Page());
                     frmOverlay.NavigationService.RemoveBackEntry();
                 }
@@ -46,7 +47,7 @@ namespace Nea_Prototype
                 }
             }
 
-            page.Page_KeyDown(sender, e);
+            (frmMainFrame.Content as IKeyboardInputs)?.Page_KeyDown(sender, e);
         }
     }
 }

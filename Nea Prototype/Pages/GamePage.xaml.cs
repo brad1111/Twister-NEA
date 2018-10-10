@@ -15,7 +15,7 @@ namespace Nea_Prototype.Pages
     /// Interaction logic for GamePage.xaml
     /// The main page that is used for the game
     /// </summary>
-    public partial class GamePage : Page
+    public partial class GamePage : IKeyboardInputs
     {
         //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
@@ -124,6 +124,5 @@ namespace Nea_Prototype.Pages
         {
             KeyboardInputTimerTick(sender, e);
         }
-        static Random rng = new Random();
     }
 }
