@@ -40,56 +40,29 @@ namespace Nea_Prototype
             }
         }
 
+        #region Player 1 keybindings
 
-
-        #region Player 1 Keybindings
-        /// <summary>
-        /// 
-        /// </summary>
-        private Key player1_up = Key.W;
-        private Key player1_down = Key.S;
-        private Key player1_left = Key.A;
-        private Key player1_right = Key.D;
-        #endregion
-
-        #region Player 2 Keybindings
-        private Key player2_up = Key.Up;
-        private Key player2_down = Key.Down;
-        private Key player2_left = Key.Left;
-        private Key player2_right = Key.Right;
-        #endregion
-
-        #region Player 1 encapsulation
-
-        public Key Player1_up { get => player1_up; set => player1_up = value; }
-        public Key Player1_down { get => player1_down; set => player1_down = value; }
-        public Key Player1_left { get => player1_left; set => player1_left = value; }
-        public Key Player1_right { get => player1_right; set => player1_right = value; }
+        public Key Player1_up { get; set; } = Key.W;
+        public Key Player1_down { get; set; } = Key.S;
+        public Key Player1_left { get; set; } = Key.A;
+        public Key Player1_right { get; set; } = Key.D;
 
         #endregion
         
-        #region Player 2 encapsulation
-        public Key Player2_up { get => player2_up; set => player2_up = value; }
-        public Key Player2_down { get => player2_down; set => player2_down = value; }
-        public Key Player2_left { get => player2_left; set => player2_left = value; }
-        public Key Player2_right { get => player2_right; set => player2_right = value; }
+        #region Player 2 keybindings
 
-        
-
-        #endregion
-
-        #region Overlay bindings
-
-        private ModifierKeys debugOverlayModifier = ModifierKeys.Shift;
-        private Key debugOverlayKey = Key.Tab;
+        public Key Player2_up { get; set; } = Key.Up;
+        public Key Player2_down { get; set; } = Key.Down;
+        public Key Player2_left { get; set; } = Key.Left;
+        public Key Player2_right { get; set; } = Key.Right;
 
         #endregion
 
-        #region Overlay encapsulation
+        #region Overlay keybindings
 
-        public ModifierKeys DebugOverlayModifier{ get => debugOverlayModifier; set => debugOverlayModifier = value; }
+        public ModifierKeys DebugOverlayModifier { get; set; } = ModifierKeys.Shift;
 
-        public Key DebugOverlayKey { get => debugOverlayKey; set => debugOverlayKey = value; }
+        public Key DebugOverlayKey { get; set; } = Key.Tab;
 
         #endregion
     }
