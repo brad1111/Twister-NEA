@@ -24,19 +24,24 @@ namespace Nea_Prototype.Keybindings
             if (!File.Exists(KeyBindingsLocation))
             {
                 //Create the keybindings file
-                KeyBindingsManager kbManager = new KeyBindingsManager();
-                string kbJson = JsonConvert.SerializeObject(kbManager);
-                
-                using (StreamWriter sw = new StreamWriter(KeyBindingsLocation))
-                {
-                    sw.Write(kbJson);
-                }
+                SaveKeybindings(new KeyBindingsManager());
             }
             //Now read the file
             using (StreamReader sr = new StreamReader(KeyBindingsLocation))
             {
                 string kbJson = sr.ReadToEnd();
                 return JsonConvert.DeserializeObject<KeyBindingsManager>(kbJson);
+            }
+        }
+
+        public static void SaveKeybindings(KeyBindingsManager kbManager)
+        {
+            //Saves the keybindings
+            string kbJson = JsonConvert.SerializeObject(kbManager);
+                
+            using (StreamWriter sw = new StreamWriter(KeyBindingsLocation))
+            {
+                sw.Write(kbJson);
             }
         }
 

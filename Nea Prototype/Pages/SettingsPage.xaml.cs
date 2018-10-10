@@ -37,7 +37,7 @@ namespace Nea_Prototype.Pages
             if (awaitingKeyPress)
             {
                 keyStored = e.Key;
-                awaitingKeyPress = true;
+                awaitingKeyPress = false;
             }
         }
 
@@ -84,7 +84,10 @@ namespace Nea_Prototype.Pages
                 case "Debug overlay key":
                     KeyBindingsManager.KeyBindings.DebugOverlayKey = keyStored;
                     break;
+                default:
+                    return;
             }
+            KeyBindingsManager.SaveKeybindings(KeyBindingsManager.KeyBindings);
         }
     }
 }
