@@ -106,7 +106,7 @@
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Position.cs" />
     <Compile Include="Grid\Walkable.cs" />
-    <Compile Include="KeyBindings.cs" />
+    <Compile Include="KeyBindingsManager.cs" />
     <Compile Include="Level\ExitPlacement.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelIO.cs" />

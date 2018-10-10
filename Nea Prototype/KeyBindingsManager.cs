@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.IO;
+using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace Nea_Prototype
 {
@@ -12,9 +14,33 @@ namespace Nea_Prototype
             
         }
 
-        private static readonly KeyBindingsManager keyBindings = new KeyBindingsManager();
+        public static KeyBindingsManager KeyBindings { get; } = LoadKeybindings();
 
-        public static KeyBindingsManager KeyBindings => keyBindings;
+
+        private const string KeyBindingsLocation = "keybindings.json";
+
+        public static KeyBindingsManager LoadKeybindings()
+        {
+            if (!File.Exists(KeyBindingsLocation))
+            {
+                //Create the keybindings file
+                KeyBindingsManager kbManager = new KeyBindingsManager();
+                string kbJson = JsonConvert.SerializeObject(kbManager);
+                
+                using (StreamWriter sw = new StreamWriter(KeyBindingsLocation))
+                {
+                    sw.Write(kbJson);
+                }
+            }
+            //Now read the file
+            using (StreamReader sr = new StreamReader(KeyBindingsLocation))
+            {
+                string kbJson = sr.ReadToEnd();
+                return JsonConvert.DeserializeObject<KeyBindingsManager>(kbJson);
+            }
+        }
+
+
 
         #region Player 1 Keybindings
         /// <summary>
