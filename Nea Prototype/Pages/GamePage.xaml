@@ -18,6 +18,10 @@
             <!--ScoreInformation-->
         </Grid>
         <Grid Grid.Row="1">
+            <Canvas x:Name="cvsExitArea" Height="400" Width="400">
+                <!--Where the exit item is manually placed-->
+                
+            </Canvas>
             <!--PlayArea-->
             <Canvas x:Name="cvsPlayArea"  Height="400" Width="400" Background="Black" RenderTransformOrigin="0.5,0.5">
                 <Canvas.RenderTransform>
@@ -26,10 +30,6 @@
                 
                 <!--Where griditems are manually placed-->
 
-            </Canvas>
-            <Canvas x:Name="cvsExitArea" Height="400" Width="400">
-                <!--Where the exit item is manually placed-->
-                
             </Canvas>
         </Grid>
         <Grid Grid.Row="2">
