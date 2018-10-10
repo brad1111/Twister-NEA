@@ -16,7 +16,7 @@ namespace Nea_Prototype.Keybindings
             new KeybindingProperty(KeyBindingsManager.KeyBindings.Player2_left,  "Player 2 Left"),
             new KeybindingProperty(KeyBindingsManager.KeyBindings.Player2_right, "Player 2 Right"),
 
-            new KeybindingProperty(KeyBindingsManager.KeyBindings.DebugOverlayKey,    "Debug overlay Key"),
+            new KeybindingProperty(KeyBindingsManager.KeyBindings.DebugOverlayKey,    "Debug overlay key"),
         };
     }
 }

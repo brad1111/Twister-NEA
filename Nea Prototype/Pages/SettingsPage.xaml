@@ -18,7 +18,7 @@
                            <ColumnDefinition/>
                        </Grid.ColumnDefinitions>
                        <Label Content="{Binding BindingName}"/>
-                       <Button Content="{Binding KeyName}" Grid.Column="1"/>
+                       <Button Click="ButtonBase_OnClick" Content="{Binding KeyName}" Grid.Column="1"/>
                    </Grid>
                    
                </DataTemplate>

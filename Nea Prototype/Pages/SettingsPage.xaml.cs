@@ -29,10 +29,62 @@ namespace Nea_Prototype.Pages
                 lstKeybindingsList.ItemsSource = KeybindingsProperties.Properties;
             };
         }
+        private Key keyStored { get; set; }
+        private bool awaitingKeyPress = false;
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            if (awaitingKeyPress)
+            {
+                keyStored = e.Key;
+                awaitingKeyPress = true;
+            }
+        }
+
+        private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            await ButtonClickAsync(sender, e);
+        }
+
+        private async Task ButtonClickAsync(object sender, RoutedEventArgs e)
+        {
+            awaitingKeyPress = true;
+            while (awaitingKeyPress)
+            {
+                await Task.Delay(1000);
+            }
+
+            KeybindingProperty keybindingToChange = (sender as Button).DataContext as KeybindingProperty;
+            switch (keybindingToChange.BindingName)
+            {
+                case "Player 1 Up":
+                    KeyBindingsManager.KeyBindings.Player1_up = keyStored;
+                    break;
+                case "Player 1 Down":
+                    KeyBindingsManager.KeyBindings.Player1_down = keyStored;
+                    break;
+                case "Player 1 Left":
+                    KeyBindingsManager.KeyBindings.Player1_left = keyStored;
+                    break;
+                case "Player 1 Right":
+                    KeyBindingsManager.KeyBindings.Player1_right = keyStored;
+                    break;
+                case "Player 2 Up":
+                    KeyBindingsManager.KeyBindings.Player2_up = keyStored;
+                    break;
+                case "Player 2 Down":
+                    KeyBindingsManager.KeyBindings.Player2_down = keyStored;
+                    break;
+                case "Player 2 Left":
+                    KeyBindingsManager.KeyBindings.Player2_left = keyStored;
+                    break;
+                case "Player 2 Right":
+                    KeyBindingsManager.KeyBindings.Player2_right = keyStored;
+                    break;
+                case "Debug overlay key":
+                    KeyBindingsManager.KeyBindings.DebugOverlayKey = keyStored;
+                    break;
+            }
         }
     }
 }
