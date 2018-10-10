@@ -76,38 +76,38 @@ namespace Nea_Prototype.Pages
 
             double getLeft;
             double getUp;
-            if (Keyboard.IsKeyDown(KeyBindings.Player1_right))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_right))
             {
                 level.MoveCharacter(1, Direction.Right);
             }
-            else if (Keyboard.IsKeyDown(KeyBindings.Player1_left))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_left))
             {
                 level.MoveCharacter(1, Direction.Left);
             }
             
-            if (Keyboard.IsKeyDown(KeyBindings.Player1_up))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_up))
             {
                 level.MoveCharacter(1, Direction.Up);
             }
-            else if (Keyboard.IsKeyDown(KeyBindings.Player1_down))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_down))
             {
                 level.MoveCharacter(1, Direction.Down);
             }
 
-            if (Keyboard.IsKeyDown(KeyBindings.Player2_right))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_right))
             {
                 level.MoveCharacter(2, Direction.Right);
             }
-            else if (Keyboard.IsKeyDown(KeyBindings.Player2_left))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_left))
             {
                 level.MoveCharacter(2, Direction.Left);
             }
             
-            if (Keyboard.IsKeyDown(KeyBindings.Player2_up))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_up))
             {
                 level.MoveCharacter(2, Direction.Up);
             }
-            else if (Keyboard.IsKeyDown(KeyBindings.Player2_down))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_down))
             {
                 level.MoveCharacter(2, Direction.Down);
             }

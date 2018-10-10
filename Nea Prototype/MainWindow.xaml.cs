@@ -31,8 +31,8 @@ namespace Nea_Prototype
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.Modifiers == KeyBindings.DebugOverlayModifier &&
-                e.Key == KeyBindings.DebugOverlayKey)
+            if (Keyboard.Modifiers == KeyBindingsManager.KeyBindings.DebugOverlayModifier &&
+                e.Key == KeyBindingsManager.KeyBindings.DebugOverlayKey)
             {
                 if (frmOverlay.Content?.GetType() == typeof(DebugOverlayPage))
                 {
