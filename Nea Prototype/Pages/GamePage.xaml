@@ -27,7 +27,7 @@
                 <!--Where griditems are manually placed-->
 
             </Canvas>
-            <Canvas x:Name="cvsExitArea" Height="500" Width="500">
+            <Canvas x:Name="cvsExitArea" Height="400" Width="400">
                 <!--Where the exit item is manually placed-->
                 
             </Canvas>

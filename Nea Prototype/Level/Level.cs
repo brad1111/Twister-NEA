@@ -507,24 +507,24 @@ namespace Nea_Prototype.Level
                 case Side.Top:
                     x1Temp = ExitLocation.HeightFromAnchor;
                     x2Temp = x1Temp + ExitLocation.Length;
-                    y1Temp = -5;
-                    y2Temp = -7;
+                    y1Temp = -50;
+                    y2Temp = -60;
                     break;
                 case Side.Bottom:
                     x1Temp = ExitLocation.HeightFromAnchor;
                     x2Temp = x1Temp + ExitLocation.Length;
-                    y1Temp = Constants.GRID_WIDTH + 7;
-                    y2Temp = Constants.GRID_WIDTH + 5;
+                    y1Temp = Constants.GRID_WIDTH + 70;
+                    y2Temp = Constants.GRID_WIDTH + 60;
                     break;
                 case Side.Left:
-                    x1Temp = -7;
-                    x2Temp = -5;
+                    x1Temp = -70;
+                    x2Temp = -60;
                     y1Temp = ExitLocation.HeightFromAnchor;
                     y2Temp = y1Temp + ExitLocation.Length;
                     break;
                 case Side.Right:
-                    x1Temp = Constants.GRID_WIDTH + 5;
-                    x2Temp = Constants.GRID_WIDTH + 7;
+                    x1Temp = Constants.GRID_WIDTH + 50;
+                    x2Temp = Constants.GRID_WIDTH + 60;
                     y1Temp = ExitLocation.HeightFromAnchor;
                     y2Temp = y1Temp + ExitLocation.Length;
                     break;
