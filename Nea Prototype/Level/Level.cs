@@ -29,7 +29,7 @@ namespace Nea_Prototype.Level
         /// <summary>
         /// The location of the exit
         /// </summary>
-        public ExitPlacement ExitLocation { get; internal set; }
+        public ExitPlacement ExitLocation { get; set; }
         
 
         /// <summary>
@@ -82,6 +82,9 @@ namespace Nea_Prototype.Level
                 //_gridManager.Characters[i].Position = 
                 MoveItemToPlace(ref _gridManager.CharactersViews[i], _gridManager.Characters[i].Position);
             }
+
+            //Add exit rectangle
+            gameCanvas.Children.Add(ExitRectanglePlacement());
         }
 
         /// <summary>
@@ -493,6 +496,50 @@ namespace Nea_Prototype.Level
             }
             //Returns whether they intersect.
             return char1Rect.IntersectsWith(char2Rect);
+        }
+
+        public Rectangle ExitRectanglePlacement()
+        {
+            int x1Temp = 0, y1Temp = 0, x2Temp = 0, y2Temp = 0;
+
+            switch (ExitLocation.SidePlaced)
+            {
+                case Side.Top:
+                    x1Temp = ExitLocation.HeightFromAnchor;
+                    x2Temp = x1Temp + ExitLocation.Length;
+                    y1Temp = -5;
+                    y2Temp = -7;
+                    break;
+                case Side.Bottom:
+                    x1Temp = ExitLocation.HeightFromAnchor;
+                    x2Temp = x1Temp + ExitLocation.Length;
+                    y1Temp = Constants.GRID_WIDTH + 7;
+                    y2Temp = Constants.GRID_WIDTH + 5;
+                    break;
+                case Side.Left:
+                    x1Temp = -7;
+                    x2Temp = -5;
+                    y1Temp = ExitLocation.HeightFromAnchor;
+                    y2Temp = y1Temp + ExitLocation.Length;
+                    break;
+                case Side.Right:
+                    x1Temp = Constants.GRID_WIDTH + 5;
+                    x2Temp = Constants.GRID_WIDTH + 7;
+                    y1Temp = ExitLocation.HeightFromAnchor;
+                    y2Temp = y1Temp + ExitLocation.Length;
+                    break;
+                default:
+                    throw new NotImplementedException($"Side {nameof(ExitLocation.SidePlaced)} is not implemented");
+            }
+            Rectangle rectangle = new Rectangle()
+            {
+                Height =  y2Temp - y1Temp,
+                Width = x2Temp - x1Temp,
+                Fill = new SolidColorBrush(Colors.GreenYellow)
+            };
+            Canvas.SetLeft(rectangle, x1Temp);
+            Canvas.SetTop(rectangle, y1Temp);
+            return rectangle;
         }
 
         /// <summary>
