@@ -62,7 +62,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="gameCanvas">The canvas reference is needed</param>
         /// <param name="enemyType"></param>
-        public void SetupGrid(ref Canvas gameCanvas, EnemyType enemyType)
+        public void SetupGrid(ref Canvas gameCanvas, ref Canvas exitCanvas, EnemyType enemyType)
         {
             DecodeGridStartLocations(enemyType);
             //Add grid items
@@ -84,7 +84,7 @@ namespace Nea_Prototype.Level
             }
 
             //Add exit rectangle
-            gameCanvas.Children.Add(ExitRectanglePlacement());
+            exitCanvas.Children.Add(ExitRectanglePlacement());
         }
 
         /// <summary>
