@@ -45,6 +45,9 @@ namespace Nea_Prototype.Grid
             gameGridStorage.gridItems = gridItems;
             gameGridStorage.exitLocations = exitableLocations;
             gameGridStorage.exitLocationsViews = exitLocationsViews;
+            gameGridStorage.PreviousAngle = 0;
+            gameGridStorage.rotationStoryboard = null;
+            gameGridStorage.GameCanvas = null;
             return gameGridStorage;
         }
 
@@ -155,5 +158,10 @@ namespace Nea_Prototype.Grid
         
 
         #endregion
+
+        public static void Clear()
+        {
+            NewGameGrid(null, null, null, null, null, null);
+        }
     }
 }

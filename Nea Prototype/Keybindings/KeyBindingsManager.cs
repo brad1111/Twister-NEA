@@ -69,6 +69,10 @@ namespace Nea_Prototype.Keybindings
 
         public Key DebugOverlayKey { get; set; } = Key.Tab;
 
+        public Key PauseMenuKey { get; set; } = Key.Escape;
+
+        public Key PauseGameKey { get; set; } = Key.Pause;
+
         #endregion
     }
 }

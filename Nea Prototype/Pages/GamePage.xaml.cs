@@ -60,8 +60,7 @@ namespace Nea_Prototype.Pages
             //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
-                keyboardInputTimer.Start();
-                rotationTimer.Start();
+                StartTimers();
             };
         }
 
@@ -113,7 +112,14 @@ namespace Nea_Prototype.Pages
                 level.MoveCharacter(2, Direction.Down);
             }
 
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.PauseMenuKey))
+            {
+                StopTimers();
+                TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
+            }
         }
+
+        private bool allowKeyDown = false;
 
         /// <summary>
         /// When a Key is pressed also run the same code for the timer (this is so that
@@ -123,7 +129,24 @@ namespace Nea_Prototype.Pages
         /// <param name="e">The arguments to do with the Key pressed</param>
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
-            KeyboardInputTimerTick(sender, e);
+            if (allowKeyDown)
+            {
+                KeyboardInputTimerTick(sender, e);
+            }
+        }
+
+        public void StopTimers()
+        {
+            keyboardInputTimer.Stop();
+            rotationTimer.Stop();
+            allowKeyDown = false;
+        }
+
+        public void StartTimers()
+        {
+            keyboardInputTimer.Start();
+            rotationTimer.Start();
+            allowKeyDown = true;
         }
     }
 }

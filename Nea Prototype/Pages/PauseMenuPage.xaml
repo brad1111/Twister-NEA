@@ -1,0 +1,18 @@
+﻿<Page x:Class="Nea_Prototype.Pages.PauseMenuPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nea_Prototype.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PauseMenuPage">
+
+    <Grid>
+        <StackPanel>
+            <Button x:Name="btnResume" Click="BtnResume_OnClick">Resume</Button>
+            <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
+            <Button x:Name="btnExit" Click="BtnExit_OnClick">Exit</Button>
+        </StackPanel>
+    </Grid>
+</Page>

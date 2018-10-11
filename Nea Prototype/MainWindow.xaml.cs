@@ -27,7 +27,8 @@ namespace Nea_Prototype
         public MainWindow()
         {
             InitializeComponent();
-            MainFrameManager.FrameManager.MainFrame = frmMainFrame;
+            TopFrameManager.FrameManager.MainFrame = frmMainFrame;
+            TopFrameManager.FrameManager.OverlayFrame = frmOverlay;
             frmMainFrame.Navigate(menu);
         }
 
@@ -38,9 +39,7 @@ namespace Nea_Prototype
             {
                 if (frmOverlay.Content?.GetType() == typeof(DebugOverlayPage))
                 {
-                    //Goto a new null menu
-                    frmOverlay.Navigate(new Page());
-                    frmOverlay.NavigationService.RemoveBackEntry();
+                    TopFrameManager.FrameManager.ClearOverlayFrame();
                 }
                 else
                 {
