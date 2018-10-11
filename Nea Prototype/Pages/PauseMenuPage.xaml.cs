@@ -43,7 +43,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TopFrameManager.FrameManager.OverlayFrame.Navigate(new SettingsPage());
         }
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)

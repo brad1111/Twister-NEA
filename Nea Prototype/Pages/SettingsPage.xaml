@@ -24,5 +24,8 @@
                </DataTemplate>
            </ListBox.ItemTemplate>
         </ListBox>
+        <Button x:Name="btnBack" Click="BtnBack_OnClick" HorizontalAlignment="Right" VerticalAlignment="Top">
+            ←
+        </Button>
     </Grid>
 </Page>

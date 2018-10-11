@@ -93,5 +93,19 @@ namespace Nea_Prototype.Pages
             KeyBindingsManager.SaveKeybindings(KeyBindingsManager.KeyBindings);
             btnSender.Content = keyStored;
         }
+
+        private void BtnBack_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (TopFrameManager.FrameManager.MainFrame.Content is SettingsPage &&
+                TopFrameManager.FrameManager.MainFrame.CanGoBack)
+            {
+                TopFrameManager.FrameManager.MainFrame.GoBack();
+            }
+            else if (TopFrameManager.FrameManager.OverlayFrame.Content is SettingsPage &&
+                     TopFrameManager.FrameManager.OverlayFrame.CanGoBack)
+            {
+                TopFrameManager.FrameManager.OverlayFrame.GoBack();
+            }
+        }
     }
 }
