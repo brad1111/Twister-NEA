@@ -117,6 +117,19 @@ namespace Nea_Prototype.Pages
                 StopTimers();
                 TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
             }
+
+            if (Keyboard.Modifiers == KeyBindingsManager.KeyBindings.DebugOverlayModifier &&
+                Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.DebugOverlayKey))
+            {
+                if (TopFrameManager.FrameManager.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
+                {
+                    TopFrameManager.FrameManager.ClearOverlayFrame();
+                }
+                else
+                {
+                    TopFrameManager.FrameManager.OverlayFrame.Navigate(new DebugOverlayPage());
+                }
+            }
         }
 
         private bool allowKeyDown = false;
