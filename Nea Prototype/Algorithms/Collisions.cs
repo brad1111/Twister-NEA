@@ -208,9 +208,14 @@ namespace Nea_Prototype.Algorithms
             //Get the characters views
             GridItemView characterOneView = GameGridManager.GetGameGrid().CharactersViews[0];
             GridItemView characterTwoView = GameGridManager.GetGameGrid().CharactersViews[1];
-            //Create both character rectangles
-            Rect char1Rect = new Rect(Canvas.GetLeft(characterOneView) + 1, Canvas.GetTop(characterOneView) + 1, characterOneView.ActualWidth - 2, characterOneView.ActualHeight - 2);
-            Rect char2Rect = new Rect(Canvas.GetLeft(characterTwoView) + 1, Canvas.GetTop(characterTwoView) + 1, characterTwoView.ActualWidth - 2, characterTwoView.ActualHeight - 2);
+
+            //Get the characters locations
+            double char1Left = Canvas.GetLeft(characterOneView);
+            double char2Left = Canvas.GetLeft(characterTwoView);
+            double char1Top = Canvas.GetTop(characterOneView);
+            double char2Top = Canvas.GetTop(characterTwoView);
+
+            bool whetherCollided = Common.Algorithms.Collisions.EnemyCollisionDetectionCommon(char1Left, char1Top, char2Left, char2Top);
 
             //Visualise the intersection
             if (_gridManager.EnemyCollisionRectangles)
@@ -218,29 +223,29 @@ namespace Nea_Prototype.Algorithms
                 Canvas canvas = _gridManager.GameCanvas;
                 Rectangle char1Rectangle = new Rectangle()
                 {
-                    Width = char1Rect.Width,
-                    Height = char1Rect.Height,
+                    Width = Common.Algorithms.Collisions.rectangle1.Width,
+                    Height = Common.Algorithms.Collisions.rectangle1.Height,
                     Fill = new SolidColorBrush(Colors.DarkMagenta)
                 };
                 Rectangle char2Rectangle = new Rectangle()
                 {
-                    Width = char2Rect.Width,
-                    Height = char2Rect.Height,
+                    Width = Common.Algorithms.Collisions.rectangle2.Width,
+                    Height = Common.Algorithms.Collisions.rectangle2.Height,
                     Fill = new SolidColorBrush(Colors.DarkMagenta)
                 };
 
                 canvas.Children.Add(char1Rectangle);
                 canvas.Children.Add(char2Rectangle);
 
-                Canvas.SetLeft(char1Rectangle, char1Rect.Left);
-                Canvas.SetLeft(char2Rectangle, char2Rect.Left);
+                Canvas.SetLeft(char1Rectangle, Common.Algorithms.Collisions.rectangle1.Left);
+                Canvas.SetLeft(char2Rectangle, Common.Algorithms.Collisions.rectangle2.Left);
 
-                Canvas.SetTop(char1Rectangle, char1Rect.Top);
-                Canvas.SetTop(char2Rectangle, char2Rect.Top);
+                Canvas.SetTop(char1Rectangle, Common.Algorithms.Collisions.rectangle1.Left);
+                Canvas.SetTop(char2Rectangle, Common.Algorithms.Collisions.rectangle2.Left);
                 _gridManager.DebuggingCanvasLeftovers += 2;
             }
             //Returns whether they intersect.
-            return char1Rect.IntersectsWith(char2Rect);
+            return whetherCollided;
         }
     }
 }
