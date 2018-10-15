@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Enums;
 using Newtonsoft.Json;
@@ -94,6 +95,9 @@ namespace Nea_Prototype.Grid
 
                 GetGameGrid().PreviousAngle = newAngle;
             }
+
+            //Check for updates
+            ExitingManager.Instance.CheckForUpdates(GetGameGrid().PreviousAngle, angleDiff);
         }
 
 
