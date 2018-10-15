@@ -5,10 +5,17 @@ using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Algorithms
 {
-    public class Exiting
+    public class ExitingManager
     {
         private List<double> AnglesToOpenInClockwiseDirection = new List<double>();
         private List<double> AnglesToCloseInClockwiseDirection = new List<double>();
+
+        private ExitingManager()
+        {
+            
+        }
+
+        public static ExitingManager Instance { get; } = new ExitingManager();
 
         /// <summary>
         /// 
@@ -20,7 +27,7 @@ namespace Nea_Prototype.Algorithms
         private void FindAnglesNeededToOpenInternal(int e1, int e2, int i1, int i2)
         {
             //Adds degrees version of angle to array
-            AnglesToOpenInClockwiseDirection.Add(Math.Acos(e1 / i1) * (Math.PI/180) );
+            AnglesToOpenInClockwiseDirection.Add(Math.Acos(e1 / i1) * (Math.PI/180));
             AnglesToCloseInClockwiseDirection.Add(Math.Acos(e2/i2) * (Math.PI/180));
         }
 

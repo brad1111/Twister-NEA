@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Nea_Prototype.Algorithms;
 using Nea_Prototype.Enums;
 using Nea_Prototype.Keybindings;
 
@@ -34,6 +35,10 @@ namespace Nea_Prototype.Pages
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referneced every tick for the collision detection visualisation to work)
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
+
+            //Setup the angles that open the exits
+            ExitingManager.Instance.FindAnglesNeededToOpen(level.ExitLocation.HeightFromAnchor, level.ExitLocation.Length);
+
             keyboardInputTimer = new DispatcherTimer()
             {
                 //Every ~1/1000 of a second update
