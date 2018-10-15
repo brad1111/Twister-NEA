@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
+using Common;
 
 namespace Nea_Prototype.Algorithms
 {

@@ -12,6 +12,7 @@ using Nea_Prototype.Characters;
 using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
 using Newtonsoft.Json;
+using Common;
 
 namespace Nea_Prototype.Level
 {

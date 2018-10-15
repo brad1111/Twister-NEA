@@ -1,4 +1,4 @@
-﻿namespace Nea_Prototype
+﻿namespace Common
 {
     /// <summary>
     /// The values that stay constant within the game that I don't want to keep repeating

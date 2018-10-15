@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Grid;
+using Common;
 
 namespace Nea_Prototype.Algorithms
 {
