@@ -65,11 +65,11 @@ namespace Nea_Prototype.Algorithms
                 //Positive rotation
                 for (int i = 0; i < AnglesToOpenInClockwiseDirection.Count; i++)
                 {
-                    if (AnglesToOpenInClockwiseDirection[i] < currentAngle)
+                    if (AnglesToOpenInClockwiseDirection[i] > currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
                     }
-                    else if (AnglesToCloseInClockwiseDirection[i] > currentAngle)
+                    if (AnglesToCloseInClockwiseDirection[i] < currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = false;
                     }
@@ -80,11 +80,11 @@ namespace Nea_Prototype.Algorithms
                 //Negative rotation
                 for (int i = 0; i < AnglesToOpenInClockwiseDirection.Count; i++)
                 {
-                    if (AnglesToOpenInClockwiseDirection[i] > currentAngle)
+                    if (AnglesToOpenInClockwiseDirection[i] < currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
                     }
-                    else if (AnglesToCloseInClockwiseDirection[i] < currentAngle)
+                    if (AnglesToCloseInClockwiseDirection[i] > currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = false;
                     }
