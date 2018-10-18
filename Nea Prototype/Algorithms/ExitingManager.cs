@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using Nea_Prototype.Grid;
 
@@ -7,8 +8,8 @@ namespace Nea_Prototype.Algorithms
 {
     public class ExitingManager
     {
-        private List<double> AnglesToOpenInClockwiseDirection = new List<double>();
-        private List<double> AnglesToCloseInClockwiseDirection = new List<double>();
+        private List<double> AnglesToOpenInClockwiseDirection { get; } = new List<double>();
+        private List<double> AnglesToCloseInClockwiseDirection { get; } = new List<double>();
 
         private ExitingManager()
         {
@@ -90,6 +91,9 @@ namespace Nea_Prototype.Algorithms
                 }
             }
         }
+
+        public ReadOnlyCollection<double> AnglesToOpen => AnglesToOpenInClockwiseDirection.AsReadOnly();
+        public ReadOnlyCollection<double> AnglesToClose => AnglesToCloseInClockwiseDirection.AsReadOnly();
 
         //public double FindYInTheVerticalDirection(int yValueRelativeToGrid)
         //{
