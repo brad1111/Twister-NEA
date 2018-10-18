@@ -26,9 +26,12 @@ namespace Nea_Prototype.Algorithms
         /// <param name="i2">The bottom of the internal exit</param>
         private void FindAnglesNeededToOpenInternal(int e1, int e2, int i1, int i2)
         {
+            
+
             //Adds degrees version of angle to array
-            AnglesToOpenInClockwiseDirection.Add(Math.Acos(e1 / i1) * (Math.PI/180));
-            AnglesToCloseInClockwiseDirection.Add(Math.Acos(e2 / i2) * (Math.PI/180));
+            //Converts to double otherwise it will round the division to 0.
+            AnglesToOpenInClockwiseDirection.Add(Math.Acos((double)e1 / i1) * (180/Math.PI));
+            AnglesToCloseInClockwiseDirection.Add(Math.Acos((double)e2 / i2) * (180/Math.PI));
         }
 
         /// <summary>
@@ -54,6 +57,7 @@ namespace Nea_Prototype.Algorithms
                 return;
                 //Dont bother if it isn't rotating
             }
+
 
             if (rotationMultiplier > 0)
             {
