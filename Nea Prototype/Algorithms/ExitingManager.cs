@@ -44,11 +44,14 @@ namespace Nea_Prototype.Algorithms
         {
             AnglesToOpenInClockwiseDirection.Clear();
             AnglesToCloseInClockwiseDirection.Clear();
-            foreach (var exitLocation in GameGridManager.GetGameGrid().ExitLocationsViews)
-            {
-                int getTop = (int) Canvas.GetTop(exitLocation);
-                FindAnglesNeededToOpenInternal(e1, e2, getTop, getTop + Constants.GRID_ITEM_WIDTH);
-            }
+            //foreach (var exitLocation in GameGridManager.GetGameGrid().ExitLocationsViews)
+            //{
+            //    int getTop = (int) Canvas.GetTop(exitLocation);
+            //    FindAnglesNeededToOpenInternal(e1, e2, getTop, getTop + Constants.GRID_ITEM_WIDTH);
+            //}
+
+            AnglesToOpenInClockwiseDirection.AddRange(new List<double>(){-20,-20});
+            AnglesToCloseInClockwiseDirection.AddRange(new List<double>(){20,20});
         }
 
         public void CheckForUpdates(int currentAngle, int rotationMultiplier)
@@ -65,7 +68,7 @@ namespace Nea_Prototype.Algorithms
                 //Positive rotation
                 for (int i = 0; i < AnglesToOpenInClockwiseDirection.Count; i++)
                 {
-                    if (AnglesToOpenInClockwiseDirection[i] > currentAngle)
+                    if (AnglesToOpenInClockwiseDirection[i] < currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
                     }
@@ -80,14 +83,15 @@ namespace Nea_Prototype.Algorithms
                 //Negative rotation
                 for (int i = 0; i < AnglesToOpenInClockwiseDirection.Count; i++)
                 {
-                    if (AnglesToOpenInClockwiseDirection[i] < currentAngle)
+                    if (AnglesToCloseInClockwiseDirection[i] > currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
                     }
-                    if (AnglesToCloseInClockwiseDirection[i] > currentAngle)
+                    if (AnglesToOpenInClockwiseDirection[i] > currentAngle)
                     {
                         GameGridManager.GetGameGrid().ExitLocations[i].CanExit = false;
                     }
+
                 }
             }
         }
