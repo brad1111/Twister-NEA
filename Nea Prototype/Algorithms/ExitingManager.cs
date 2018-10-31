@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using Common;
 using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Algorithms
