@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Algorithms\Collisions.cs" />
+    <Compile Include="Algorithms\ExitingManager.cs" />
     <Compile Include="Algorithms\Rotation.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

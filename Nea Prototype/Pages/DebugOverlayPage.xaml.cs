@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+using Nea_Prototype.Algorithms;
 using Nea_Prototype.Grid;
 using CheckBox = System.Windows.Controls.CheckBox;
 
@@ -22,6 +24,8 @@ namespace Nea_Prototype.Pages
     /// </summary>
     public partial class DebugOverlayPage : Page
     {
+        DispatcherTimer angleTimer = new DispatcherTimer();
+
         public DebugOverlayPage()
         {
             InitializeComponent();
@@ -45,6 +49,28 @@ namespace Nea_Prototype.Pages
                     pnlExitableItems.Children.Add(exitableCheckBox);
                     count++;
                 }
+
+                //Add all of the angles to the display
+                for(int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                {
+                    Label open = new Label()
+                    {
+                        Content = $"{i} opens at: {ExitingManager.Instance.AnglesToOpen[i]}"
+                    };
+                    Label close = new Label()
+                    {
+                        Content = $"{i} closes at: {ExitingManager.Instance.AnglesToClose[i]}"
+                    };
+                    pnlAnglesPanel.Children.Add(open);
+                    pnlAnglesPanel.Children.Add(close);
+                }
+                
+
+                //Auto update the angle
+                angleTimer.Interval = new TimeSpan(0,0,1);
+                angleTimer.Tick += (se, ev) => 
+                    lblAngle.Content = $"Angle: {GameGridManager.GetGameGrid().PreviousAngle}";
+                angleTimer.Start();
             };
         }
 
