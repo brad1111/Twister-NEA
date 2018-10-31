@@ -97,7 +97,7 @@ namespace Nea_Prototype.Grid
             }
 
             //Check for updates
-            ExitingManager.Instance.CheckForUpdates(GetGameGrid().PreviousAngle, angleDiff);
+            ExitingManager.CheckForUpdates(GetGameGrid().PreviousAngle, angleDiff);
         }
 
 
