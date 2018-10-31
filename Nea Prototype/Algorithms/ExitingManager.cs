@@ -11,12 +11,16 @@ namespace Nea_Prototype.Algorithms
     public class ExitingManager
     {
         private static Common.Algorithms.ExitingManager instance = Common.Algorithms.ExitingManager.Instance;   
+
+        public static ReadOnlyCollection<double> AnglesToOpen => instance.AnglesToOpen;
+        public static ReadOnlyCollection<double> AnglesToClose => instance.AnglesToClose;
+
         /// <summary>
-        /// 
+        /// Finds angles needed to open/close the gates
         /// </summary>
         /// <param name="e1">The external top height</param>
         /// <param name="e2">The length of the exit</param>
-        public void FindAnglesNeededToOpen(int e1, int e2)
+        public static void FindAnglesNeededToOpen(int e1, int e2)
         {
             instance.ClearLists();
             foreach (var exitLocation in GameGridManager.GetGameGrid().ExitLocationsViews)

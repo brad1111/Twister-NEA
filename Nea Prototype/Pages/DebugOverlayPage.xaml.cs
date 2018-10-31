@@ -51,15 +51,15 @@ namespace Nea_Prototype.Pages
                 }
 
                 //Add all of the angles to the display
-                for(int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                for(int i = 0; i < ExitingManager.AnglesToOpen.Count; i++)
                 {
                     Label open = new Label()
                     {
-                        Content = $"{i} opens at: {ExitingManager.Instance.AnglesToOpen[i]}"
+                        Content = $"{i} opens at: {ExitingManager.AnglesToOpen[i]}"
                     };
                     Label close = new Label()
                     {
-                        Content = $"{i} closes at: {ExitingManager.Instance.AnglesToClose[i]}"
+                        Content = $"{i} closes at: {ExitingManager.AnglesToClose[i]}"
                     };
                     pnlAnglesPanel.Children.Add(open);
                     pnlAnglesPanel.Children.Add(close);

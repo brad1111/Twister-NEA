@@ -37,7 +37,7 @@ namespace Nea_Prototype.Pages
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
 
             //Setup the angles that open the exits
-            ExitingManager.Instance.FindAnglesNeededToOpen(level.ExitLocation.HeightFromAnchor, level.ExitLocation.Length);
+            ExitingManager.FindAnglesNeededToOpen(level.ExitLocation.HeightFromAnchor, level.ExitLocation.Length);
 
             keyboardInputTimer = new DispatcherTimer()
             {

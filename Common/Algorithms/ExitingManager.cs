@@ -47,6 +47,9 @@ namespace Common.Algorithms
 
         }
 
+        /// <summary>
+        /// Clears the lists
+        /// </summary>
         public void ClearLists()
         {
             AnglesToOpenInClockwiseDirection.Clear();
