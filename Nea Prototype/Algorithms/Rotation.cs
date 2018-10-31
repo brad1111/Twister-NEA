@@ -6,7 +6,7 @@ using Common;
 
 namespace Nea_Prototype.Algorithms
 {
-    public class Rotation
+    public static class Rotation
     {
         /// <summary>
         /// Finds out the direction that the rotation will be
@@ -22,16 +22,6 @@ namespace Nea_Prototype.Algorithms
             {
                 //The distance from the centre line of the board relative to the rotation
                 double relativeDistanceFromPivot = 200 - Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[i]);
-                
-                //The distance from the centre of the board in the x direction no matter the rotation
-                double fixedDistanceFromPivot = 0;
-
-                if (-90 < rotationAngle && rotationAngle < 90)
-                {   
-                    fixedDistanceFromPivot = relativeDistanceFromPivot * Math.Sin((Math.PI / 2)-rotationAngleRadians);
-                }
-
-                int posFromCentre = (characters[i].Position.x + 1) - Constants.CENTRE_TILE_XY;
 
                 double moment = relativeDistanceFromPivot * characters[i].GetWeight;
 

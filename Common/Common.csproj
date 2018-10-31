@@ -45,6 +45,7 @@
     <Compile Include="Algorithms\Collisions.cs" />
     <Compile Include="Algorithms\ExitingManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Grid\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

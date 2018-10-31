@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
+using Common.Grid;
 using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Characters

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Common.Grid;
 using Nea_Prototype.Annotations;
 
 namespace Nea_Prototype.Grid

@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Algorithms;
 
 namespace Server
 {
@@ -14,12 +15,19 @@ namespace Server
         private TcpListener listener;
         private Thread listenThread;
 
-        private const int PORT_NO = 26332;
+        private readonly int PORT_NO = 26332;
 
         static void Main(string[] args)
         {
-            Program p = new Program();
-            
+            Program p = new Program(ref args);   
+        }
+
+        private Program(ref string[] args)
+        {
+            if (args.Length > 0 && int.TryParse(args[0], out PORT_NO))
+            {
+                //Port number is set
+            }
         }
 
         private void ServerStart()
@@ -43,6 +51,10 @@ namespace Server
                         
                         byte[] message = new byte[4096];
                         int bytesRead = 0;
+
+                        bool mapSent = false;
+                        bool mapDownloaded = false;
+
                         while (true)
                         {
                             bytesRead = 0;
@@ -76,7 +88,59 @@ namespace Server
 
                             string bufferMessage = encoder.GetString(message, 0, bytesRead);
 
-                            //message logic goes here
+                            
+                            //If the map has downloaded
+                            if (mapDownloaded)
+                            {
+                                //message logic goes here
+                                string[] messageSections = bufferMessage.Split(',');
+                                try
+                                {
+                                    int characterNo = int.Parse(messageSections[0]);
+                                    double xCoord = double.Parse(messageSections[1]);
+                                    double yCoord = double.Parse(messageSections[2]);
+
+                                    switch (characterNo)
+                                    {
+                                        case 1:
+                                            ServerDataManager.Instance.character1.CharacterPosition.x = xCoord;
+                                            ServerDataManager.Instance.character1.CharacterPosition.y = yCoord;
+                                            break;
+                                        case 2:
+                                            ServerDataManager.Instance.character1.CharacterPosition.x = xCoord;
+                                            ServerDataManager.Instance.character1.CharacterPosition.y = yCoord;
+                                            break;
+                                        default:
+                                            throw new Exception("Too many people have joined.");
+                                    }
+
+                                    ServerChecks();
+                                }
+                                catch (IndexOutOfRangeException e)
+                                {
+                                    Console.WriteLine(
+                                        $"Incorrect format message recieved: {e.GetType().FullName} {e.Message}");
+                                    continue;
+                                }
+                                catch (FormatException e)
+                                {
+                                    Console.WriteLine(
+                                        $"Incorrect format message recieved: {e.GetType().FullName} {e.Message}");
+                                    continue;
+                                }
+
+                                ServerChecks();
+                                
+                            }
+                            else if(!mapSent)
+                            {
+                                //Send map over
+                                byte[] buffer = encoder.GetBytes("Send map");
+                                clientStream.Write(buffer, 0, buffer.Length);
+                                clientStream.Flush();
+                                continue;
+                            }
+
                         }
                     }));
                 }
@@ -84,6 +148,21 @@ namespace Server
             listenThread.Start();
         }
 
+        private void ServerChecks()
+        {
+            double char1Left = ServerDataManager.Instance.character1.CharacterPosition.x;
+            double char1Top = ServerDataManager.Instance.character1.CharacterPosition.y;
+            
+            double char2Left = ServerDataManager.Instance.character2.CharacterPosition.x;
+            double char2Top = ServerDataManager.Instance.character2.CharacterPosition.y;
+
+            if (Collisions.EnemyCollisionDetectionCommon(char1Left,char1Top,
+                                                         char2Left,char2Top))
+            {
+
+                ServerDataManager.Instance.CharactersCollided = true;
+            }
+        }
 
     }
 }
