@@ -38,5 +38,10 @@
             <LineBreak></LineBreak>
             MENU
         </TextBlock>
+        <StackPanel x:Name="pnlAnglesPanel" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Label x:Name="lblAngle" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+            
+        </StackPanel>
+        
     </Grid>
 </Page>
