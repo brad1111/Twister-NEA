@@ -287,7 +287,7 @@ namespace Nea_Prototype.Level
                     x2Temp = x1Temp + ExitLocation.Length;
                     y1Temp = Constants.GRID_WIDTH + 70;
                     y2Temp = Constants.GRID_WIDTH + 60;
-                    break;
+                    break;  
                 case Side.Left:
                     x1Temp = -70;
                     x2Temp = -60;
