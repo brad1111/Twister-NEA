@@ -240,8 +240,8 @@ namespace Nea_Prototype.Algorithms
                 Canvas.SetLeft(char1Rectangle, Common.Algorithms.Collisions.rectangle1.Left);
                 Canvas.SetLeft(char2Rectangle, Common.Algorithms.Collisions.rectangle2.Left);
 
-                Canvas.SetTop(char1Rectangle, Common.Algorithms.Collisions.rectangle1.Left);
-                Canvas.SetTop(char2Rectangle, Common.Algorithms.Collisions.rectangle2.Left);
+                Canvas.SetTop(char1Rectangle, Common.Algorithms.Collisions.rectangle1.Top);
+                Canvas.SetTop(char2Rectangle, Common.Algorithms.Collisions.rectangle2.Top);
                 _gridManager.DebuggingCanvasLeftovers += 2;
             }
             //Returns whether they intersect.
