@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using Common.Enums;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
-using Nea_Prototype.Enums;
 using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid

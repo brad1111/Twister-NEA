@@ -9,11 +9,12 @@ using System.Windows.Shapes;
 using System.Xml.Schema;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
-using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
 using Newtonsoft.Json;
 using Common;
+using Common.Enums;
 using Common.Grid;
+using Common.Level;
 
 namespace Nea_Prototype.Level
 {

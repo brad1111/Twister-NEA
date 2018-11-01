@@ -7,8 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Common.Enums;
 using Nea_Prototype.Algorithms;
-using Nea_Prototype.Enums;
 using Nea_Prototype.Keybindings;
 
 namespace Nea_Prototype.Pages

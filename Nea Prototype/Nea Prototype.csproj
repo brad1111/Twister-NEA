@@ -86,9 +86,6 @@
     <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Characters\PlayerOne.cs" />
     <Compile Include="Characters\PlayerTwo.cs" />
-    <Compile Include="Enums\Direction.cs" />
-    <Compile Include="Enums\EnemyType.cs" />
-    <Compile Include="Enums\Side.cs" />
     <Compile Include="Keybindings\KeybindingProperty.cs" />
     <Compile Include="Keybindings\KeybindingsProperties.cs" />
     <Compile Include="TopFrameManager.cs" />
@@ -109,7 +106,6 @@
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Walkable.cs" />
     <Compile Include="Keybindings\KeyBindingsManager.cs" />
-    <Compile Include="Level\ExitPlacement.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelIO.cs" />
     <Compile Include="MainWindow.xaml.cs">

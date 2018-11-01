@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
 using Common;
+using Common.Enums;
 
 namespace Nea_Prototype.Algorithms
 {

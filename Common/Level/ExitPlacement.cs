@@ -1,6 +1,6 @@
-﻿using Nea_Prototype.Enums;
+﻿using Common.Enums;
 
-namespace Nea_Prototype.Level
+namespace Common.Level
 {
     public class ExitPlacement
     {

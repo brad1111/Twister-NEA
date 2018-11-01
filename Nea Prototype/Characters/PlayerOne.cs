@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Nea_Prototype.Enums;
+using Common.Enums;
 
 namespace Nea_Prototype.Characters
 {

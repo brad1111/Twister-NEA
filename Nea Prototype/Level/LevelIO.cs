@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using Nea_Prototype.Enums;
+using Common.Enums;
+using Common.Level;
 using Newtonsoft.Json;
 
 namespace Nea_Prototype.Level

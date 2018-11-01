@@ -1,4 +1,4 @@
-﻿using Nea_Prototype.Enums;
+﻿using Common.Enums;
 
 namespace Nea_Prototype.Characters
 {
