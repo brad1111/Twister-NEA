@@ -30,6 +30,7 @@ namespace Server
             }
         }
 
+
         private void ServerStart()
         {
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
@@ -88,7 +89,7 @@ namespace Server
 
                             string bufferMessage = encoder.GetString(message, 0, bytesRead);
 
-                            
+                            int characterNo;
                             //If the map has downloaded
                             if (mapDownloaded)
                             {
@@ -96,7 +97,7 @@ namespace Server
                                 string[] messageSections = bufferMessage.Split(',');
                                 try
                                 {
-                                    int characterNo = int.Parse(messageSections[0]);
+                                    characterNo = int.Parse(messageSections[0]);
                                     double xCoord = double.Parse(messageSections[1]);
                                     double yCoord = double.Parse(messageSections[2]);
 
@@ -107,8 +108,8 @@ namespace Server
                                             ServerDataManager.Instance.character1.CharacterPosition.y = yCoord;
                                             break;
                                         case 2:
-                                            ServerDataManager.Instance.character1.CharacterPosition.x = xCoord;
-                                            ServerDataManager.Instance.character1.CharacterPosition.y = yCoord;
+                                            ServerDataManager.Instance.character2.CharacterPosition.x = xCoord;
+                                            ServerDataManager.Instance.character2.CharacterPosition.y = yCoord;
                                             break;
                                         default:
                                             throw new Exception("Too many people have joined.");
@@ -119,22 +120,35 @@ namespace Server
                                 catch (IndexOutOfRangeException e)
                                 {
                                     Console.WriteLine(
-                                        $"Incorrect format message recieved: {e.GetType().FullName} {e.Message}");
+                                        $"Incorrect format message received: {e.GetType().FullName} {e.Message}");
                                     continue;
                                 }
                                 catch (FormatException e)
                                 {
                                     Console.WriteLine(
-                                        $"Incorrect format message recieved: {e.GetType().FullName} {e.Message}");
+                                        $"Incorrect format message received: {e.GetType().FullName} {e.Message}");
                                     continue;
                                 }
 
                                 ServerChecks();
-                                
+
+                                //Converts character 1 to character 2 and vice versa
+                                int otherCharacterNumber = characterNo == 1 ? 2 : 1;
+                                double otherCharacterX = (otherCharacterNumber == 1
+                                    ? ServerDataManager.Instance.character1.CharacterPosition.x
+                                    : ServerDataManager.Instance.character2.CharacterPosition.x);
+                                double otherCharacterY = (otherCharacterNumber == 1
+                                    ? ServerDataManager.Instance.character1.CharacterPosition.y
+                                    : ServerDataManager.Instance.character2.CharacterPosition.y);
+
+                                byte[] buffer = encoder.GetBytes($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{ServerDataManager.Instance.ExitsOpen.ToArray().ToString()}");
+                                clientStream.Write(buffer, 0, buffer.Length);
+                                clientStream.Flush();
+                                continue;
                             }
                             else if(!mapSent)
                             {
-                                //Send map over
+                                //Send map over (would be in JSON)
                                 byte[] buffer = encoder.GetBytes("Send map");
                                 clientStream.Write(buffer, 0, buffer.Length);
                                 clientStream.Flush();
@@ -148,8 +162,13 @@ namespace Server
             listenThread.Start();
         }
 
+
+        /// <summary>
+        /// The checks that the server does to send back to the client (enemy collision detection, doors)
+        /// </summary>
         private void ServerChecks()
         {
+            //Enemy collision detection
             double char1Left = ServerDataManager.Instance.character1.CharacterPosition.x;
             double char1Top = ServerDataManager.Instance.character1.CharacterPosition.y;
             
@@ -162,6 +181,9 @@ namespace Server
 
                 ServerDataManager.Instance.CharactersCollided = true;
             }
+
+            //Rotation stuff worked out here for exist being open
+
         }
 
     }

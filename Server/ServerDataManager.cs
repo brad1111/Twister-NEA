@@ -1,4 +1,6 @@
-﻿namespace Server
+﻿using System.Collections.Generic;
+
+namespace Server
 {
     public class ServerDataManager
     {
@@ -13,5 +15,8 @@
         public Character character2 = new Character(2);
 
         public bool CharactersCollided = false;
+        public bool CharactersWon = false;
+        public List<bool> ExitsOpen = new List<bool>();
+
     }
 }
