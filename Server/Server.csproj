@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Character.cs" />
+    <Compile Include="Level\InternalExit.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelIO.cs" />
     <Compile Include="Program.cs" />

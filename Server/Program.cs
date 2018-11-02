@@ -14,6 +14,7 @@ namespace Server
     {
         private TcpListener listener;
         private Thread listenThread;
+        private Level.Level level;
 
         private readonly int PORT_NO = 26332;
 
@@ -184,6 +185,10 @@ namespace Server
 
             //Rotation stuff worked out here for exist being open
 
+            for (int i = 0; i < level.InternalExits.Length; i++)
+            {
+                
+            }
         }
 
     }

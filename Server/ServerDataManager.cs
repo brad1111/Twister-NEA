@@ -18,5 +18,6 @@ namespace Server
         public bool CharactersWon = false;
         public List<bool> ExitsOpen = new List<bool>();
 
+        public double currentAngle = 0;
     }
 }
