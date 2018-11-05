@@ -14,29 +14,15 @@ namespace Nea_Prototype.Algorithms
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
         public static double RotationMultiplier(Character[] characters, ref double rotationAngle)
         {
-            double totalMomentFromCentre = 0;
-            //Absolute because it does not matter which way it goes
-            double rotationAngleRadians = Math.Abs((Math.PI / 180) * rotationAngle);
-
+            double[] charactersXPos = new double[characters.Length];
+            int[] weights = new int[characters.Length];
             for (int i = 0; i < characters.Length; i++)
             {
-                //The distance from the centre line of the board relative to the rotation
-                double relativeDistanceFromPivot = 200 - Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[i]);
-
-                double moment = relativeDistanceFromPivot * characters[i].GetWeight;
-
-                totalMomentFromCentre += moment;
+                charactersXPos[i] = Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[i]);
+                weights[i] = characters[i].GetWeight;
             }
 
-            if (totalMomentFromCentre == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                //Prevents divide by 0 error
-                return -(totalMomentFromCentre / Math.Abs(totalMomentFromCentre));
-            }
+            return Common.Algorithms.Rotation.RotationMultiplier(charactersXPos, weights, ref rotationAngle);
         }
 
         public static double AbsAngleDelta()

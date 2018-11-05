@@ -1,8 +1,7 @@
 ﻿using System;
-using Common;
 using Common.Grid;
 
-namespace Nea_Prototype.Algorithms
+namespace Common.Algorithms
 {
     public static class Rotation
     {
@@ -10,7 +9,7 @@ namespace Nea_Prototype.Algorithms
         /// Finds out the direction that the rotation will be
         /// </summary>
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
-        public static double RotationMultiplier(int[] charactersXPos, int[] charactersWeight, ref double rotationAngle)
+        public static double RotationMultiplier(double[] charactersXPos, int[] charactersWeight, ref double rotationAngle)
         {
             double totalMomentFromCentre = 0;
             //Absolute because it does not matter which way it goes
@@ -37,10 +36,9 @@ namespace Nea_Prototype.Algorithms
             }
         }
 
-        public static double AbsAngleDelta(Position[] charactersPos)
+        public static double AbsAngleDelta(Position[] charactersPos, double time)
         {
             double velocity = 9.8; //Assume velocity = acceleration * time = 1
-            double time = 0.25; //TODO make this based on constants
             double totalDeltaRadians = 0;
 
             for (int i = 0; i < charactersPos.Length; i++)

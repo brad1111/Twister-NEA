@@ -56,7 +56,7 @@ namespace Nea_Prototype.Pages
             {
 
                 double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
-                double rotation = Algorithms.Rotation.AbsAngleDelta() *
+                double rotation = Rotation.AbsAngleDelta() *
                                         Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
                                             ref rotationAbs);
 
