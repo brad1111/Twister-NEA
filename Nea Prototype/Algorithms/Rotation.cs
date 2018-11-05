@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using Nea_Prototype.Characters;
 using Nea_Prototype.Grid;
 using Common;
+using Common.Grid;
 
 namespace Nea_Prototype.Algorithms
 {
@@ -27,22 +28,16 @@ namespace Nea_Prototype.Algorithms
 
         public static double AbsAngleDelta()
         {
-            double velocity = 9.8; //Assume velocity = acceleration * time = 1
-            double time = 0.25;
-            double totalDeltaRadians = 0;
-            //Get characters views
-            GridItemView[] charViews = GameGridManager.GetGameGrid().CharactersViews;
-
-            for (int i = 0; i < charViews.Length; i++)
+            //Create position array
+            Position[] charPositions = new Position[GameGridManager.GetGameGrid().Characters.Length];
+            for (int i = 0; i < GameGridManager.GetGameGrid().Characters.Length; i++)
             {
-                double radiusFromCentrex = 200 - Canvas.GetLeft(charViews[i]);
-                double radiusFromCentrey = 200 - Canvas.GetTop(charViews[i]);
-                //c=sqrt(a^2+b^2) (pythagoras)
-                double radiusFromCentre = Math.Sqrt(Math.Pow(radiusFromCentrex, 2) + Math.Pow(radiusFromCentrey, 2));
-                totalDeltaRadians += (velocity * time) / radiusFromCentre;
+                charPositions[i] = new Position(
+                    x:Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[i]),
+                    y:Canvas.GetTop(GameGridManager.GetGameGrid().CharactersViews[i]));
             }
 
-            return Math.Abs(totalDeltaRadians / Math.PI)*180;
+            return Common.Algorithms.Rotation.AbsAngleDelta(charPositions, 0.25);
         }
     }
 }
