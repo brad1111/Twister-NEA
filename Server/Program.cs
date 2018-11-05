@@ -20,7 +20,8 @@ namespace Server
 
         static void Main(string[] args)
         {
-            Program p = new Program(ref args);   
+            Program p = new Program(ref args); 
+            p.ServerStart();
         }
 
         private Program(ref string[] args)
@@ -141,8 +142,14 @@ namespace Server
                                 double otherCharacterY = (otherCharacterNumber == 1
                                     ? ServerDataManager.Instance.character1.CharacterPosition.y
                                     : ServerDataManager.Instance.character2.CharacterPosition.y);
+                                //Convert exit array into string
+                                string exits = String.Empty;
+                                foreach (var openExit in ServerDataManager.Instance.ExitsOpen)
+                                {
+                                    exits += openExit.ToString() + ",";
+                                }
 
-                                byte[] buffer = encoder.GetBytes($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{ServerDataManager.Instance.ExitsOpen.ToArray().ToString()}");
+                                byte[] buffer = encoder.GetBytes($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{exits}");
                                 clientStream.Write(buffer, 0, buffer.Length);
                                 clientStream.Flush();
                                 continue;
@@ -158,6 +165,7 @@ namespace Server
 
                         }
                     }));
+                    clientThread.Start();
                 }
             }));
             listenThread.Start();
@@ -185,10 +193,10 @@ namespace Server
 
             //Rotation stuff worked out here for exist being open
 
-            for (int i = 0; i < level.InternalExits.Length; i++)
-            {
+            //for (int i = 0; i < level.InternalExits.Length; i++)
+            //{
                 
-            }
+            //}
         }
 
     }

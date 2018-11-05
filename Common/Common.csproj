@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Collisions.cs" />
     <Compile Include="Algorithms\ExitingManager.cs" />
+    <Compile Include="Algorithms\Rotation.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\EnemyType.cs" />
