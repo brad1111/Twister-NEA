@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Algorithms;
+using Server.Level;
 
 namespace Server
 {
@@ -17,6 +19,7 @@ namespace Server
         private Level.Level level;
 
         private readonly int PORT_NO = 26332;
+        private readonly string levelLocation = String.Empty;
 
         static void Main(string[] args)
         {
@@ -30,11 +33,24 @@ namespace Server
             {
                 //Port number is set
             }
+
+            if (args.Length >= 2 && File.Exists(args[1]))
+            {
+                //Level parameter can be set
+                levelLocation = args[1];
+            }
+            else
+            {
+                Console.WriteLine("Can't load level file.");
+            }
         }
 
 
         private void ServerStart()
         {
+            //Setup level
+            level = LevelIO.ReadJSON(levelLocation);
+
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
             //New thread
             this.listenThread = new Thread(new ThreadStart(() =>
