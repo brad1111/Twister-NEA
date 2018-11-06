@@ -109,7 +109,7 @@ namespace Server
 
                             int characterNo;
                             //If the map has downloaded
-                            if (mapDownloaded)
+                            if (ServerDataManager.Instance.GameStarted)
                             {
                                 //message logic goes here
                                 string[] messageSections = bufferMessage.Split(',');
@@ -173,10 +173,30 @@ namespace Server
                             else if(!mapSent)
                             {
                                 //Send map over (would be in JSON)
-                                byte[] buffer = encoder.GetBytes("Send map");
+                                byte[] buffer = encoder.GetBytes(ServerDataManager.Instance.levelJson);
                                 clientStream.Write(buffer, 0, buffer.Length);
                                 clientStream.Flush();
+                                mapSent = true;
                                 continue;
+                            }
+                            else if (mapSent && !mapDownloaded)
+                            {
+                                //Check to see if the client says they have recieved it
+                                if (bufferMessage == "Received")
+                                {
+                                    //If they have received the map then map is downloaded
+                                    mapDownloaded = true;
+                                    ServerDataManager.Instance.CharacterReady();
+                                }
+                                else if (bufferMessage == "Resend")
+                                {
+                                    //The have failed to receive the message send again.
+                                    mapSent = false;
+                                }
+                            }
+                            else if (mapSent && mapDownloaded)
+                            {
+                                //The map is downloaded just wait 
                             }
 
                         }
