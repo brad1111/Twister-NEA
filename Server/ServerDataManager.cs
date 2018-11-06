@@ -19,5 +19,7 @@ namespace Server
         public List<bool> ExitsOpen = new List<bool>();
 
         public double currentAngle = 0;
+
+        public string levelJson { get; set; }
     }
 }

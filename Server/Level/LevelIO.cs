@@ -14,6 +14,8 @@ namespace Server.Level
         {
             StreamReader sr = new StreamReader(fileToRead);
             string json = sr.ReadToEnd();
+            //Save json file to send to clients
+            ServerDataManager.Instance.levelJson = json;
             Level level = JsonConvert.DeserializeObject<Level>(json);   
             return level;
         }
