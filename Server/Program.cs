@@ -73,6 +73,7 @@ namespace Server
 
                         bool mapSent = false;
                         bool mapDownloaded = false;
+                        bool gameStartedOnThread = false;
 
                         while (true)
                         {
@@ -109,9 +110,8 @@ namespace Server
 
                             int characterNo;
                             //If the map has downloaded
-                            if (ServerDataManager.Instance.GameStarted)
+                            if (gameStartedOnThread)
                             {
-                                //message logic goes here
                                 string[] messageSections = bufferMessage.Split(',');
                                 try
                                 {
@@ -182,21 +182,25 @@ namespace Server
                             else if (mapSent && !mapDownloaded)
                             {
                                 //Check to see if the client says they have recieved it
-                                if (bufferMessage == "Received")
+                                if (bufferMessage == "received")
                                 {
                                     //If they have received the map then map is downloaded
                                     mapDownloaded = true;
                                     ServerDataManager.Instance.CharacterReady();
                                 }
-                                else if (bufferMessage == "Resend")
+                                else if (bufferMessage == "resend")
                                 {
                                     //The have failed to receive the message send again.
                                     mapSent = false;
                                 }
                             }
-                            else if (mapSent && mapDownloaded)
+                            else if (mapSent && mapDownloaded && ServerDataManager.Instance.GameStarted)
                             {
-                                //The map is downloaded just wait 
+                                //If the game has started overall, tell the client and start the game on this thread
+                                gameStartedOnThread = true;
+                                byte[] buffer = encoder.GetBytes("start");
+                                clientStream.Write(buffer, 0, buffer.Length);
+                                clientStream.Flush();
                             }
 
                         }
