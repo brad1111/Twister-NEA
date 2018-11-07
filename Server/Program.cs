@@ -36,7 +36,8 @@ namespace Server
             else
             {
                 Console.WriteLine("Can't load level file");
-                Environment.Exit(0);
+                Thread.Sleep(1000);
+                Environment.Exit(1);
             }
             if (args.Length >= 2 && File.Exists(args[1]))
             {
@@ -46,7 +47,8 @@ namespace Server
             else
             {
                 Console.WriteLine("Can't load level file.");
-                Environment.Exit(0);
+                Thread.Sleep(1000);
+                Environment.Exit(1);
             }
         }
 
