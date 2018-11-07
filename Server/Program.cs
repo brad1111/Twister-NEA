@@ -23,7 +23,7 @@ namespace Server
 
         static void Main(string[] args)
         {
-            Program p = new Program(ref args); 
+            Program p = new Program(ref args);
             p.ServerStart();
         }
 
@@ -39,6 +39,7 @@ namespace Server
                 Thread.Sleep(1000);
                 Environment.Exit(1);
             }
+
             if (args.Length >= 2 && File.Exists(args[1]))
             {
                 //Level parameter can be set
@@ -74,7 +75,7 @@ namespace Server
                     {
                         TcpClient threadClient = client;
                         NetworkStream clientStream = threadClient.GetStream();
-                        
+
                         byte[] message = new byte[4096];
                         int bytesRead = 0;
 
@@ -90,7 +91,6 @@ namespace Server
                                 Console.WriteLine($"Waiting for data from {client.ToString()}");
                                 //blocks thread until client sends message
                                 bytesRead = clientStream.Read(message, 0, 4096);
-
                             }
                             catch (SocketException e)
                             {
@@ -110,10 +110,12 @@ namespace Server
                                 Console.WriteLine($"{client.ToString()} disconnected");
                                 break;
                             }
+
                             //msg recieved
                             ASCIIEncoding encoder = new ASCIIEncoding();
 
                             string bufferMessage = encoder.GetString(message, 0, bytesRead);
+                            Console.WriteLine(bufferMessage);
 
                             int characterNo;
                             //If the map has downloaded
@@ -172,12 +174,13 @@ namespace Server
                                     exits += openExit.ToString() + ",";
                                 }
 
-                                byte[] buffer = encoder.GetBytes($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{exits}");
+                                byte[] buffer = encoder.GetBytes(
+                                    $"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{exits}");
                                 clientStream.Write(buffer, 0, buffer.Length);
                                 clientStream.Flush();
                                 continue;
                             }
-                            else if(!mapSent)
+                            else if (!mapSent)
                             {
                                 //Send map over (would be in JSON)
                                 byte[] buffer = encoder.GetBytes(ServerDataManager.Instance.levelJson);
@@ -209,7 +212,6 @@ namespace Server
                                 clientStream.Write(buffer, 0, buffer.Length);
                                 clientStream.Flush();
                             }
-
                         }
                     }));
                     clientThread.Start();
@@ -227,14 +229,13 @@ namespace Server
             //Enemy collision detection
             double char1Left = ServerDataManager.Instance.character1.CharacterPosition.x;
             double char1Top = ServerDataManager.Instance.character1.CharacterPosition.y;
-            
+
             double char2Left = ServerDataManager.Instance.character2.CharacterPosition.x;
             double char2Top = ServerDataManager.Instance.character2.CharacterPosition.y;
 
-            if (Collisions.EnemyCollisionDetectionCommon(char1Left,char1Top,
-                                                         char2Left,char2Top))
+            if (Collisions.EnemyCollisionDetectionCommon(char1Left, char1Top,
+                char2Left, char2Top))
             {
-
                 ServerDataManager.Instance.CharactersCollided = true;
             }
 
@@ -242,9 +243,8 @@ namespace Server
 
             //for (int i = 0; i < level.InternalExits.Length; i++)
             //{
-                
+
             //}
         }
-
     }
 }
