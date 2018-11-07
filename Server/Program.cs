@@ -33,7 +33,11 @@ namespace Server
             {
                 //Port number is set
             }
-
+            else
+            {
+                Console.WriteLine("Can't load level file");
+                Environment.Exit(0);
+            }
             if (args.Length >= 2 && File.Exists(args[1]))
             {
                 //Level parameter can be set
@@ -42,6 +46,7 @@ namespace Server
             else
             {
                 Console.WriteLine("Can't load level file.");
+                Environment.Exit(0);
             }
         }
 
