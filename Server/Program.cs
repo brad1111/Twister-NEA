@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Common.Algorithms;
 using Server.Level;
 
@@ -26,6 +27,7 @@ namespace Server
         static void Main(string[] args)
         {
             Program p = new Program(ref args);
+            p.SetupExits();
             p.ServerStart();
         }
 
@@ -55,7 +57,21 @@ namespace Server
             }
         }
 
+        private void SetupExits()
+        {
+            for (int i = 0; i < level.InternalExits.Length; i++)
+            {
+                ExitingManager.Instance.FindAnglesNeededToOpenInternal(
+                    level.ExitLocation.HeightFromAnchor,
+                    level.ExitLocation.HeightFromAnchor + level.ExitLocation.Length,
+                    int.Parse(level.InternalExits[i].CanvasPos.y.ToString()),
+                    int.Parse(level.InternalExits[i].CanvasPos.y.ToString()) + Constants.GRID_ITEM_WIDTH);
+            }
+        }
 
+        /// <summary>
+        /// Starts the server
+        /// </summary>
         private void ServerStart()
         {
             //Setup level
