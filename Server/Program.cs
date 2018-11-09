@@ -7,8 +7,10 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Common;
 using Common.Algorithms;
+using Common.Grid;
 using Server.Level;
 
 namespace Server
@@ -23,6 +25,11 @@ namespace Server
         private readonly string levelLocation = String.Empty;
 
         private Stack<TcpClient> ClientsStack = new Stack<TcpClient>();
+
+        private readonly DispatcherTimer rotationTimer = new DispatcherTimer()
+        {
+            Interval = new TimeSpan(0,0,1)
+        };
 
         static void Main(string[] args)
         {
@@ -66,6 +73,74 @@ namespace Server
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()),
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()) + Constants.GRID_ITEM_WIDTH);
             }
+        }
+
+        /// <summary>
+        /// Sets up the rotation timer and includes all of the code to check each
+        /// time the rotation updates whether the doors are open
+        /// </summary>
+        private void SetupRotationTimer()
+        {
+            rotationTimer.Tick += (s, e) =>
+            {
+                //Check for updates in rotation and hence exits openings
+                double[] charactersXPositions =
+                {
+                    ServerDataManager.Instance.character1.CharacterPosition.x,
+                    ServerDataManager.Instance.character2.CharacterPosition.x
+                };
+                Position[] charactersPositions =
+                {
+                    ServerDataManager.Instance.character1.CharacterPosition,
+                    ServerDataManager.Instance.character2.CharacterPosition
+                };
+                int[] charactersWeights = {1, 1};
+                int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights,
+                    ref ServerDataManager.Instance.currentAngle);
+
+                double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
+                angleDelta += angleDelta;
+
+                //Check for exit opening/closing
+                if (multiplier == 0)
+                {
+                    return;
+                    //Dont bother if it isn't rotating
+                }
+
+
+                if (multiplier > 0)
+                {
+                    //Positive rotation
+                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    {
+                        if (ExitingManager.Instance.AnglesToOpen[i] < ServerDataManager.Instance.currentAngle)
+                        {
+                            ServerDataManager.Instance.ExitsOpen[i] = true;
+                        }
+                        if (ExitingManager.Instance.AnglesToClose[i] < ServerDataManager.Instance.currentAngle)
+                        {
+                            ServerDataManager.Instance.ExitsOpen[i] = false;
+                        }
+                    }
+                }
+                else /*if (rotationMultiplier > 0)*/
+                {
+                    //Negative rotation
+                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    {
+                        if (ExitingManager.Instance.AnglesToClose[i] > ServerDataManager.Instance.currentAngle)
+                        {
+                            ServerDataManager.Instance.ExitsOpen[i] = true;
+                        }
+                        if (ExitingManager.Instance.AnglesToOpen[i] > ServerDataManager.Instance.currentAngle)
+                        {
+                            ServerDataManager.Instance.ExitsOpen[i] = false;
+                        }
+
+                    }
+                }
+            };
         }
 
         /// <summary>
@@ -174,7 +249,7 @@ namespace Server
                                     "Too many people have joined, or error in transmission");
                         }
 
-                        ServerChecks();
+                        CollisionDetectionChecks();
                     }
                     catch (IndexOutOfRangeException e)
                     {
@@ -187,7 +262,7 @@ namespace Server
                         continue;
                     }
 
-                    ServerChecks();
+                    CollisionDetectionChecks();
 
                     //Converts character 1 to character 2 and vice versa
                     int otherCharacterNumber = characterNo == 1 ? 2 : 1;
@@ -239,6 +314,10 @@ namespace Server
                 {
                     //If the game has started overall, tell the client and start the game on this thread
                     gameStartedOnThread = true;
+                    if (!rotationTimer.IsEnabled)
+                    {
+                        rotationTimer.Start();
+                    }
                     byte[] buffer = encoder.GetBytes("start");
                     clientStream.Write(buffer, 0, buffer.Length);
                     clientStream.Flush();
@@ -248,9 +327,9 @@ namespace Server
 
 
         /// <summary>
-        /// The checks that the server does to send back to the client (enemy collision detection, doors)
+        /// The checks that the server does to send back to the client (enemy collision detection)
         /// </summary>
-        private void ServerChecks()
+        private void CollisionDetectionChecks()
         {
             //Enemy collision detection
             double char1Left = ServerDataManager.Instance.character1.CharacterPosition.x;
@@ -264,13 +343,6 @@ namespace Server
             {
                 ServerDataManager.Instance.CharactersCollided = true;
             }
-
-            //Rotation stuff worked out here for exist being open
-
-            //for (int i = 0; i < level.InternalExits.Length; i++)
-            //{
-
-            //}
         }
     }
 }

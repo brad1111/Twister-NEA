@@ -9,7 +9,7 @@ namespace Common.Algorithms
         /// Finds out the direction that the rotation will be
         /// </summary>
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
-        public static double RotationMultiplier(double[] charactersXPos, int[] charactersWeight, ref double rotationAngle)
+        public static int RotationMultiplier(double[] charactersXPos, int[] charactersWeight, ref double rotationAngle)
         {
             double totalMomentFromCentre = 0;
             //Absolute because it does not matter which way it goes
@@ -32,7 +32,7 @@ namespace Common.Algorithms
             else
             {
                 //Prevents divide by 0 error
-                return -(totalMomentFromCentre / Math.Abs(totalMomentFromCentre));
+                return (int)-(totalMomentFromCentre / Math.Abs(totalMomentFromCentre));
             }
         }
 
