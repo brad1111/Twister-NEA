@@ -27,7 +27,6 @@ namespace Server
         static void Main(string[] args)
         {
             Program p = new Program(ref args);
-            p.SetupExits();
             p.ServerStart();
         }
 
@@ -74,9 +73,9 @@ namespace Server
         /// </summary>
         private void ServerStart()
         {
-            //Setup level
             level = LevelIO.ReadJSON(levelLocation);
-
+            level.SetupLevel();
+            SetupExits();
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
             //New thread
             this.listenThread = new Thread(new ThreadStart(ClientConnection));
@@ -192,12 +191,12 @@ namespace Server
 
                     //Converts character 1 to character 2 and vice versa
                     int otherCharacterNumber = characterNo == 1 ? 2 : 1;
-                    double otherCharacterX = (otherCharacterNumber == 1
+                    double otherCharacterX = otherCharacterNumber == 1
                         ? ServerDataManager.Instance.character1.CharacterPosition.x
-                        : ServerDataManager.Instance.character2.CharacterPosition.x);
-                    double otherCharacterY = (otherCharacterNumber == 1
+                        : ServerDataManager.Instance.character2.CharacterPosition.x;
+                    double otherCharacterY = otherCharacterNumber == 1
                         ? ServerDataManager.Instance.character1.CharacterPosition.y
-                        : ServerDataManager.Instance.character2.CharacterPosition.y);
+                        : ServerDataManager.Instance.character2.CharacterPosition.y;
                     //Convert exit array into string
                     string exits = String.Empty;
                     foreach (var openExit in ServerDataManager.Instance.ExitsOpen)
