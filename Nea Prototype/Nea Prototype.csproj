@@ -88,6 +88,8 @@
     <Compile Include="Characters\PlayerTwo.cs" />
     <Compile Include="Keybindings\KeybindingProperty.cs" />
     <Compile Include="Keybindings\KeybindingsProperties.cs" />
+    <Compile Include="Network\MessageEventArgs.cs" />
+    <Compile Include="Network\MessageManager.cs" />
     <Compile Include="TopFrameManager.cs" />
     <Compile Include="Pages\DebugOverlayPage.xaml.cs">
       <DependentUpon>DebugOverlayPage.xaml</DependentUpon>
