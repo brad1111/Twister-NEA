@@ -24,8 +24,10 @@ namespace Nea_Prototype.Network
 
         public int LocalCharacterNumber { get; private set; }
 
+        public bool IsNetworked { get; private set; } = false;
+
         //Update the network every second to begin with
-        private DispatcherTimer connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
+        private readonly DispatcherTimer connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
 
         /// <summary>
         /// Sets 
@@ -52,6 +54,7 @@ namespace Nea_Prototype.Network
             LocalCharacterNumber = et == EnemyType.Remote ? 1 : 2;
             //Start the timer since the enemies have been setup
             connectionTimer.Start();
+            IsNetworked = true;
             return true;
         }
 
@@ -60,14 +63,31 @@ namespace Nea_Prototype.Network
         /// </summary>
         private void ConnectionTimer_Tick(object sender, EventArgs e)
         {
-            
-
             //Setup the message
             string serverMsg = String.Format("{0},{1},{2},",
-                                                LocalCharacterNumber, //character number
-                                                Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber]), //x
-                                                Canvas.GetTop(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber])); //y
+                                            LocalCharacterNumber, //character number
+                                            Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber]), //x
+                                            Canvas.GetTop(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber])); //y
             MessageManager.Instance.SendMessage(serverMsg);
+        }
+
+        public void Start()
+        {
+            if (!connectionTimer.IsEnabled)
+            {
+                connectionTimer.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Stops the timer
+        /// </summary>
+        public void Stop()
+        {
+            if (connectionTimer.IsEnabled)
+            {
+                connectionTimer.IsEnabled = false;
+            }
         }
     }
 }
