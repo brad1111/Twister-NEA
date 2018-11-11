@@ -14,20 +14,17 @@ namespace Nea_Prototype.Network
         /// </summary>
         private CommunicationManager()
         {
-            connectionTimer.Tick += ConnectionTimer_Tick;
+            _connectionTimer.Tick += ConnectionTimer_Tick;
         }
 
         private CommunicationManager Instance { get; } = new CommunicationManager();
-
-        public ProtagonistType ProtagonistType { get; private set; }
-        public EnemyType EnemyType { get; private set; }
 
         public int LocalCharacterNumber { get; private set; }
 
         public bool IsNetworked { get; private set; } = false;
 
         //Update the network every second to begin with
-        private readonly DispatcherTimer connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
+        private readonly DispatcherTimer _connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
 
         /// <summary>
         /// Sets 
@@ -36,7 +33,7 @@ namespace Nea_Prototype.Network
         /// <param name="et"></param>
         public bool SetupEnemyTypes(ProtagonistType pt, EnemyType et)
         {
-            if (connectionTimer.IsEnabled)
+            if (_connectionTimer.IsEnabled)
             {
                 //If the timer is running return false because you couldn't update it
                 return false;
@@ -48,13 +45,23 @@ namespace Nea_Prototype.Network
                 throw new Exception("Error in CommunicationManager.SetupEnemyTypes(), only one remote character allowed.");
             }
 
-            ProtagonistType = pt;
-            EnemyType = et;
             //If the enemy is remote, then player 1 is local, if enemy is not remote then player 1 is remote and enemy is local
             LocalCharacterNumber = et == EnemyType.Remote ? 1 : 2;
-            //Start the timer since the enemies have been setup
-            connectionTimer.Start();
+            //We know its networked
             IsNetworked = true;
+            return true;
+        }
+
+        public bool ClearEnemyTypes()
+        {
+            if (_connectionTimer.IsEnabled)
+            {
+                //Can't change whilst running
+                return false;
+            }
+
+            LocalCharacterNumber = -1;
+            IsNetworked = false;
             return true;
         }
 
@@ -73,9 +80,9 @@ namespace Nea_Prototype.Network
 
         public void Start()
         {
-            if (!connectionTimer.IsEnabled)
+            if (!_connectionTimer.IsEnabled)
             {
-                connectionTimer.IsEnabled = true;
+                _connectionTimer.IsEnabled = true;
             }
         }
 
@@ -84,9 +91,9 @@ namespace Nea_Prototype.Network
         /// </summary>
         public void Stop()
         {
-            if (connectionTimer.IsEnabled)
+            if (_connectionTimer.IsEnabled)
             {
-                connectionTimer.IsEnabled = false;
+                _connectionTimer.IsEnabled = false;
             }
         }
     }
