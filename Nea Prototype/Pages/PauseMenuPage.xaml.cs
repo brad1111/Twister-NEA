@@ -49,6 +49,12 @@ namespace Nea_Prototype.Pages
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)
         {
             GameGridManager.Clear();
+            //Stop anything going in game if its there
+            if (TopFrameManager.FrameManager.MainFrame.Content is GamePage)
+            {
+                GamePage page = (GamePage) TopFrameManager.FrameManager.MainFrame.Content;
+                page.EndGame();
+            }
             if (TopFrameManager.FrameManager.MainFrame.CanGoBack)
             {
                 TopFrameManager.FrameManager.MainFrame.GoBack();

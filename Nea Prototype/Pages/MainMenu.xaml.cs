@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common.Enums;
 
 namespace Nea_Prototype.Pages
 {
@@ -32,7 +33,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.MainFrame.Navigate(new GamePage());
+            TopFrameManager.FrameManager.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local));
         }
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)

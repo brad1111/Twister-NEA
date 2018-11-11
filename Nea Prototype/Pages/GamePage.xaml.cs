@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Common.Enums;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Keybindings;
+using Nea_Prototype.Network;
 
 namespace Nea_Prototype.Pages
 {
@@ -23,17 +24,25 @@ namespace Nea_Prototype.Pages
         private DispatcherTimer keyboardInputTimer;
         private DispatcherTimer rotationTimer;
 
+        //The connection to the message manager if networked
+        private MessageManager messageInstance = null;
+
         //The storage for level information
         private Level.Level level = LevelIO.ReadJSON("testing.json");
 
-        public GamePage()
+        /// <summary>
+        /// Creates an instance of GamePage
+        /// </summary>
+        /// <param name="pt">The type of protagonist to generate</param>
+        /// <param name="et">The type of enemy to generate</param>
+        public GamePage(ProtagonistType pt, EnemyType et)
         {
             InitializeComponent();
             
             //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
-            //not need to be referneced every tick for the collision detection visualisation to work)
+            //not need to be referenced every tick for the collision detection visualisation to work)
             GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
 
             //Setup the angles that open the exits
@@ -62,6 +71,13 @@ namespace Nea_Prototype.Pages
 
                 GameGridManager.RotateStoryBoard((int) rotation);
             };
+            
+            //If there is some networking involved within characters then start the communication manager and tie it to the message manager
+            if (pt == ProtagonistType.Remote || et == EnemyType.Remote)
+            {
+                CommunicationManager.Instance.SetupEnemyTypes(pt, et);
+            }
+
             //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
@@ -70,7 +86,7 @@ namespace Nea_Prototype.Pages
         }
 
         /// <summary>
-        /// Everytime the timer ticks check for keyboard input
+        /// Every time the timer ticks check for keyboard input
         /// </summary>
         /// <param name="sender">The timer</param>
         /// <param name="e">The event arguments</param>
@@ -153,17 +169,75 @@ namespace Nea_Prototype.Pages
             }
         }
 
+
+        public void HandleMessage(object sender, MessageEventArgs e)
+        {
+            if (e != null)
+            {
+                try
+                {
+                    string receivedMessage = e.Message;
+                    //break up string
+                    string[] messageComponents = receivedMessage.Split(',');
+                    int characterNumber = int.Parse(messageComponents[0]);
+                    double x = double.Parse(messageComponents[1]);
+                    double y = double.Parse(messageComponents[2]);
+
+                    //Move characters into position
+                    Canvas.SetLeft(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], x);
+                    Canvas.SetTop(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], y);
+
+                    for (int i = 3; i < messageComponents.Length; i++)
+                    {
+                        int j = i - 3;
+                        //For each is left these are the exit conditions
+                        bool isGateOpen = bool.Parse(messageComponents[i]);
+                        GameGridManager.GetGameGrid().ExitLocations[j].CanExit = isGateOpen;
+                    }
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                catch (IndexOutOfRangeException ex)
+                {
+                    Console.WriteLine(ex);
+                }
+
+            }
+        }
+
+
         public void StopTimers()
         {
             keyboardInputTimer.Stop();
             rotationTimer.Stop();
+            //If networked you need to stop the network timer
+            if (CommunicationManager.Instance.IsNetworked)
+            {
+                CommunicationManager.Instance.Stop();
+            }
             allowKeyDown = false;
+        }
+
+        public void EndGame()
+        {
+            StopTimers();
+            if (CommunicationManager.Instance.IsNetworked)
+            {
+                CommunicationManager.Instance.ClearEnemyTypes();
+            }
         }
 
         public void StartTimers()
         {
             keyboardInputTimer.Start();
             rotationTimer.Start();
+            //If networked you need to start the network timer
+            if (CommunicationManager.Instance.IsNetworked)
+            {
+                CommunicationManager.Instance.Start();
+            }
             allowKeyDown = true;
         }
     }

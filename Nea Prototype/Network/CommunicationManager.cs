@@ -17,7 +17,7 @@ namespace Nea_Prototype.Network
             _connectionTimer.Tick += ConnectionTimer_Tick;
         }
 
-        private CommunicationManager Instance { get; } = new CommunicationManager();
+        public static CommunicationManager Instance { get; } = new CommunicationManager();
 
         public int LocalCharacterNumber { get; private set; }
 
@@ -27,7 +27,7 @@ namespace Nea_Prototype.Network
         private readonly DispatcherTimer _connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
 
         /// <summary>
-        /// Sets 
+        /// Sets the enemy types required to do things with the network
         /// </summary>
         /// <param name="pt"></param>
         /// <param name="et"></param>
