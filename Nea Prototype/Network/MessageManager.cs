@@ -26,6 +26,12 @@ namespace Nea_Prototype.Network
         public int Port { get; private set; } = 26332;
 
         private List<string> messages = new List<string>();
+
+        /// <summary>
+        /// Don't allow external instances
+        /// </summary>
+        private MessageManager() { }
+
         public static MessageManager Instance { get; } = new MessageManager();
 
         public event EventHandler MessageHandler;
