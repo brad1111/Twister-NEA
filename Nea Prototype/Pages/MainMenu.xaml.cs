@@ -38,7 +38,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TopFrameManager.FrameManager.MainFrame.Navigate(new ConnectPage());
         }
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)

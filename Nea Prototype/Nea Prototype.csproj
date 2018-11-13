@@ -58,6 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\ConnectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\DebugOverlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,11 +90,15 @@
     <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Characters\PlayerOne.cs" />
     <Compile Include="Characters\PlayerTwo.cs" />
+    <Compile Include="Controls\RegexTextBox.cs" />
     <Compile Include="Keybindings\KeybindingProperty.cs" />
     <Compile Include="Keybindings\KeybindingsProperties.cs" />
     <Compile Include="Network\CommunicationManager.cs" />
     <Compile Include="Network\MessageEventArgs.cs" />
     <Compile Include="Network\MessageManager.cs" />
+    <Compile Include="Pages\ConnectPage.xaml.cs">
+      <DependentUpon>ConnectPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TopFrameManager.cs" />
     <Compile Include="Pages\DebugOverlayPage.xaml.cs">
       <DependentUpon>DebugOverlayPage.xaml</DependentUpon>
