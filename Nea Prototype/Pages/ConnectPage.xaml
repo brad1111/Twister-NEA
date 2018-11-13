@@ -27,6 +27,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <controls:RegexTextBox x:Name="txtIP" Width="120" Watermark="IP Address"/>
+            <!--Regex is assigned in code-->
             <controls:RegexTextBox x:Name="txtPort" Grid.Column="1" Width="80" Watermark="Port"/>
             <Button x:Name="btnConnect" Grid.Row="1" Grid.ColumnSpan="2" Click="BtnConnect_OnClick">Connect</Button>
         </Grid>

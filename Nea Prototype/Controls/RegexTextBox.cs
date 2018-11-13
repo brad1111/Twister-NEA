@@ -84,8 +84,6 @@ namespace Nea_Prototype.Controls
             base.OnKeyUp(e);
         }
 
-        private TextChange previousChange = null;
-
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
