@@ -118,7 +118,42 @@ namespace Nea_Prototype.Pages
                 MessageBox.Show("Could not find server.exe", "Error");
             }
             Process.Start("server.exe", "26332 testing.json");
+            Focus();
+            //Wait a sec and try to connect
 
+            Thread connectThread = new Thread(new ThreadStart(() =>
+            {
+                while (!MessageManager.Instance.IsConnected)
+                {
+                    try
+                    {
+                        MessageManager.Instance.Connect("127.0.0.1", 26332);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                        throw;
+                    }
+                    
+                    
+                    Thread.Sleep(1000);
+                }
+                //Setup handlemessage so the map gets downloaded
+                MessageManager.Instance.MessageHandler += HandleMessage;
+                //Wait for map to be downloaded
+                while (levelFile is null)
+                {
+                    MessageManager.Instance.SendMessage("send");
+                    Thread.Sleep(1000);
+                }
+                //Start the game
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    GamePage gp = new GamePage(pt: ProtagonistType.Local, et: EnemyType.Remote, _level: levelFile);
+                    TopFrameManager.FrameManager.MainFrame.Navigate(gp);
+                }));
+            }));
+            connectThread.Start();
         }
     }
 }
