@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Common.Enums;
+using Nea_Prototype.Level;
 
 namespace Nea_Prototype.Pages
 {
@@ -33,7 +34,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local));
+            TopFrameManager.FrameManager.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
         }
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)

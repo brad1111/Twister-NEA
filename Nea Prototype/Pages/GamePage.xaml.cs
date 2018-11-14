@@ -28,16 +28,17 @@ namespace Nea_Prototype.Pages
         private MessageManager messageInstance = null;
 
         //The storage for level information
-        private Level.Level level = LevelIO.ReadJSON("testing.json");
+        private Level.Level level = null;
 
         /// <summary>
         /// Creates an instance of GamePage
         /// </summary>
         /// <param name="pt">The type of protagonist to generate</param>
         /// <param name="et">The type of enemy to generate</param>
-        public GamePage(ProtagonistType pt, EnemyType et)
+        public GamePage(ProtagonistType pt, EnemyType et, Level.Level _level)
         {
             InitializeComponent();
+            level = _level;
             
             //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
@@ -76,6 +77,12 @@ namespace Nea_Prototype.Pages
             if (pt == ProtagonistType.Remote || et == EnemyType.Remote)
             {
                 CommunicationManager.Instance.SetupEnemyTypes(pt, et);
+                //Also tell the server that it has received and loaded the map
+                
+                messageInstance = MessageManager.Instance;
+                messageInstance.MessageHandler += HandleMessage;
+                messageInstance.SendMessage("received");
+
             }
 
             //When the page has loaded start the timer
@@ -170,13 +177,13 @@ namespace Nea_Prototype.Pages
         }
 
 
-        public void HandleMessage(object sender, MessageEventArgs e)
+        public void HandleMessage(object sender, EventArgs e)
         {
-            if (e != null)
+            if (e != null && e is MessageEventArgs)
             {
                 try
                 {
-                    string receivedMessage = e.Message;
+                    string receivedMessage = (e as MessageEventArgs).Message;
                     //break up string
                     string[] messageComponents = receivedMessage.Split(',');
                     int characterNumber = int.Parse(messageComponents[0]);
@@ -184,16 +191,25 @@ namespace Nea_Prototype.Pages
                     double y = double.Parse(messageComponents[2]);
 
                     //Move characters into position
-                    Canvas.SetLeft(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], x);
-                    Canvas.SetTop(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], y);
-
-                    for (int i = 3; i < messageComponents.Length; i++)
+                    //Get main thread dispatcher
+                    Dispatcher dispatcher =
+                        GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1].Dispatcher;
+                    dispatcher.Invoke(new Action(() =>
                     {
-                        int j = i - 3;
-                        //For each is left these are the exit conditions
-                        bool isGateOpen = bool.Parse(messageComponents[i]);
-                        GameGridManager.GetGameGrid().ExitLocations[j].CanExit = isGateOpen;
-                    }
+                        Canvas.SetLeft(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], x);
+                        Canvas.SetTop(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], y);
+                        for (int i = 0; i < GameGridManager.GetGameGrid().ExitLocations.Length; i++)
+                        {
+                            int j = i + 3;
+                            //For each is left these are the exit conditions
+                            bool isGateOpen = GameGridManager.GetGameGrid().ExitLocations[i].CanExit;
+                            if (!bool.TryParse(messageComponents[j], out isGateOpen))
+                            {
+                                Console.WriteLine($"Couldn't resolve messageComponents[{j}] as a boolean. Value: {messageComponents[j]}");
+                            }
+                            GameGridManager.GetGameGrid().ExitLocations[i].CanExit = isGateOpen;
+                        }
+                    }));
                 }
                 catch (FormatException ex)
                 {

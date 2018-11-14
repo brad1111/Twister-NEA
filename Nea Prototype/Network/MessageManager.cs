@@ -17,12 +17,12 @@ namespace Nea_Prototype.Network
             get
             {
                 IPAddress temp = null;
-                IPAddress.TryParse(iPstring, out temp);
+                IPAddress.TryParse(IPstring, out temp);
                 return temp;
             }
         }
 
-        private string iPstring { get; set; } = "127.0.0.1";
+        private string IPstring { get; set; } = "127.0.0.1";
         public int Port { get; private set; } = 26332;
 
         private List<string> messages = new List<string>();
@@ -32,7 +32,7 @@ namespace Nea_Prototype.Network
         /// </summary>
         private MessageManager() { }
 
-        public static MessageManager Instance { get; } = new MessageManager();
+        public readonly static MessageManager Instance = new MessageManager();
 
         public event EventHandler MessageHandler;
 
@@ -41,7 +41,7 @@ namespace Nea_Prototype.Network
 
         public bool Connect(string IP, int port)
         {
-            iPstring = IP;
+            IPstring = IP;
 
             if (IP == null)
             {
@@ -52,6 +52,7 @@ namespace Nea_Prototype.Network
             try
             {
                 serverClient = new TcpClient();
+                
                 serverClient.Connect(IP, port);
             }
             catch (SocketException e)
@@ -61,8 +62,10 @@ namespace Nea_Prototype.Network
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString(), "Error");
+                serverClient.Close();
                 throw;
             }
+
 
             if (IsConnected)
             {

@@ -12,12 +12,14 @@ namespace Server.Level
         /// <returns>A level object</returns>
         public static Level ReadJSON(string fileToRead)
         {
-            StreamReader sr = new StreamReader(fileToRead);
-            string json = sr.ReadToEnd();
-            //Save json file to send to clients
-            ServerDataManager.Instance.levelJson = json;
-            Level level = JsonConvert.DeserializeObject<Level>(json);   
-            return level;
+            using (StreamReader sr = new StreamReader(fileToRead))
+            {
+                string json = sr.ReadToEnd();
+                //Save json file to send to clients
+                ServerDataManager.Instance.levelJson = json;
+                Level level = JsonConvert.DeserializeObject<Level>(json);
+                return level;
+            }
         }
     }
 }
