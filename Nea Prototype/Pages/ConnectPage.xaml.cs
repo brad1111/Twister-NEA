@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -106,6 +108,17 @@ namespace Nea_Prototype.Pages
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             //Do nothing
+        }
+
+        private void BtnCreateServer_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("server.exe"))
+            {
+                //If server is not found then stop and tell the user
+                MessageBox.Show("Could not find server.exe", "Error");
+            }
+            Process.Start("server.exe", "26332 testing.json");
+
         }
     }
 }
