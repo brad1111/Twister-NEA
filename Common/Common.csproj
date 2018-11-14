@@ -48,6 +48,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Enums\Direction.cs" />
     <Compile Include="Enums\EnemyType.cs" />
+    <Compile Include="Enums\GameType.cs" />
     <Compile Include="Enums\ProtagonistType.cs" />
     <Compile Include="Enums\Side.cs" />
     <Compile Include="Grid\Position.cs" />

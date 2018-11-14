@@ -24,6 +24,49 @@ namespace Nea_Prototype.Pages
         private DispatcherTimer keyboardInputTimer;
         private DispatcherTimer rotationTimer;
 
+        private EnemyType Enemy;
+        private ProtagonistType Protagonist;
+
+        private GameType gameType
+        {
+            get
+            {
+                if (Protagonist == ProtagonistType.Remote || Enemy == EnemyType.Remote)
+                {
+                    //Remote game
+                    return GameType.Networked;
+                }
+                else if (Enemy == EnemyType.AI)
+                {
+                    //AI game
+                    return GameType.Singleplayer;
+                }
+                else
+                {
+                    //Local multiplayer game
+                    return GameType.LocalMultiplayer;
+                }
+            }
+        }
+
+        //Which charcater is binded to WASD (or whatever player 1 is bound to) (e.g. player 1 for AI or Local, either for networked)
+        private int MainCharacterKeyBind
+        {
+            get
+            {
+                if (Protagonist == ProtagonistType.Remote)
+                {
+                    return 2;
+                }
+                else
+                {
+                    //Player 1 is default 
+                    return 1;
+                }
+            }
+        }
+
+
         //The connection to the message manager if networked
         private MessageManager messageInstance = null;
 
@@ -39,7 +82,10 @@ namespace Nea_Prototype.Pages
         {
             InitializeComponent();
             level = _level;
-            
+
+            Protagonist = pt;
+            Enemy = et;
+
             //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
@@ -74,7 +120,7 @@ namespace Nea_Prototype.Pages
             };
             
             //If there is some networking involved within characters then start the communication manager and tie it to the message manager
-            if (pt == ProtagonistType.Remote || et == EnemyType.Remote)
+            if (gameType == GameType.Networked)
             {
                 CommunicationManager.Instance.SetupEnemyTypes(pt, et);
                 //Also tell the server that it has received and loaded the map
@@ -106,20 +152,26 @@ namespace Nea_Prototype.Pages
             double getUp;
             if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_right))
             {
-                level.MoveCharacter(1, Direction.Right);
+                level.MoveCharacter(MainCharacterKeyBind, Direction.Right);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_left))
             {
-                level.MoveCharacter(1, Direction.Left);
+                level.MoveCharacter(MainCharacterKeyBind, Direction.Left);
             }
             
             if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_up))
             {
-                level.MoveCharacter(1, Direction.Up);
+                level.MoveCharacter(MainCharacterKeyBind, Direction.Up);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_down))
             {
-                level.MoveCharacter(1, Direction.Down);
+                level.MoveCharacter(MainCharacterKeyBind, Direction.Down);
+            }
+
+            //If the game is networked or AI there is only one character
+            if (gameType == GameType.Networked || gameType == GameType.Singleplayer)
+            {
+                return;
             }
 
             if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_right))
