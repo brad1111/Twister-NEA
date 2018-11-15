@@ -24,7 +24,7 @@ namespace Nea_Prototype.Network
         public bool IsNetworked { get; private set; } = false;
 
         //Update the network every second to begin with
-        private readonly DispatcherTimer _connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,1)};
+        private readonly DispatcherTimer _connectionTimer = new DispatcherTimer(){Interval = new TimeSpan(0,0,0,0,100)};
 
         /// <summary>
         /// Sets the enemy types required to do things with the network
