@@ -96,5 +96,23 @@ namespace Nea_Prototype.Network
                 _connectionTimer.IsEnabled = false;
             }
         }
+
+        /// <summary>
+        /// Disconnect everything from the server, assume message handler has been cleared
+        /// </summary>
+        public void Disconnect()
+        {
+            _connectionTimer.Stop();
+            IsNetworked = false;
+            //Also move the topframe back to main menu (on a different thread so just do it)
+            TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+            {
+                while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                {
+                    TopFrameManager.FrameManager.MainFrame.GoBack();
+                }
+            }));
+            MessageManager.Instance.ClearServer();
+        }
     }
 }

@@ -88,7 +88,7 @@ namespace Nea_Prototype.Network
 
             try
             {
-                while (true)
+                while (IsConnected)
                 {
                     byte[] buffer = new byte[4096];
                     //blocking call until server sends message
@@ -105,6 +105,7 @@ namespace Nea_Prototype.Network
             {
                 TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
                 {
+
                     while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
                     {
                         TopFrameManager.FrameManager.MainFrame.GoBack();
@@ -153,5 +154,14 @@ namespace Nea_Prototype.Network
             NotifyMessage(message);
         }
 
+        /// <summary>
+        /// Clears the backend of the server, assumes event is empty
+        /// </summary>
+        public void ClearServer()
+        {
+            serverClient.Dispose();
+            serverClient = null;
+            messages.Clear();
+        }
     }
 }

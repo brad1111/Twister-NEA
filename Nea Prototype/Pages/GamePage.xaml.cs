@@ -242,16 +242,7 @@ namespace Nea_Prototype.Pages
                     if (receivedMessage == "crash" || receivedMessage == "close")
                     {
                         
-                        StopTimers();
-                        MessageManager.Instance.MessageHandler -= HandleMessage;
-                        TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
-                        {
-                            while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
-                            {
-                                TopFrameManager.FrameManager.MainFrame.GoBack();
-                                //Go back to main menu
-                            }
-                        }));
+                        CommunicationManager.Instance.Disconnect();
                         MessageBox.Show(receivedMessage == "crash" ? "Other player has exited unexpectedly" : "Other player has willingly quit.");
                     }
                     
