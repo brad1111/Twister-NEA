@@ -55,7 +55,7 @@ namespace Nea_Prototype.Pages
                 GamePage page = (GamePage) TopFrameManager.FrameManager.MainFrame.Content;
                 page.EndGame();
             }
-            if (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+            while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
             {
                 TopFrameManager.FrameManager.MainFrame.GoBack();
             }

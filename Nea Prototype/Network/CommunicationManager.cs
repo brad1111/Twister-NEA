@@ -113,6 +113,7 @@ namespace Nea_Prototype.Network
                 }
             }));
             MessageManager.Instance.ClearServer();
+            ClearEnemyTypes();
         }
     }
 }
