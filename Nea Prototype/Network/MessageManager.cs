@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -99,6 +100,19 @@ namespace Nea_Prototype.Network
                     Console.WriteLine($"Received: {receivedMessage}");
                     AddMessage(receivedMessage);
                 }
+            }
+            catch (IOException e)
+            {
+                TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+                {
+                    while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                    {
+                        TopFrameManager.FrameManager.MainFrame.GoBack();
+                        //Go back to the beginning.
+                    }
+                }));
+                MessageBox.Show($"Server has disconnected: {e}", "Error");
+                //Close the game
             }
             catch (Exception e)
             {

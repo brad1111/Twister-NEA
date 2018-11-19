@@ -235,8 +235,28 @@ namespace Nea_Prototype.Pages
             {
                 try
                 {
+                    
+
                     string receivedMessage = (e as MessageEventArgs).Message;
+                    //Check if the clients are still alive
+                    if (receivedMessage == "crash" || receivedMessage == "close")
+                    {
+                        
+                        StopTimers();
+                        MessageManager.Instance.MessageHandler -= HandleMessage;
+                        TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+                        {
+                            while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                            {
+                                TopFrameManager.FrameManager.MainFrame.GoBack();
+                                //Go back to main menu
+                            }
+                        }));
+                        MessageBox.Show(receivedMessage == "crash" ? "Other player has exited unexpectedly" : "Other player has willingly quit.");
+                    }
+                    
                     //break up string
+
                     string[] messageComponents = receivedMessage.Split(',');
                     int characterNumber = int.Parse(messageComponents[0]);
                     double x = double.Parse(messageComponents[1]);

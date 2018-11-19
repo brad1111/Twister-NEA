@@ -162,7 +162,8 @@ namespace Server
         private void ClientConnection()
         {
             listener.Start();
-            while (true)
+            //Wait until the stack is full 
+            while (ClientsStack.Count < 2)
             {
                 Console.WriteLine("Waiting for a connection");
                 //Thread blocking call (blocks until client has connected)
@@ -171,6 +172,15 @@ namespace Server
                 //create a new thread to handle this new client
                 Thread clientThread = new Thread(new ThreadStart(ClientCommunication));
                 clientThread.Start();
+            }
+
+            //Then wait until a client has left the stack
+            while (ClientsStack.Count == 2)
+            {
+                Thread.Sleep(1000);
+            }
+            {
+                
             }
         }
 
@@ -188,8 +198,9 @@ namespace Server
             bool mapSent = false;
             bool mapDownloaded = false;
             bool gameStartedOnThread = false;
+            bool clientConnected = true;
 
-            while (true)
+            while (clientConnected)
             {
                 bytesRead = 0;
                 try
@@ -202,6 +213,15 @@ namespace Server
                 {
                     //Socket Error has occured
                     Console.WriteLine(e);
+                    break;
+                }
+                catch (IOException e)
+                {
+                    //Client has possibly disconnected so finish the thread.
+                    Console.WriteLine(e);
+                    clientConnected = false;
+                    ServerDataManager.Instance.CharacterCrashed();
+                    threadClient.Dispose();
                     break;
                 }
                 catch (Exception e)
@@ -225,6 +245,15 @@ namespace Server
 
                 int characterNo;
                 //If the map has downloaded
+                if (ServerDataManager.Instance.GameOver && ServerDataManager.Instance.ClientCrashed)
+                {
+                    byte[] buffer =
+                        encoder.GetBytes("crash");
+                    clientStream.Write(buffer, 0, buffer.Length);
+                    clientStream.Flush();
+                    threadClient.Dispose();
+                    ClientsStack.Clear();
+                }
                 if (gameStartedOnThread)
                 {
                     string[] messageSections = bufferMessage.Split(',');

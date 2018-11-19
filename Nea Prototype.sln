@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28010.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nea Prototype", "Nea Prototype\Nea Prototype.csproj", "{D3E179BA-93A5-4F1A-9BFC-5845FFBB9F54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EE799F00-1CB9-4E1D-856D-F03A448CD00F} = {EE799F00-1CB9-4E1D-856D-F03A448CD00F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{EE799F00-1CB9-4E1D-856D-F03A448CD00F}"
 EndProject
