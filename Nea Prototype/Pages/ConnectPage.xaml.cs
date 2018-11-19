@@ -146,6 +146,9 @@ namespace Nea_Prototype.Pages
                     MessageManager.Instance.SendMessage("send");
                     Thread.Sleep(1000);
                 }
+                //Remove handlemessage so that junk is not sent to the server
+                MessageManager.Instance.MessageHandler -= HandleMessage;
+
                 //Start the game
                 Dispatcher.Invoke(new Action(() =>
                 {
