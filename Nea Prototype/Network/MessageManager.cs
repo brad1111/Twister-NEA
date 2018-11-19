@@ -159,7 +159,7 @@ namespace Nea_Prototype.Network
         /// </summary>
         public void ClearServer()
         {
-            serverClient.Dispose();
+            serverClient.Close();
             serverClient = null;
             messages.Clear();
         }

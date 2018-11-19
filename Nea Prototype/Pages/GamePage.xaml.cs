@@ -308,7 +308,7 @@ namespace Nea_Prototype.Pages
             StopTimers();
             if (CommunicationManager.Instance.IsNetworked)
             {
-
+                MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();
             }
         }
