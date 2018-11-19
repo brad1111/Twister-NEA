@@ -167,6 +167,28 @@ namespace Nea_Prototype.Pages
             {
                 level.MoveCharacter(MainCharacterKeyBind, Direction.Down);
             }
+            
+            //Section for overlay menus
+            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.PauseMenuKey))
+            {
+                StopTimers();
+                TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
+            }
+
+            if (Keyboard.Modifiers == KeyBindingsManager.KeyBindings.DebugOverlayModifier &&
+                Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.DebugOverlayKey))
+            {
+                if (TopFrameManager.FrameManager.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
+                {
+                    TopFrameManager.FrameManager.ClearOverlayFrame();
+                }
+                else
+                {
+                    TopFrameManager.FrameManager.OverlayFrame.Navigate(new DebugOverlayPage());
+                }
+            }
+
+
 
             //If the game is networked or AI there is only one character
             if (gameType == GameType.Networked || gameType == GameType.Singleplayer)
@@ -192,24 +214,6 @@ namespace Nea_Prototype.Pages
                 level.MoveCharacter(2, Direction.Down);
             }
 
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.PauseMenuKey))
-            {
-                StopTimers();
-                TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
-            }
-
-            if (Keyboard.Modifiers == KeyBindingsManager.KeyBindings.DebugOverlayModifier &&
-                Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.DebugOverlayKey))
-            {
-                if (TopFrameManager.FrameManager.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
-                {
-                    TopFrameManager.FrameManager.ClearOverlayFrame();
-                }
-                else
-                {
-                    TopFrameManager.FrameManager.OverlayFrame.Navigate(new DebugOverlayPage());
-                }
-            }
         }
 
         private bool allowKeyDown = false;
