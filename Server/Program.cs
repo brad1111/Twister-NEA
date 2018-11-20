@@ -232,8 +232,11 @@ namespace Server
 
                 if (bytesRead == 0)
                 {
-                    //client disconnected
-                    Console.WriteLine($"{threadClient.ToString()} disconnected");
+                    //Client has disconnected so finish the thread.
+                    Console.WriteLine("Character has left");
+                    clientConnected = false;
+                    ServerDataManager.Instance.CharacterLeft();
+                    threadClient.Dispose();
                     break;
                 }
 
