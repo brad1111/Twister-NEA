@@ -103,17 +103,22 @@ namespace Nea_Prototype.Network
             }
             catch (IOException e)
             {
-                TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+                if (IsConnected)
                 {
-
-                    while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                    //The server has crashed or something has happened
+                    TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
                     {
-                        TopFrameManager.FrameManager.MainFrame.GoBack();
-                        //Go back to the beginning.
-                    }
-                }));
-                MessageBox.Show($"Server has disconnected: {e}", "Error");
-                //Close the game
+
+                        while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                        {
+                            TopFrameManager.FrameManager.MainFrame.GoBack();
+                            //Go back to the beginning.
+                        }
+                    }));
+                    MessageBox.Show($"Server has disconnected: {e}", "Error");
+                    //Close the game
+                }
+                //else This client has quit
             }
             catch (Exception e)
             {
