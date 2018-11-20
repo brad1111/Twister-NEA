@@ -147,20 +147,7 @@ namespace Nea_Prototype.Level
                           //Enemy
                           case 3:
                               //Choose which type of Enemy:
-                              Enemy enemy = null;
-                              switch (enemyType)
-                              {
-                                  case EnemyType.Local:
-                                      enemy = new PlayerTwo();
-                                      break;
-                                  case EnemyType.AI:
-                                      //enemy = new BotPlayer();
-                                      //break;
-                                  case EnemyType.Remote:
-                                  default:
-                                      throw new NotImplementedException(
-                                          $"{nameof(enemyType)} players are not implemented");
-                              }
+                              Enemy enemy = new Enemy();
 
                               enemy.Position = new Position(x, y);
                               var enemyItem = new CharacterItem(enemy);
