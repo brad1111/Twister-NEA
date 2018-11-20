@@ -24,7 +24,7 @@ namespace Server
         private readonly int PORT_NO = 26332;
         private readonly string levelLocation = String.Empty;
 
-        private Stack<TcpClient> ClientsStack = new Stack<TcpClient>();
+        private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2);
 
         private readonly DispatcherTimer rotationTimer = new DispatcherTimer()
         {
@@ -174,14 +174,12 @@ namespace Server
                 clientThread.Start();
             }
 
-            //Then wait until a client has left the stack
-            while (ClientsStack.Count == 2)
+            //Then wait until all clients have left the stack
+            while (ClientsStack.Count > 0)
             {
                 Thread.Sleep(1000);
             }
-            {
-                
-            }
+            //Then close
         }
 
         /// <summary>
@@ -248,15 +246,30 @@ namespace Server
 
                 int characterNo;
                 //If the map has downloaded
-                if (ServerDataManager.Instance.GameOver && ServerDataManager.Instance.ClientCrashed)
+                if (ServerDataManager.Instance.GameOver)
                 {
-                    byte[] buffer =
-                        encoder.GetBytes("crash");
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
-                    threadClient.Dispose();
-                    ClientsStack.Clear();
+                    if (ServerDataManager.Instance.ClientCrashed)
+                    {
+                        byte[] buffer =
+                            encoder.GetBytes("crash");
+                        clientStream.Write(buffer, 0, buffer.Length);
+                        clientStream.Flush();
+                        threadClient.Dispose();
+                        ClientsStack.Clear();
+                        break;
+                    }
+                    else if(ServerDataManager.Instance.ClientLeft)
+                    {
+                        byte[] buffer =
+                            encoder.GetBytes("close");
+                        clientStream.Write(buffer, 0, buffer.Length);
+                        clientStream.Flush();
+                        threadClient.Dispose();
+                        ClientsStack.Clear();
+                        break;
+                    }
                 }
+                
                 if (gameStartedOnThread)
                 {
                     string[] messageSections = bufferMessage.Split(',');
