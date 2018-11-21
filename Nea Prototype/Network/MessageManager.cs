@@ -130,11 +130,23 @@ namespace Nea_Prototype.Network
         public void SendMessage(string message)
         {
             ASCIIEncoding encoder = new ASCIIEncoding();
-            NetworkStream serverStream = serverClient.GetStream();
+            NetworkStream serverStream = null;
+            try
+            {
+                serverStream = serverClient.GetStream();
+                byte[] buffer = encoder.GetBytes(message);
+                serverStream.Write(buffer, 0, buffer.Length);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error");
+                throw;
+            }
+            finally
+            {
+                serverStream.Flush();
+            }
 
-            byte[] buffer = encoder.GetBytes(message);
-            serverStream.Write(buffer, 0, buffer.Length);
-            serverStream.Flush();
         }
 
         /// <summary>
