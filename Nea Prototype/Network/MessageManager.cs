@@ -137,6 +137,10 @@ namespace Nea_Prototype.Network
                 byte[] buffer = encoder.GetBytes(message);
                 serverStream.Write(buffer, 0, buffer.Length);
             }
+            catch(IOException ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error");
