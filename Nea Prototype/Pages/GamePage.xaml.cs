@@ -150,33 +150,33 @@ namespace Nea_Prototype.Pages
 
             double getLeft;
             double getUp;
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_right))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_right))
             {
                 level.MoveCharacter(MainCharacterKeyBind, Direction.Right);
             }
-            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_left))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_left))
             {
                 level.MoveCharacter(MainCharacterKeyBind, Direction.Left);
             }
             
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_up))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_up))
             {
                 level.MoveCharacter(MainCharacterKeyBind, Direction.Up);
             }
-            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player1_down))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_down))
             {
                 level.MoveCharacter(MainCharacterKeyBind, Direction.Down);
             }
             
             //Section for overlay menus
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.PauseMenuKey))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.PauseMenuKey))
             {
                 StopTimers();
                 TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
             }
 
-            if (Keyboard.Modifiers == KeyBindingsManager.KeyBindings.DebugOverlayModifier &&
-                Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.DebugOverlayKey))
+            if (Keyboard.Modifiers == KeyBindingsManager.Instance.DebugOverlayModifier &&
+                Keyboard.IsKeyDown(KeyBindingsManager.Instance.DebugOverlayKey))
             {
                 if (TopFrameManager.FrameManager.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
                 {
@@ -196,20 +196,20 @@ namespace Nea_Prototype.Pages
                 return;
             }
 
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_right))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_right))
             {
                 level.MoveCharacter(2, Direction.Right);
             }
-            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_left))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_left))
             {
                 level.MoveCharacter(2, Direction.Left);
             }
             
-            if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_up))
+            if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_up))
             {
                 level.MoveCharacter(2, Direction.Up);
             }
-            else if (Keyboard.IsKeyDown(KeyBindingsManager.KeyBindings.Player2_down))
+            else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_down))
             {
                 level.MoveCharacter(2, Direction.Down);
             }
