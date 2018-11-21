@@ -152,7 +152,7 @@ namespace Nea_Prototype.Network
             }
             finally
             {
-                serverStream.Flush();
+                serverStream?.Flush();
             }
 
         }
