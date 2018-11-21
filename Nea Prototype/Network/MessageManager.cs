@@ -129,6 +129,11 @@ namespace Nea_Prototype.Network
 
         public void SendMessage(string message)
         {
+            if (!IsConnected)
+            {
+                CommunicationManager.Instance.Disconnect();
+                return;
+            }
             ASCIIEncoding encoder = new ASCIIEncoding();
             NetworkStream serverStream = null;
             try
