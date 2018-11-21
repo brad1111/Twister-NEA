@@ -23,7 +23,7 @@ namespace Nea_Prototype.Algorithms
         public static void FindAnglesNeededToOpen(int e1, int e2)
         {
             instance.ClearLists();
-            foreach (var exitLocation in GameGridManager.GetGameGrid().ExitLocationsViews)
+            foreach (var exitLocation in GameGridManager.Instance.ExitLocationsViews)
             {
                 int getTop = (int)Canvas.GetTop(exitLocation);
                 instance.FindAnglesNeededToOpenInternal(e1, e2, getTop, getTop + Constants.GRID_ITEM_WIDTH);
@@ -46,11 +46,11 @@ namespace Nea_Prototype.Algorithms
                 {
                     if (instance.AnglesToOpen[i] < currentAngle)
                     {
-                        GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
+                        GameGridManager.Instance.ExitLocations[i].CanExit = true;
                     }
                     if (instance.AnglesToClose[i] < currentAngle)
                     {
-                        GameGridManager.GetGameGrid().ExitLocations[i].CanExit = false;
+                        GameGridManager.Instance.ExitLocations[i].CanExit = false;
                     }
                 }
             }
@@ -61,11 +61,11 @@ namespace Nea_Prototype.Algorithms
                 {
                     if (instance.AnglesToClose[i] > currentAngle)
                     {
-                        GameGridManager.GetGameGrid().ExitLocations[i].CanExit = true;
+                        GameGridManager.Instance.ExitLocations[i].CanExit = true;
                     }
                     if (instance.AnglesToOpen[i] > currentAngle)
                     {
-                        GameGridManager.GetGameGrid().ExitLocations[i].CanExit = false;
+                        GameGridManager.Instance.ExitLocations[i].CanExit = false;
                     }
 
                 }

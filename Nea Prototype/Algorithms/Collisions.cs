@@ -12,7 +12,7 @@ namespace Nea_Prototype.Algorithms
 {
     public static class Collisions
     {
-        private static GameGridManager _gridManager => GameGridManager.GetGameGrid();
+        private static GameGridManager _gridManager => GameGridManager.Instance;
 
         /// <summary>
         /// Checks whether a character will collide into a wall with their movement
@@ -206,8 +206,8 @@ namespace Nea_Prototype.Algorithms
         {
 
             //Get the characters views
-            GridItemView characterOneView = GameGridManager.GetGameGrid().CharactersViews[0];
-            GridItemView characterTwoView = GameGridManager.GetGameGrid().CharactersViews[1];
+            GridItemView characterOneView = GameGridManager.Instance.CharactersViews[0];
+            GridItemView characterTwoView = GameGridManager.Instance.CharactersViews[1];
 
             //Get the characters locations
             double char1Left = Canvas.GetLeft(characterOneView);

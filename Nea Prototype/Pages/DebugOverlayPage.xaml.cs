@@ -34,9 +34,9 @@ namespace Nea_Prototype.Pages
                 int count = 0;
 
                 //Check to see if the opiton is already on and set that to the value
-                WallToggleButton.IsChecked = GameGridManager.GetGameGrid().WallCollisionRectangles;
-                EnemyToggleButton.IsChecked = GameGridManager.GetGameGrid().EnemyCollisionRectangles;
-                foreach (Exitable exitableItem in GameGridManager.GetGameGrid().ExitLocations)
+                WallToggleButton.IsChecked = GameGridManager.Instance.WallCollisionRectangles;
+                EnemyToggleButton.IsChecked = GameGridManager.Instance.EnemyCollisionRectangles;
+                foreach (Exitable exitableItem in GameGridManager.Instance.ExitLocations)
                 {
                     //Place all of the exitable items in a list
                     CheckBox exitableCheckBox = new CheckBox()
@@ -69,7 +69,7 @@ namespace Nea_Prototype.Pages
                 //Auto update the angle
                 angleTimer.Interval = new TimeSpan(0,0,1);
                 angleTimer.Tick += (se, ev) => 
-                    lblAngle.Content = $"Angle: {GameGridManager.GetGameGrid().PreviousAngle}";
+                    lblAngle.Content = $"Angle: {GameGridManager.Instance.PreviousAngle}";
                 angleTimer.Start();
             };
         }
@@ -78,13 +78,13 @@ namespace Nea_Prototype.Pages
         private void WallToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
             //If item is checked update variable
-            GameGridManager.GetGameGrid().WallCollisionRectangles = ((sender as CheckBox).IsChecked ?? false);
+            GameGridManager.Instance.WallCollisionRectangles = ((sender as CheckBox).IsChecked ?? false);
         }
 
         private void EnemyToggleButton_OnClick(object sender, RoutedEventArgs e)
         {
             //If item is checked update variables
-            GameGridManager.GetGameGrid().EnemyCollisionRectangles = ((sender as CheckBox).IsChecked ?? false);
+            GameGridManager.Instance.EnemyCollisionRectangles = ((sender as CheckBox).IsChecked ?? false);
         }
 
         private void ExitableToggleButton_OnClick(object sender, RoutedEventArgs e)
@@ -93,7 +93,7 @@ namespace Nea_Prototype.Pages
             CheckBox senderCheckBox = (CheckBox) sender;
             if (int.TryParse(senderCheckBox.Content.ToString(), out var arrayIndex))
             {
-                GameGridManager.GetGameGrid().ExitLocations[arrayIndex].CanExit = senderCheckBox.IsChecked ?? false;
+                GameGridManager.Instance.ExitLocations[arrayIndex].CanExit = senderCheckBox.IsChecked ?? false;
             }
         }
            

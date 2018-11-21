@@ -90,7 +90,7 @@ namespace Nea_Prototype.Pages
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referenced every tick for the collision detection visualisation to work)
-            GameGridManager.GetGameGrid().GameCanvas = cvsPlayArea;
+            GameGridManager.Instance.GameCanvas = cvsPlayArea;
 
             //Setup the angles that open the exits
             ExitingManager.FindAnglesNeededToOpen(level.ExitLocation.HeightFromAnchor, level.ExitLocation.Length);
@@ -111,9 +111,9 @@ namespace Nea_Prototype.Pages
             rotationTimer.Tick += (s, e) =>
             {
 
-                double rotationAbs = GameGridManager.GetGameGrid().PreviousAngle;
+                double rotationAbs = GameGridManager.Instance.PreviousAngle;
                 double rotation = Rotation.AbsAngleDelta() *
-                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.GetGameGrid().Characters,
+                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.Instance.Characters,
                                             ref rotationAbs);
 
                 GameGridManager.RotateStoryBoard((int) rotation);
@@ -260,21 +260,21 @@ namespace Nea_Prototype.Pages
                     //Move characters into position
                     //Get main thread dispatcher
                     Dispatcher dispatcher =
-                        GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1].Dispatcher;
+                        GameGridManager.Instance.CharactersViews[characterNumber - 1].Dispatcher;
                     dispatcher.Invoke(new Action(() =>
                     {
-                        Canvas.SetLeft(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], x);
-                        Canvas.SetTop(GameGridManager.GetGameGrid().CharactersViews[characterNumber - 1], y);
-                        for (int i = 0; i < GameGridManager.GetGameGrid().ExitLocations.Length; i++)
+                        Canvas.SetLeft(GameGridManager.Instance.CharactersViews[characterNumber - 1], x);
+                        Canvas.SetTop(GameGridManager.Instance.CharactersViews[characterNumber - 1], y);
+                        for (int i = 0; i < GameGridManager.Instance.ExitLocations.Length; i++)
                         {
                             int j = i + 3;
                             //For each is left these are the exit conditions
-                            bool isGateOpen = GameGridManager.GetGameGrid().ExitLocations[i].CanExit;
+                            bool isGateOpen = GameGridManager.Instance.ExitLocations[i].CanExit;
                             if (!bool.TryParse(messageComponents[j], out isGateOpen))
                             {
                                 Console.WriteLine($"Couldn't resolve messageComponents[{j}] as a boolean. Value: {messageComponents[j]}");
                             }
-                            GameGridManager.GetGameGrid().ExitLocations[i].CanExit = isGateOpen;
+                            GameGridManager.Instance.ExitLocations[i].CanExit = isGateOpen;
                         }
                     }));
                 }

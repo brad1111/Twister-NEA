@@ -37,7 +37,7 @@ namespace Nea_Prototype.Grid
             set
             {
                 canExit = value;
-                GameGridManager.GetGameGrid().ExitLocationsViews[arrayIndex].Update();
+                GameGridManager.Instance.ExitLocationsViews[arrayIndex].Update();
             }
         }
     }

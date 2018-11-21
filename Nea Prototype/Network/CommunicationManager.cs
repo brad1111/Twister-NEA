@@ -73,8 +73,8 @@ namespace Nea_Prototype.Network
             //Setup the message
             string serverMsg = String.Format("{0},{1},{2},",
                                             LocalCharacterNumber, //character number
-                                            Canvas.GetLeft(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber - 1]), //x
-                                            Canvas.GetTop(GameGridManager.GetGameGrid().CharactersViews[LocalCharacterNumber - 1])); //y
+                                            Canvas.GetLeft(GameGridManager.Instance.CharactersViews[LocalCharacterNumber - 1]), //x
+                                            Canvas.GetTop(GameGridManager.Instance.CharactersViews[LocalCharacterNumber - 1])); //y
             MessageManager.Instance.SendMessage(serverMsg);
         }
 
