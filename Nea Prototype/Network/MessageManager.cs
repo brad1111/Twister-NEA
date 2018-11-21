@@ -141,6 +141,10 @@ namespace Nea_Prototype.Network
             {
                 MessageBox.Show(ex.ToString(), "Error");
             }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Error");
