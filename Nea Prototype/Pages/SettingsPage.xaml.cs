@@ -96,15 +96,15 @@ namespace Nea_Prototype.Pages
 
         private void BtnBack_OnClick(object sender, RoutedEventArgs e)
         {
-            if (TopFrameManager.FrameManager.MainFrame.Content is SettingsPage &&
-                TopFrameManager.FrameManager.MainFrame.CanGoBack)
+            if (TopFrameManager.Instance.MainFrame.Content is SettingsPage &&
+                TopFrameManager.Instance.MainFrame.CanGoBack)
             {
-                TopFrameManager.FrameManager.MainFrame.GoBack();
+                TopFrameManager.Instance.MainFrame.GoBack();
             }
-            else if (TopFrameManager.FrameManager.OverlayFrame.Content is SettingsPage &&
-                     TopFrameManager.FrameManager.OverlayFrame.CanGoBack)
+            else if (TopFrameManager.Instance.OverlayFrame.Content is SettingsPage &&
+                     TopFrameManager.Instance.OverlayFrame.CanGoBack)
             {
-                TopFrameManager.FrameManager.OverlayFrame.GoBack();
+                TopFrameManager.Instance.OverlayFrame.GoBack();
             }
         }
     }

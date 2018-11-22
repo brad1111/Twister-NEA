@@ -81,7 +81,7 @@ namespace Nea_Prototype.Pages
                     Dispatcher.Invoke(new Action(() =>
                     {
                         GamePage gp = new GamePage(pt: ProtagonistType.Remote, et: EnemyType.Local, _level: levelFile);
-                        TopFrameManager.FrameManager.MainFrame.Navigate(gp);
+                        TopFrameManager.Instance.MainFrame.Navigate(gp);
                     }));
                 }));
                 waitThread.Start();
@@ -153,7 +153,7 @@ namespace Nea_Prototype.Pages
                 Dispatcher.Invoke(new Action(() =>
                 {
                     GamePage gp = new GamePage(pt: ProtagonistType.Local, et: EnemyType.Remote, _level: levelFile);
-                    TopFrameManager.FrameManager.MainFrame.Navigate(gp);
+                    TopFrameManager.Instance.MainFrame.Navigate(gp);
                 }));
             }));
             connectThread.Start();

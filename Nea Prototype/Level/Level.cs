@@ -207,7 +207,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="itemView">The item to move</param>
         /// <param name="location">Where to move it</param>
-        public void MoveItemToPlace(ref GridItemView itemView, Position location)
+        private void MoveItemToPlace(ref GridItemView itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
@@ -277,7 +277,7 @@ namespace Nea_Prototype.Level
             }
         } 
 
-        public Rectangle ExitRectanglePlacement()
+        private Rectangle ExitRectanglePlacement()
         {
             int x1Temp = 0, y1Temp = 0, x2Temp = 0, y2Temp = 0;
 
@@ -326,7 +326,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="characterNo">The characters number, either player 1 or player 2</param>
         /// <returns>The characters' view</returns>
-        public GridItemView GetCharacterView(int characterNo)
+        private GridItemView GetCharacterView(int characterNo)
         {
             switch (characterNo)
             {

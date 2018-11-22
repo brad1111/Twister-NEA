@@ -9,7 +9,7 @@ namespace Nea_Prototype
             
         }
 
-        public static TopFrameManager FrameManager { get; } = new TopFrameManager();
+        public static TopFrameManager Instance { get; } = new TopFrameManager();
 
         public Frame MainFrame { get; set; }
 

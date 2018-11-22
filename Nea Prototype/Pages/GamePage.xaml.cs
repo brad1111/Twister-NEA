@@ -172,19 +172,19 @@ namespace Nea_Prototype.Pages
             if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.PauseMenuKey))
             {
                 StopTimers();
-                TopFrameManager.FrameManager.OverlayFrame.Navigate(new PauseMenuPage());
+                TopFrameManager.Instance.OverlayFrame.Navigate(new PauseMenuPage());
             }
 
             if (Keyboard.Modifiers == KeyBindingsManager.Instance.DebugOverlayModifier &&
                 Keyboard.IsKeyDown(KeyBindingsManager.Instance.DebugOverlayKey))
             {
-                if (TopFrameManager.FrameManager.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
+                if (TopFrameManager.Instance.OverlayFrame.Content?.GetType() == typeof(DebugOverlayPage))
                 {
-                    TopFrameManager.FrameManager.ClearOverlayFrame();
+                    TopFrameManager.Instance.ClearOverlayFrame();
                 }
                 else
                 {
-                    TopFrameManager.FrameManager.OverlayFrame.Navigate(new DebugOverlayPage());
+                    TopFrameManager.Instance.OverlayFrame.Navigate(new DebugOverlayPage());
                 }
             }
 

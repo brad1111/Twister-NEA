@@ -33,7 +33,7 @@ namespace Nea_Prototype.Network
         /// </summary>
         private MessageManager() { }
 
-        public readonly static MessageManager Instance = new MessageManager();
+        public static MessageManager Instance { get; } = new MessageManager();
 
         public event EventHandler MessageHandler;
 
@@ -106,12 +106,12 @@ namespace Nea_Prototype.Network
                 if (IsConnected)
                 {
                     //The server has crashed or something has happened
-                    TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+                    TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
                     {
 
-                        while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                        while (TopFrameManager.Instance.MainFrame.CanGoBack)
                         {
-                            TopFrameManager.FrameManager.MainFrame.GoBack();
+                            TopFrameManager.Instance.MainFrame.GoBack();
                             //Go back to the beginning.
                         }
                     }));

@@ -105,11 +105,11 @@ namespace Nea_Prototype.Network
             _connectionTimer.Stop();
             IsNetworked = false;
             //Also move the topframe back to main menu (on a different thread so just do it)
-            TopFrameManager.FrameManager.MainFrame.Dispatcher.Invoke(new Action(() =>
+            TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
             {
-                while (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+                while (TopFrameManager.Instance.MainFrame.CanGoBack)
                 {
-                    TopFrameManager.FrameManager.MainFrame.GoBack();
+                    TopFrameManager.Instance.MainFrame.GoBack();
                 }
             }));
             MessageManager.Instance.ClearServer();

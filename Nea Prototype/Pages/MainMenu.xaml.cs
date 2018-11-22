@@ -34,17 +34,17 @@ namespace Nea_Prototype.Pages
 
         private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
+            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
         }
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.MainFrame.Navigate(new ConnectPage());
+            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
         }
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.MainFrame.Navigate(new SettingsPage());
+            TopFrameManager.Instance.MainFrame.Navigate(new SettingsPage());
         }
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)
