@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,10 +27,8 @@ namespace Nea_Prototype.Pages
         private readonly ProtagonistType pt;
         private readonly EnemyType et;
         private readonly Level.Level level; 
-        private DispatcherTimer _waitingTimer = new DispatcherTimer()
-        {
-            Interval = new TimeSpan(0,0,1)
-        };
+
+        private bool gameStarted = false;
 
         public WaitPage(ProtagonistType pt, EnemyType et, Level.Level level)
         {
@@ -43,11 +42,26 @@ namespace Nea_Prototype.Pages
             }
 
             MessageManager.Instance.MessageHandler += StartHandler;
-            _waitingTimer.Tick += (s, e) =>
+            Loaded += (s, e) =>
             {
-                MessageManager.Instance.SendMessage("Waiting");
+                Thread waitingThread = new Thread(new ThreadStart(() =>
+                {
+                    //Wait until the start message has been received
+                    while (!gameStarted)
+                    {
+                        MessageManager.Instance.SendMessage("waiting");
+                        Thread.Sleep(1000);
+                    }
+                    //Start the game
+                    MessageManager.Instance.MessageHandler -= StartHandler;
+                    TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
+                    {
+                        GamePage gp = new GamePage(pt, et, level);
+                        TopFrameManager.Instance.MainFrame.Navigate(gp);
+                    }));
+                }));
+                waitingThread.Start();
             };
-            _waitingTimer.Start();
         }
 
         public void StartHandler(object sender, EventArgs e)
@@ -58,13 +72,7 @@ namespace Nea_Prototype.Pages
                 string message = eventArgs.Message;
                 if (message == "start")
                 {
-                    _waitingTimer.Stop();
-                    MessageManager.Instance.MessageHandler -= StartHandler;
-                    TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
-                    {
-                        GamePage gp = new GamePage(pt, et, level);
-                        TopFrameManager.Instance.MainFrame.Navigate(gp);
-                    }));
+                    gameStarted = true;
                 }
                 
             }
