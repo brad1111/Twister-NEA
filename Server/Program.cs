@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -39,6 +40,7 @@ namespace Server
 
         private Program(ref string[] args)
         {
+
             if (args.Length > 0 && int.TryParse(args[0], out PORT_NO))
             {
                 //Port number is set
@@ -189,6 +191,7 @@ namespace Server
         {
             TcpClient threadClient = ClientsStack.Peek();
             NetworkStream clientStream = threadClient.GetStream();
+            int debuggingCharacterNo = ClientsStack.Count;
 
             byte[] message = new byte[4096];
             int bytesRead = 0;
@@ -197,6 +200,7 @@ namespace Server
             bool mapDownloaded = false;
             bool gameStartedOnThread = false;
             bool clientConnected = true;
+            bool clientReady = false;
 
             while (clientConnected)
             {
@@ -206,6 +210,7 @@ namespace Server
                     Console.WriteLine($"Waiting for data from {threadClient.ToString()}");
                     //blocks thread until client sends message
                     bytesRead = clientStream.Read(message, 0, 4096);
+                    Console.WriteLine(debuggingCharacterNo);
                 }
                 catch (SocketException e)
                 {
@@ -228,7 +233,8 @@ namespace Server
                     throw;
                 }
 
-                if (bytesRead == 0)
+                //If the client hasn't sent anything and it's not because its waiting then close the socket
+                if (bytesRead == 0 && !clientReady)
                 {
                     //Client has disconnected so finish the thread.
                     Console.WriteLine("Character has left");
@@ -347,6 +353,7 @@ namespace Server
                     {
                         //If they have received the map then map is downloaded
                         mapDownloaded = true;
+                        clientReady = true;
                         ServerDataManager.Instance.CharacterReady();
                     }
                     else if (bufferMessage == "resend")
@@ -366,8 +373,12 @@ namespace Server
                     byte[] buffer = encoder.GetBytes("start");
                     clientStream.Write(buffer, 0, buffer.Length);
                     clientStream.Flush();
+                    Console.WriteLine($"---------Game started on {debuggingCharacterNo}---------");
+                    Console.ReadKey();
                 }
             }
+
+            Console.WriteLine("Left the while loop for" + debuggingCharacterNo);
         }
 
 

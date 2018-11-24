@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -189,9 +191,24 @@ namespace Nea_Prototype.Network
         /// </summary>
         public void ClearServer()
         {
-            serverClient.Close();
+            serverClient?.Close();
             serverClient = null;
             messages.Clear();
+        }
+
+        public List<string> GetLocalIPs()
+        {
+
+            List<IPAddress> ips = Dns.GetHostAddresses(Dns.GetHostName()).ToList();
+            List<IPAddress> unneeded = ips.FindAll(x => IPAddress.IsLoopback(x));
+            ips.RemoveAll(x => unneeded.Contains(x));
+
+            List<string> ipStrings = new List<string>(ips.Count);
+            foreach (IPAddress ip in ips)
+            {
+                ipStrings.Add(ip.ToString());
+            }
+            return ipStrings;
         }
     }
 }

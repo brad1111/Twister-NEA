@@ -97,6 +97,7 @@ namespace Nea_Prototype.Pages
                 {
                     Level.Level receivedMessageObj = JsonConvert.DeserializeObject<Level.Level>(receivedMessage);
                     levelFile = receivedMessageObj;
+                    MessageManager.Instance.SendMessage("received");
                 }
                 catch (JsonException)
                 {
@@ -149,11 +150,11 @@ namespace Nea_Prototype.Pages
                 //Remove handlemessage so that junk is not sent to the server
                 MessageManager.Instance.MessageHandler -= HandleMessage;
 
-                //Start the game
+                //Start the waiting for the game
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    GamePage gp = new GamePage(pt: ProtagonistType.Local, et: EnemyType.Remote, _level: levelFile);
-                    TopFrameManager.Instance.MainFrame.Navigate(gp);
+                    WaitPage wp = new WaitPage(pt:ProtagonistType.Local, et:EnemyType.Remote, level: levelFile);
+                    TopFrameManager.Instance.MainFrame.Navigate(wp);
                 }));
             }));
             connectThread.Start();
