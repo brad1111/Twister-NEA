@@ -378,8 +378,6 @@ namespace Server
                     Console.WriteLine($"---------Game started on {debuggingCharacterNo}---------");
                 }
             }
-
-            Console.WriteLine("Left the while loop for" + debuggingCharacterNo);
         }
 
 
