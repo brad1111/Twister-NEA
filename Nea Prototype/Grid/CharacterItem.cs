@@ -13,6 +13,7 @@ namespace Nea_Prototype.Grid
         {
             this.character = character;
             sprite = character.GetSprite();
+            relativeLocation = sprite.ToString();
         }
 
         public Character GetCharacter => character;
