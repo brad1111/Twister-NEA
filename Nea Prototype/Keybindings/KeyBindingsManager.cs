@@ -14,7 +14,7 @@ namespace Nea_Prototype.Keybindings
             
         }
 
-        public static KeyBindingsManager KeyBindings { get; } = LoadKeybindings();
+        public static KeyBindingsManager Instance { get; } = LoadKeybindings();
 
 
         private const string KeyBindingsLocation = "keybindings.json";

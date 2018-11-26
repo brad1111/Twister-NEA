@@ -1,4 +1,4 @@
-﻿namespace Nea_Prototype.Enums
+﻿namespace Common.Enums
 {
     /// <summary>
     /// The side of the maze to place the exit

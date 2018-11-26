@@ -9,9 +9,12 @@ using System.Windows.Shapes;
 using System.Xml.Schema;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
-using Nea_Prototype.Enums;
 using Nea_Prototype.Grid;
 using Newtonsoft.Json;
+using Common;
+using Common.Enums;
+using Common.Grid;
+using Common.Level;
 
 namespace Nea_Prototype.Level
 {
@@ -31,6 +34,7 @@ namespace Nea_Prototype.Level
         /// The location of the exit
         /// </summary>
         public ExitPlacement ExitLocation { get; set; }
+
         
 
         /// <summary>
@@ -63,9 +67,9 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="gameCanvas">The canvas reference is needed</param>
         /// <param name="enemyType"></param>
-        public void SetupGrid(ref Canvas gameCanvas, ref Canvas exitCanvas, EnemyType enemyType)
+        public void SetupGrid(ref Canvas gameCanvas, ref Canvas exitCanvas, ProtagonistType protagonistType, EnemyType enemyType)
         {
-            DecodeGridStartLocations(enemyType);
+            DecodeGridStartLocations(protagonistType, enemyType);
             //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
             {
@@ -91,8 +95,9 @@ namespace Nea_Prototype.Level
         /// <summary>
         /// Converts the integer array for the start locations into the grid items, grid views, characters, characters' views, and exitable items
         /// </summary>
-        /// <param name="enemyType">The type of enemy to instatiate</param>
-        private void DecodeGridStartLocations(EnemyType enemyType)
+        /// <param name="protagonistType">The type of protagonist to instantiate</param>
+        /// <param name="enemyType">The type of enemy to instantiate</param>
+        private void DecodeGridStartLocations(ProtagonistType protagonistType, EnemyType enemyType)
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
             GridItemView[,] gridItemsViews = new GridItemView[yLength(), xLength()];
@@ -187,7 +192,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="itemView">The item to move</param>
         /// <param name="location">Where to move it</param>
-        public void MoveItemToPlace(ref GridItemView itemView, Position location)
+        private void MoveItemToPlace(ref GridItemView itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
@@ -257,7 +262,7 @@ namespace Nea_Prototype.Level
             }
         } 
 
-        public Rectangle ExitRectanglePlacement()
+        private Rectangle ExitRectanglePlacement()
         {
             int x1Temp = 0, y1Temp = 0, x2Temp = 0, y2Temp = 0;
 
@@ -306,7 +311,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="characterNo">The characters number, either player 1 or player 2</param>
         /// <returns>The characters' view</returns>
-        public GridItemView GetCharacterView(int characterNo)
+        private GridItemView GetCharacterView(int characterNo)
         {
             switch (characterNo)
             {

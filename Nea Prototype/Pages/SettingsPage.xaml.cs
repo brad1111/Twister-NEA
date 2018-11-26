@@ -61,50 +61,50 @@ namespace Nea_Prototype.Pages
             switch (keybindingToChange.BindingName)
             {
                 case "Player 1 Up":
-                    KeyBindingsManager.KeyBindings.Player1_up = keyStored;
+                    KeyBindingsManager.Instance.Player1_up = keyStored;
                     break;
                 case "Player 1 Down":
-                    KeyBindingsManager.KeyBindings.Player1_down = keyStored;
+                    KeyBindingsManager.Instance.Player1_down = keyStored;
                     break;
                 case "Player 1 Left":
-                    KeyBindingsManager.KeyBindings.Player1_left = keyStored;
+                    KeyBindingsManager.Instance.Player1_left = keyStored;
                     break;
                 case "Player 1 Right":
-                    KeyBindingsManager.KeyBindings.Player1_right = keyStored;
+                    KeyBindingsManager.Instance.Player1_right = keyStored;
                     break;
                 case "Player 2 Up":
-                    KeyBindingsManager.KeyBindings.Player2_up = keyStored;
+                    KeyBindingsManager.Instance.Player2_up = keyStored;
                     break;
                 case "Player 2 Down":
-                    KeyBindingsManager.KeyBindings.Player2_down = keyStored;
+                    KeyBindingsManager.Instance.Player2_down = keyStored;
                     break;
                 case "Player 2 Left":
-                    KeyBindingsManager.KeyBindings.Player2_left = keyStored;
+                    KeyBindingsManager.Instance.Player2_left = keyStored;
                     break;
                 case "Player 2 Right":
-                    KeyBindingsManager.KeyBindings.Player2_right = keyStored;
+                    KeyBindingsManager.Instance.Player2_right = keyStored;
                     break;
                 case "Debug overlay key":
-                    KeyBindingsManager.KeyBindings.DebugOverlayKey = keyStored;
+                    KeyBindingsManager.Instance.DebugOverlayKey = keyStored;
                     break;
                 default:
                     return;
             }
-            KeyBindingsManager.SaveKeybindings(KeyBindingsManager.KeyBindings);
+            KeyBindingsManager.SaveKeybindings(KeyBindingsManager.Instance);
             btnSender.Content = keyStored;
         }
 
         private void BtnBack_OnClick(object sender, RoutedEventArgs e)
         {
-            if (TopFrameManager.FrameManager.MainFrame.Content is SettingsPage &&
-                TopFrameManager.FrameManager.MainFrame.CanGoBack)
+            if (TopFrameManager.Instance.MainFrame.Content is SettingsPage &&
+                TopFrameManager.Instance.MainFrame.CanGoBack)
             {
-                TopFrameManager.FrameManager.MainFrame.GoBack();
+                TopFrameManager.Instance.MainFrame.GoBack();
             }
-            else if (TopFrameManager.FrameManager.OverlayFrame.Content is SettingsPage &&
-                     TopFrameManager.FrameManager.OverlayFrame.CanGoBack)
+            else if (TopFrameManager.Instance.OverlayFrame.Content is SettingsPage &&
+                     TopFrameManager.Instance.OverlayFrame.CanGoBack)
             {
-                TopFrameManager.FrameManager.OverlayFrame.GoBack();
+                TopFrameManager.Instance.OverlayFrame.GoBack();
             }
         }
     }

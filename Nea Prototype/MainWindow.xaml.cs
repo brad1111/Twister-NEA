@@ -27,8 +27,8 @@ namespace Nea_Prototype
         public MainWindow()
         {
             InitializeComponent();
-            TopFrameManager.FrameManager.MainFrame = frmMainFrame;
-            TopFrameManager.FrameManager.OverlayFrame = frmOverlay;
+            TopFrameManager.Instance.MainFrame = frmMainFrame;
+            TopFrameManager.Instance.OverlayFrame = frmOverlay;
             frmMainFrame.Navigate(menu);
         }
 

@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using Common.Enums;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
-using Nea_Prototype.Enums;
 using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
@@ -22,8 +22,8 @@ namespace Nea_Prototype.Grid
         private GridItemView[] exitLocationsViews;
         private Storyboard rotationStoryboard = null;
         public int PreviousAngle { get; set; }
-        
-        private static readonly GameGridManager gameGridStorage = new GameGridManager();
+
+        public static GameGridManager Instance { get; } = new GameGridManager();
 
         private GameGridManager()
         {
@@ -40,30 +40,21 @@ namespace Nea_Prototype.Grid
         /// <returns>The instance of the new singleton</returns>
         public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations, GridItemView[] exitLocationsViews)
         {
-            gameGridStorage.characters = characters;
-            gameGridStorage.charactersView = charactersView;
-            gameGridStorage.gridItemsViews = gridItemsViews;
-            gameGridStorage.gridItems = gridItems;
-            gameGridStorage.exitLocations = exitableLocations;
-            gameGridStorage.exitLocationsViews = exitLocationsViews;
-            gameGridStorage.PreviousAngle = 0;
-            gameGridStorage.rotationStoryboard = null;
-            gameGridStorage.GameCanvas = null;
-            return gameGridStorage;
-        }
-
-        /// <summary>
-        /// Gets the current instance of the singleton
-        /// </summary>
-        /// <returns>The current instance of the signleton</returns>
-        public static GameGridManager GetGameGrid()
-        {
-            return gameGridStorage;
+            Instance.characters = characters;
+            Instance.charactersView = charactersView;
+            Instance.gridItemsViews = gridItemsViews;
+            Instance.gridItems = gridItems;
+            Instance.exitLocations = exitableLocations;
+            Instance.exitLocationsViews = exitLocationsViews;
+            Instance.PreviousAngle = 0;
+            Instance.rotationStoryboard = null;
+            Instance.GameCanvas = null;
+            return Instance;
         }
 
         public static void RotateStoryBoard(int angleDiff)
         {
-            int newAngle = GetGameGrid().PreviousAngle + angleDiff;
+            int newAngle = Instance.PreviousAngle + angleDiff;
             if (newAngle >= 90)
             {
 
@@ -76,28 +67,28 @@ namespace Nea_Prototype.Grid
                 newAngle = -90;
             }
 
-            if (GetGameGrid().rotationStoryboard is null || GetGameGrid().rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
+            if (Instance.rotationStoryboard is null || Instance.rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
             {
-                GetGameGrid().rotationStoryboard = new Storyboard();
-                GetGameGrid().rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 250));
+                Instance.rotationStoryboard = new Storyboard();
+                Instance.rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 250));
                 DoubleAnimation animation = new DoubleAnimation()
                 {
-                    From = GetGameGrid().PreviousAngle,
+                    From = Instance.PreviousAngle,
                     To = newAngle,
-                    Duration = GetGameGrid().rotationStoryboard.Duration
+                    Duration = Instance.rotationStoryboard.Duration
                 };
-                GetGameGrid().rotationStoryboard.Children.Add(animation);
-                Storyboard.SetTarget(animation, GetGameGrid().GameCanvas);
+                Instance.rotationStoryboard.Children.Add(animation);
+                Storyboard.SetTarget(animation, Instance.GameCanvas);
                 Storyboard.SetTargetProperty(animation,
                     new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
 
-                GetGameGrid().rotationStoryboard.Begin();
+                Instance.rotationStoryboard.Begin();
 
-                GetGameGrid().PreviousAngle = newAngle;
+                Instance.PreviousAngle = newAngle;
             }
 
             //Check for updates
-            ExitingManager.Instance.CheckForUpdates(GetGameGrid().PreviousAngle, angleDiff);
+            ExitingManager.CheckForUpdates(Instance.PreviousAngle, angleDiff);
         }
 
 
@@ -149,17 +140,13 @@ namespace Nea_Prototype.Grid
         {
             get => exitLocationsViews;
         }
-
-        public int DebuggingCanvasLeftovers { get; set; }
-
-        public EnemyType EnemyType { get; set; }
         
 
         #region Debugging Variables
 
+        public int DebuggingCanvasLeftovers { get; set; }
         public bool WallCollisionRectangles { get; set; }
         public bool EnemyCollisionRectangles { get; set; }
-        
 
         #endregion
 

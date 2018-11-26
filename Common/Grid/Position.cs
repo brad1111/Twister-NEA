@@ -1,4 +1,4 @@
-﻿namespace Nea_Prototype.Grid
+﻿namespace Common.Grid
 {
     /// <summary>
     /// The position of a grid item within the maze
@@ -6,12 +6,12 @@
     public class Position
     {
 
-        public Position(int x, int y)
+        public Position(double x, double y)
         {
             this.x = x;
             this.y = y;
         }
-        public int x { get; set; }
-        public int y { get; set; }
+        public double x { get; set; }
+        public double y { get; set; }
     }
 }

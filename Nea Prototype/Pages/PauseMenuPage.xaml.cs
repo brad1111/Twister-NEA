@@ -33,27 +33,33 @@ namespace Nea_Prototype.Pages
 
         private void BtnResume_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.ClearOverlayFrame();
-            if (TopFrameManager.FrameManager.MainFrame.Content is GamePage)
+            TopFrameManager.Instance.ClearOverlayFrame();
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
-                GamePage page = (GamePage) TopFrameManager.FrameManager.MainFrame.Content;
+                GamePage page = (GamePage) TopFrameManager.Instance.MainFrame.Content;
                 page.StartTimers();
             }
         }
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.FrameManager.OverlayFrame.Navigate(new SettingsPage());
+            TopFrameManager.Instance.OverlayFrame.Navigate(new SettingsPage());
         }
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)
         {
             GameGridManager.Clear();
-            if (TopFrameManager.FrameManager.MainFrame.CanGoBack)
+            //Stop anything going in game if its there
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
-                TopFrameManager.FrameManager.MainFrame.GoBack();
+                GamePage page = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+                page.EndGame();
             }
-            TopFrameManager.FrameManager.ClearOverlayFrame();
+            while (TopFrameManager.Instance.MainFrame.CanGoBack)
+            {
+                TopFrameManager.Instance.MainFrame.GoBack();
+            }
+            TopFrameManager.Instance.ClearOverlayFrame();
         }
     }
 }

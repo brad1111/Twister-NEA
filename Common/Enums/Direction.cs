@@ -1,4 +1,4 @@
-﻿namespace Nea_Prototype.Enums
+﻿namespace Common.Enums
 {
     /// <summary>
     /// The movement directions accepted

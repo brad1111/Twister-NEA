@@ -58,6 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\ConnectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\DebugOverlayPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,12 +88,18 @@
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Characters\PlayerOne.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Enums\Direction.cs" />
-    <Compile Include="Enums\EnemyType.cs" />
-    <Compile Include="Enums\Side.cs" />
+    <Compile Include="Controls\RegexTextBox.cs" />
     <Compile Include="Keybindings\KeybindingProperty.cs" />
     <Compile Include="Keybindings\KeybindingsProperties.cs" />
+    <Compile Include="Network\CommunicationManager.cs" />
+    <Compile Include="Network\MessageEventArgs.cs" />
+    <Compile Include="Network\MessageManager.cs" />
+    <Compile Include="Pages\ConnectPage.xaml.cs">
+      <DependentUpon>ConnectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WaitPage.xaml.cs">
+      <DependentUpon>WaitPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TopFrameManager.cs" />
     <Compile Include="Pages\DebugOverlayPage.xaml.cs">
       <DependentUpon>DebugOverlayPage.xaml</DependentUpon>
@@ -106,10 +116,8 @@
     </Compile>
     <Compile Include="Grid\GridItemViewModel.cs" />
     <Compile Include="Grid\NonWalkable.cs" />
-    <Compile Include="Grid\Position.cs" />
     <Compile Include="Grid\Walkable.cs" />
     <Compile Include="Keybindings\KeyBindingsManager.cs" />
-    <Compile Include="Level\ExitPlacement.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\LevelIO.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -125,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WaitPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,5 +203,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{c4525112-3139-4035-ba74-813002963365}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)\Server\$(OutDir)\*.exe" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
