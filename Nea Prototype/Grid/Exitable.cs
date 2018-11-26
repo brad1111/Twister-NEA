@@ -15,11 +15,13 @@ namespace Nea_Prototype.Grid
         public Exitable(int arrayIndex)
         {
             this.arrayIndex = arrayIndex;
-            closedSprite = SetupSprite("ExitableClosed.png");
-            openSprite = SetupSprite("ExitableOpen.png");
+            relativeLocation = "ExitableClosed.png";
+            closedSprite = SetupSprite();
+            relativeLocation = "ExitableOpen.png";
+            openSprite = SetupSprite();
         }
 
-        public override ImageSource Sprite
+        public new ImageSource Source
         {
             get
             {
@@ -37,7 +39,7 @@ namespace Nea_Prototype.Grid
             set
             {
                 canExit = value;
-                GameGridManager.Instance.ExitLocationsViews[arrayIndex].Update();
+                //GameGridManager.Instance.ExitLocationsViews[arrayIndex].Update();
             }
         }
     }

@@ -15,11 +15,9 @@ namespace Nea_Prototype.Grid
     public class GameGridManager
     {
         private Character[] characters;
-        private GridItemView[] charactersView;
-        private GridItemView[,] gridItemsViews;
+        private GridItem[] charactersViews;
         private GridItem[,] gridItems;
         private Exitable[] exitLocations;
-        private GridItemView[] exitLocationsViews;
         private Storyboard rotationStoryboard = null;
         public int PreviousAngle { get; set; }
 
@@ -38,14 +36,12 @@ namespace Nea_Prototype.Grid
         /// <param name="gridItems">The non-view part of the grid items to store</param>
         /// <param name="exitableLocations">The non-view part of the internal exitable locations</param>
         /// <returns>The instance of the new singleton</returns>
-        public static GameGridManager NewGameGrid(Character[] characters, GridItemView[] charactersView, GridItemView[,] gridItemsViews, GridItem[,] gridItems, Exitable[] exitableLocations, GridItemView[] exitLocationsViews)
+        public static GameGridManager NewGameGrid(Character[] characters, GridItem[] charactersView, GridItem[,] gridItems, Exitable[] exitableLocations)
         {
             Instance.characters = characters;
-            Instance.charactersView = charactersView;
-            Instance.gridItemsViews = gridItemsViews;
+            Instance.charactersViews = charactersView;
             Instance.gridItems = gridItems;
             Instance.exitLocations = exitableLocations;
-            Instance.exitLocationsViews = exitLocationsViews;
             Instance.PreviousAngle = 0;
             Instance.rotationStoryboard = null;
             Instance.GameCanvas = null;
@@ -105,20 +101,9 @@ namespace Nea_Prototype.Grid
             get => characters;
         }
 
-        /// <summary>
-        /// All of the characters views
-        /// </summary>
-        public GridItemView[] CharactersViews
+        public GridItem[] CharactersViews
         {
-            get => charactersView;
-        }
-
-        /// <summary>
-        /// All of the views of the grid items
-        /// </summary>
-        public GridItemView[,] GridItemsViews
-        {
-            get => gridItemsViews;
+            get => charactersViews;
         }
 
         /// <summary>
@@ -135,11 +120,6 @@ namespace Nea_Prototype.Grid
         {
             get => gridItems;
         }
-
-        public GridItemView[] ExitLocationsViews
-        {
-            get => exitLocationsViews;
-        }
         
 
         #region Debugging Variables
@@ -152,7 +132,7 @@ namespace Nea_Prototype.Grid
 
         public static void Clear()
         {
-            NewGameGrid(null, null, null, null, null, null);
+            NewGameGrid(null, null, null, null);
         }
     }
 }

@@ -75,8 +75,8 @@ namespace Nea_Prototype.Level
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
                 {
-                    gameCanvas.Children.Add(_gridManager.GridItemsViews[y, x]);
-                    MoveItemToPlace(ref _gridManager.GridItemsViews[y,x], _gridManager.GridItems[y,x].Position);
+                    gameCanvas.Children.Add(_gridManager.GridItems[y, x]);
+                    MoveItemToPlace(ref _gridManager.GridItems[y,x], _gridManager.GridItems[y,x].Position);
                 }
             }
 
@@ -100,11 +100,9 @@ namespace Nea_Prototype.Level
         private void DecodeGridStartLocations(ProtagonistType protagonistType, EnemyType enemyType)
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
-            GridItemView[,] gridItemsViews = new GridItemView[yLength(), xLength()];
             Character[] characters = new Character[2];
-            GridItemView[] charactersView = new GridItemView[2];
+            GridItem[] charactersView = new GridItem[2];
             List<Exitable> exitables = new List<Exitable>();
-            List<GridItemView> exitableViews = new List<GridItemView>();
             int exitableIndex = 0;
             for (int y = 0; y < yLength(); y++)
             {
@@ -118,9 +116,7 @@ namespace Nea_Prototype.Level
                               {
                                   Position = new Position(x,y)
                               };
-                              GridItemView walkableView = new GridItemView(walkable);
                               gridItems[y, x] = walkable;
-                              gridItemsViews[y, x] = walkableView;
                               break;
                           //non-walkable object
                           case 1:
@@ -128,9 +124,7 @@ namespace Nea_Prototype.Level
                               {
                                   Position = new Position(x,y)
                               };
-                              GridItemView nonWalkableView = new GridItemView(nonWalkable);
                               gridItems[y, x] = nonWalkable;
-                              gridItemsViews[y, x] = nonWalkableView;
                               break;
                           //player 1
                           case 2:
@@ -139,14 +133,12 @@ namespace Nea_Prototype.Level
                                   Position = new Position(x, y)
                               };
                               CharacterItem playerOneItem = new CharacterItem(playerOne);
-                              GridItemView playerOneView = new GridItemView(playerOneItem);
                               //gridItems[y, x] = playerOneItem;
                               gridItems[y, x] = new Walkable()
                               {
                                   Position = new Position(x, y)
                               };
-                              gridItemsViews[y, x] = new GridItemView(gridItems[y, x]);
-                              charactersView[0] = playerOneView;
+                              charactersView[0] = playerOneItem;
                               characters[0] = playerOne;
                               break;
                           //Enemy
@@ -156,14 +148,11 @@ namespace Nea_Prototype.Level
 
                               enemy.Position = new Position(x, y);
                               var enemyItem = new CharacterItem(enemy);
-
-                              var enemyView = new GridItemView(enemyItem);
                               gridItems[y, x] = new Walkable
                               {
                                   Position = new Position(x, y)
                               };
-                              gridItemsViews[y, x] = new GridItemView(gridItems[y, x]);
-                              charactersView[1] = enemyView;
+                              charactersView[1] = enemyItem;
                               characters[1] = enemy;
                               break;
                           //Exitable block
@@ -173,18 +162,15 @@ namespace Nea_Prototype.Level
                               {
                                   Position = new Position(x, y)
                               };
-                              GridItemView exitableView = new GridItemView(exitable);
                               gridItems[y, x] = exitable;
-                              gridItemsViews[y, x] = exitableView;
                               exitables.Add(exitable);
-                              exitableViews.Add(exitableView);
                               break;
                           default:
                               throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
                 }
             }
-            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItemsViews, gridItems, exitables.ToArray(), exitableViews.ToArray());
+            _gridManager = GameGridManager.NewGameGrid(characters, charactersView, gridItems, exitables.ToArray());
         }
 
         /// <summary>
@@ -192,7 +178,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="itemView">The item to move</param>
         /// <param name="location">Where to move it</param>
-        private void MoveItemToPlace(ref GridItemView itemView, Position location)
+        private void MoveItemToPlace(ref GridItem itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);
@@ -215,7 +201,7 @@ namespace Nea_Prototype.Level
             }
 
 
-            GridItemView characterView = GetCharacterView(characterNo);
+            GridItem characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
             if (!Collisions.WallCollisionDetection(ref characterView, dir))
             {
@@ -233,7 +219,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="itemView"></param>
         /// <param name="dir"></param>
-        private void MoveCharacterInternal(ref GridItemView itemView, Direction dir)
+        private void MoveCharacterInternal(ref GridItem itemView, Direction dir)
         {
             double leftPos = 0;
             double topPos = 0;
@@ -311,7 +297,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="characterNo">The characters number, either player 1 or player 2</param>
         /// <returns>The characters' view</returns>
-        private GridItemView GetCharacterView(int characterNo)
+        private GridItem GetCharacterView(int characterNo)
         {
             switch (characterNo)
             {

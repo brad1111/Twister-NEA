@@ -23,7 +23,7 @@ namespace Nea_Prototype.Algorithms
         public static void FindAnglesNeededToOpen(int e1, int e2)
         {
             instance.ClearLists();
-            foreach (var exitLocation in GameGridManager.Instance.ExitLocationsViews)
+            foreach (var exitLocation in GameGridManager.Instance.ExitLocations)
             {
                 int getTop = (int)Canvas.GetTop(exitLocation);
                 instance.FindAnglesNeededToOpenInternal(e1, e2, getTop, getTop + Constants.GRID_ITEM_WIDTH);

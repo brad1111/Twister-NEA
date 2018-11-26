@@ -21,14 +21,14 @@ namespace Nea_Prototype.Algorithms
         /// <param name="movementDirection">The direction the character would move</param>
         /// <param name="canvas">The canvas to draw rectangles on if visualising the collision detection</param>
         /// <returns>Whether the character will collide</returns>
-        public static bool WallCollisionDetection(ref GridItemView characterView, Direction movementDirection)
+        public static bool WallCollisionDetection(ref GridItem characterView, Direction movementDirection)
         {
             double x, y = 0;
             x = Canvas.GetLeft(characterView);
             y = Canvas.GetTop(characterView);
             int xApprox, yApprox = 0;
             const double half_GRID_ITEM_WIDTH = Constants.GRID_ITEM_WIDTH / 2;
-            Queue<GridItemView> ItemsToCheckForCollision = new Queue<GridItemView>(3);
+            Queue<GridItem> ItemsToCheckForCollision = new Queue<GridItem>(3);
             //Get approx co-ords
             xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
             yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
@@ -128,7 +128,7 @@ namespace Nea_Prototype.Algorithms
 
             while (ItemsToCheckForCollision.Count > 0)
             {
-                GridItemView tempItem = ItemsToCheckForCollision.Dequeue();
+                GridItem tempItem = ItemsToCheckForCollision.Dequeue();
                 Rect nonWalkableRect = new Rect(Canvas.GetLeft(tempItem), Canvas.GetTop(tempItem), Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
                 if (nonWalkableRect.IntersectsWith(characterRect) || collision /*== true*/)
                 {
@@ -161,9 +161,9 @@ namespace Nea_Prototype.Algorithms
         /// <param name="xcheck">The x value to check either a fixed value (-1 or 1) or i from a for loop</param>
         /// <param name="ycheck">The y value to check either a fixed value (-1 or 1) or i from a for loop</param>
         /// <returns>A queue of items in that direction that need checking for intersection</returns>
-        private static Queue<GridItemView> QueuingLocationsToCheck(ref int xApprox, ref int yApprox, int xcheck, int ycheck)
+        private static Queue<GridItem> QueuingLocationsToCheck(ref int xApprox, ref int yApprox, int xcheck, int ycheck)
         {
-            Queue<GridItemView> queue = new Queue<GridItemView>(3);
+            Queue<GridItem> queue = new Queue<GridItem>(3);
             //If xCheck is 0 then it should be replaced by i, otherwise yCheck should shouldnt
             bool xCheckIsi = xcheck == 0;
             for (int i = -1; i <= 1; i++)
@@ -191,7 +191,7 @@ namespace Nea_Prototype.Algorithms
                 if (item.GetType() == typeof(NonWalkable) || (item.GetType() == typeof(Exitable) && !(item as Exitable).CanExit))
                 {
                     //Then add to the queue
-                    queue.Enqueue(_gridManager.GridItemsViews[yApprox + ycheck, xApprox + xcheck]);
+                    queue.Enqueue(_gridManager.GridItems[yApprox + ycheck, xApprox + xcheck]);
                 }
             }
 
@@ -206,8 +206,8 @@ namespace Nea_Prototype.Algorithms
         {
 
             //Get the characters views
-            GridItemView characterOneView = GameGridManager.Instance.CharactersViews[0];
-            GridItemView characterTwoView = GameGridManager.Instance.CharactersViews[1];
+            GridItem characterOneView = GameGridManager.Instance.CharactersViews[0];
+            GridItem characterTwoView = GameGridManager.Instance.CharactersViews[1];
 
             //Get the characters locations
             double char1Left = Canvas.GetLeft(characterOneView);

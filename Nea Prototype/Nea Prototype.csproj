@@ -70,10 +70,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Grid\GridItemView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -111,10 +107,6 @@
     <Compile Include="Grid\Exitable.cs" />
     <Compile Include="Grid\GameGridManager.cs" />
     <Compile Include="Grid\GridItem.cs" />
-    <Compile Include="Grid\GridItemView.xaml.cs">
-      <DependentUpon>GridItemView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Grid\GridItemViewModel.cs" />
     <Compile Include="Grid\NonWalkable.cs" />
     <Compile Include="Grid\Walkable.cs" />
     <Compile Include="Keybindings\KeyBindingsManager.cs" />
@@ -185,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Enemy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExitableClosed.png">
