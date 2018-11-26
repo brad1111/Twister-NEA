@@ -207,10 +207,12 @@ namespace Server
                 bytesRead = 0;
                 try
                 {
-                    Console.WriteLine($"Waiting for data from {threadClient.ToString()}");
-                    //blocks thread until client sends message
-                    bytesRead = clientStream.Read(message, 0, 4096);
-                    Console.WriteLine(debuggingCharacterNo);
+                    Console.WriteLine($"Waiting for data from client {debuggingCharacterNo}");
+                    //If the client isn't waiting block the thread until the client sends a message
+                    if (gameStartedOnThread || !mapDownloaded)
+                    {
+                        bytesRead = clientStream.Read(message, 0, 4096);
+                    }
                 }
                 catch (SocketException e)
                 {
@@ -374,7 +376,6 @@ namespace Server
                     clientStream.Write(buffer, 0, buffer.Length);
                     clientStream.Flush();
                     Console.WriteLine($"---------Game started on {debuggingCharacterNo}---------");
-                    Console.ReadKey();
                 }
             }
 

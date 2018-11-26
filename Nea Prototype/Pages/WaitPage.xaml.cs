@@ -49,7 +49,6 @@ namespace Nea_Prototype.Pages
                     //Wait until the start message has been received
                     while (!gameStarted)
                     {
-                        MessageManager.Instance.SendMessage("waiting");
                         Thread.Sleep(1000);
                     }
                     //Start the game
