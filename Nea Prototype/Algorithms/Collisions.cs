@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 using Nea_Prototype.Grid;
 using Common;
 using Common.Enums;
+using Nea_Prototype.Pages;
 
 namespace Nea_Prototype.Algorithms
 {
@@ -36,11 +37,15 @@ namespace Nea_Prototype.Algorithms
             {
                 case Direction.Up:
                     //get three possible collisionable items above
-                    if (yApprox == 0)
+                    if (yApprox <= 0)
                     {
-                        //then can't look any higher so look for distance from top wall
-                        // (if y is smaller than 4 then it will collide, otherwise it wont).
-                        return (y <= Constants.KEYPRESS_PX_MOVED);
+                        //If y is less than 0 they are out of map so assume win
+                        if (y < 0)
+                        {
+                            //Won so goto won menu and return true
+                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                        }
+                        return false;
                     }
                     else
                     {
@@ -51,11 +56,14 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Down:
                     //get three possible collisionable items below
-                    if (yApprox == Constants.GRID_TILES_XY)
+                    if (yApprox >= Constants.GRID_TILES_XY)
                     {
-                        //then can't look any higher so look for distance from top wall
-                        // (if y is greater than 396 then it will collide, otherwise it wont).
-                        return (y >= Constants.GRID_WIDTH - Constants.KEYPRESS_PX_MOVED);
+                        //If outside of map then win
+                        if (y >= Constants.GRID_WIDTH)
+                        {
+                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                        }
+                        return false;
                     }
                     else
                     {
@@ -67,11 +75,14 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Left:
                     //get three possible collisionable items below
-                    if (xApprox == 0)
+                    if (xApprox <= 0)
                     {
-                        //then can't look any higher so look for distance from top wall
-                        // (if x is greater than 396 then it will collide, otherwise it wont).
-                        return (x >= Constants.KEYPRESS_PX_MOVED);
+                        //If they are outside the map
+                        if ((x <= 0))
+                        {
+                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                        }
+                        return false;
                     }
                     else
                     {
@@ -84,11 +95,14 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Right:
                     //get three possible collisionable items below
-                    if (xApprox == Constants.GRID_TILES_XY)
+                    if (xApprox >= Constants.GRID_TILES_XY)
                     {
-                        //then can't look any higher so look for distance from top wall
-                        // (if x is greater than 396 then it will collide, otherwise it wont).
-                        return (x >= Constants.GRID_WIDTH - Constants.KEYPRESS_PX_MOVED);
+                        //Check if outside the map
+                        if (x >= Constants.GRID_WIDTH)
+                        {
+                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                        }
+                        return false;
                     }
                     else
                     {
