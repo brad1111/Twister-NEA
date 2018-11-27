@@ -40,10 +40,10 @@ namespace Nea_Prototype.Algorithms
                     if (yApprox <= 0)
                     {
                         //If y is less than 0 they are out of map so assume win
-                        if (y < 0)
+                        if (y < 0 && !WinPage.open)
                         {
                             //Won so goto won menu and return true
-                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
                         }
                         return false;
                     }
@@ -59,9 +59,9 @@ namespace Nea_Prototype.Algorithms
                     if (yApprox >= Constants.GRID_TILES_XY)
                     {
                         //If outside of map then win
-                        if (y >= Constants.GRID_WIDTH)
+                        if (y >= Constants.GRID_WIDTH  && !WinPage.open)
                         {
-                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
                         }
                         return false;
                     }
@@ -78,9 +78,9 @@ namespace Nea_Prototype.Algorithms
                     if (xApprox <= 0)
                     {
                         //If they are outside the map
-                        if ((x <= 0))
+                        if (x <= 0 && !WinPage.open)
                         {
-                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
                         }
                         return false;
                     }
@@ -98,9 +98,9 @@ namespace Nea_Prototype.Algorithms
                     if (xApprox >= Constants.GRID_TILES_XY)
                     {
                         //Check if outside the map
-                        if (x >= Constants.GRID_WIDTH)
+                        if (x >= Constants.GRID_WIDTH && !WinPage.open)
                         {
-                            TopFrameManager.Instance.MainFrame.Navigate(new WinPage());
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
                         }
                         return false;
                     }

@@ -205,6 +205,11 @@ namespace Nea_Prototype.Level
             //If character won't collide with the wall
             if (!Collisions.WallCollisionDetection(ref characterView, dir))
             {
+                if (GameGridManager.Instance.Characters is null)
+                {
+                    //Game is over so return
+                    return;
+                }
                 MoveCharacterInternal(ref characterView, dir);
             }
 

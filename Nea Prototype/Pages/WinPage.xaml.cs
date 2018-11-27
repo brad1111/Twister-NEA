@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Pages
 {
@@ -20,13 +22,34 @@ namespace Nea_Prototype.Pages
     /// </summary>
     public partial class WinPage : Page, IKeyboardInputs
     {
+        /// <summary>
+        /// Only call this on the overlay panel
+        /// </summary>
         public WinPage()
         {
             InitializeComponent();
+            if (open && TopFrameManager.Instance.MainFrame.CanGoBack)
+            {
+                TopFrameManager.Instance.MainFrame.GoBack();
+            }
+            open = true;
+            //Stop the game
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                GameGridManager.Clear();
+                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+                gp.EndGame();
+            }
         }
+
+        public static bool open { get; private set; } = false;
 
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
+            open = false;
+            //Clear the overlay frame
+            TopFrameManager.Instance.ClearOverlayFrame();
+            //Clear the main frame
             while (TopFrameManager.Instance.MainFrame.CanGoBack)
             {
                 TopFrameManager.Instance.MainFrame.GoBack();
