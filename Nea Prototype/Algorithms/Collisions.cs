@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 using Nea_Prototype.Grid;
 using Common;
 using Common.Enums;
+using Nea_Prototype.Network;
 using Nea_Prototype.Pages;
 
 namespace Nea_Prototype.Algorithms
@@ -37,15 +38,9 @@ namespace Nea_Prototype.Algorithms
             {
                 case Direction.Up:
                     //get three possible collisionable items above
-                    if (yApprox <= 0)
+                    if (yApprox <= 0 && y < 0)
                     {
-                        //If y is less than 0 they are out of map so assume win
-                        if (y < 0 && !WinPage.open)
-                        {
-                            //Won so goto won menu and return true
-                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
-                        }
-                        return false;
+                        return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
                     {
@@ -56,14 +51,10 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Down:
                     //get three possible collisionable items below
-                    if (yApprox >= Constants.GRID_TILES_XY)
+                    if (yApprox >= Constants.GRID_TILES_XY && y + Constants.GRID_ITEM_WIDTH >= Constants.GRID_WIDTH)
                     {
                         //If outside of map then win
-                        if (y >= Constants.GRID_WIDTH  && !WinPage.open)
-                        {
-                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
-                        }
-                        return false;
+                        return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
                     {
@@ -75,14 +66,10 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Left:
                     //get three possible collisionable items below
-                    if (xApprox <= 0)
+                    if (xApprox <= 0 && x <= 0)
                     {
                         //If they are outside the map
-                        if (x <= 0 && !WinPage.open)
-                        {
-                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
-                        }
-                        return false;
+                        return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
                     {
@@ -95,14 +82,9 @@ namespace Nea_Prototype.Algorithms
                     break;
                 case Direction.Right:
                     //get three possible collisionable items below
-                    if (xApprox >= Constants.GRID_TILES_XY)
+                    if (xApprox >= Constants.GRID_TILES_XY && (x + Constants.GRID_ITEM_WIDTH) >= Constants.GRID_WIDTH)
                     {
-                        //Check if outside the map
-                        if (x >= Constants.GRID_WIDTH && !WinPage.open)
-                        {
-                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
-                        }
-                        return false;
+                        return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
                     {
@@ -136,8 +118,6 @@ namespace Nea_Prototype.Algorithms
                 _gridManager.DebuggingCanvasLeftovers += ItemsToCheckForCollision.Count + 1;
             }
 
-            
-
             bool collision = false;
 
             while (ItemsToCheckForCollision.Count > 0)
@@ -165,6 +145,27 @@ namespace Nea_Prototype.Algorithms
             }
 
             return collision;
+        }
+
+        /// <summary>
+        /// Runs the Win Dialog if it is appropriate (charcater 1, not networked, 
+        /// </summary>
+        private static bool RunWinDialogIfNeeded(ref GridItem characterView)
+        {
+            if (!WinPage.open && !CommunicationManager.Instance.IsNetworked &&
+                (characterView as CharacterItem)?.GetCharacter == GameGridManager.Instance.Characters[0])
+            {
+                TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
+                return false;
+            }
+            else if ((characterView as CharacterItem)?.GetCharacter == GameGridManager.Instance.Characters[1])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
