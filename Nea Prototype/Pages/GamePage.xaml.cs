@@ -324,6 +324,8 @@ namespace Nea_Prototype.Pages
             messageInstance = null;
             keyboardInputTimer = null;
             rotationTimer = null;
+            cvsPlayArea.Children.Clear();
+            cvsExitArea.Children.Clear();
             GC.Collect();
         }
 
