@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Common.Algorithms;
 
 namespace Server
 {
@@ -21,6 +22,7 @@ namespace Server
         public bool ClientLeft { get; private set; } = false;
         public bool GameOver => CharactersWon || ClientCrashed || this.ClientLeft;
         public List<bool> ExitsOpen = new List<bool>();
+        public Level.Level Level { get; set; }
 
         public int CharactersReady { get; private set; } = 0;
 

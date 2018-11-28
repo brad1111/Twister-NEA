@@ -83,66 +83,61 @@ namespace Server
         /// </summary>
         private void SetupRotationTimer()
         {
-            rotationTimer.Tick += (s, e) =>
+            rotationTimer.Tick += RotationTimer_Tick;
+        }
+
+        private void RotationTimer_Tick(object s, EventArgs e)
+        {
+            Console.WriteLine("Tick");
+            //Check for updates in rotation and hence exits openings
+            double[] charactersXPositions = {ServerDataManager.Instance.character1.CharacterPosition.x, ServerDataManager.Instance.character2.CharacterPosition.x};
+            Position[] charactersPositions = {ServerDataManager.Instance.character1.CharacterPosition, ServerDataManager.Instance.character2.CharacterPosition};
+            int[] charactersWeights = {1, 1};
+            int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
+
+            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
+            angleDelta += angleDelta;
+
+            //Check for exit opening/closing
+            if (multiplier == 0)
             {
-                //Check for updates in rotation and hence exits openings
-                double[] charactersXPositions =
-                {
-                    ServerDataManager.Instance.character1.CharacterPosition.x,
-                    ServerDataManager.Instance.character2.CharacterPosition.x
-                };
-                Position[] charactersPositions =
-                {
-                    ServerDataManager.Instance.character1.CharacterPosition,
-                    ServerDataManager.Instance.character2.CharacterPosition
-                };
-                int[] charactersWeights = {1, 1};
-                int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights,
-                    ref ServerDataManager.Instance.currentAngle);
-
-                double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
-                angleDelta += angleDelta;
-
-                //Check for exit opening/closing
-                if (multiplier == 0)
-                {
-                    return;
-                    //Dont bother if it isn't rotating
-                }
+                return;
+                //Dont bother if it isn't rotating
+            }
 
 
-                if (multiplier > 0)
+            if (multiplier > 0)
+            {
+                //Positive rotation
+                for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
                 {
-                    //Positive rotation
-                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    if (ExitingManager.Instance.AnglesToOpen[i] < ServerDataManager.Instance.currentAngle)
                     {
-                        if (ExitingManager.Instance.AnglesToOpen[i] < ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = true;
-                        }
-                        if (ExitingManager.Instance.AnglesToClose[i] < ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = false;
-                        }
+                        ServerDataManager.Instance.ExitsOpen[i] = true;
+                    }
+
+                    if (ExitingManager.Instance.AnglesToClose[i] < ServerDataManager.Instance.currentAngle)
+                    {
+                        ServerDataManager.Instance.ExitsOpen[i] = false;
                     }
                 }
-                else /*if (rotationMultiplier > 0)*/
+            }
+            else /*if (rotationMultiplier > 0)*/
+            {
+                //Negative rotation
+                for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
                 {
-                    //Negative rotation
-                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    if (ExitingManager.Instance.AnglesToClose[i] > ServerDataManager.Instance.currentAngle)
                     {
-                        if (ExitingManager.Instance.AnglesToClose[i] > ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = true;
-                        }
-                        if (ExitingManager.Instance.AnglesToOpen[i] > ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = false;
-                        }
+                        ServerDataManager.Instance.ExitsOpen[i] = true;
+                    }
 
+                    if (ExitingManager.Instance.AnglesToOpen[i] > ServerDataManager.Instance.currentAngle)
+                    {
+                        ServerDataManager.Instance.ExitsOpen[i] = false;
                     }
                 }
-            };
+            }
         }
 
         /// <summary>
@@ -153,6 +148,8 @@ namespace Server
             level = LevelIO.ReadJSON(levelLocation);
             level.SetupLevel();
             SetupExits();
+            SetupRotationTimer();
+            ServerDataManager.Instance.Level = level;
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
             //New thread
             this.listenThread = new Thread(new ThreadStart(ClientConnection));
@@ -412,7 +409,7 @@ namespace Server
                 char2Left, char2Top))
             {
                 ServerDataManager.Instance.CharactersCollided = true;
-            }
+            }   
         }
     }
 }

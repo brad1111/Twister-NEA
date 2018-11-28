@@ -271,8 +271,6 @@ namespace Nea_Prototype.Pages
                     int characterNumber = int.Parse(messageComponents[0]);
                     double x = double.Parse(messageComponents[1]);
                     double y = double.Parse(messageComponents[2]);
-                    bool collided = bool.Parse(messageComponents[3]);
-                    bool won = bool.Parse(messageComponents[4]);
 
                     //Move characters into position
                     //Get main thread dispatcher
