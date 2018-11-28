@@ -97,6 +97,9 @@
     <Compile Include="Pages\WaitPage.xaml.cs">
       <DependentUpon>WaitPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\LosePage.xaml.cs">
+      <DependentUpon>LosePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WinPage.xaml.cs">
       <DependentUpon>WinPage.xaml</DependentUpon>
     </Compile>
@@ -135,6 +138,10 @@
     <Page Include="Pages\WaitPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LosePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\WinPage.xaml">
       <SubType>Designer</SubType>

@@ -145,6 +145,13 @@ namespace Nea_Prototype.Pages
         /// <param name="e">The event arguments</param>
         private void KeyboardInputTimerTick(object sender, EventArgs e)
         {
+            //If the level file has been nullified don't continue
+            if (level is null)
+            {
+                return;
+            }
+
+
             //Timer is used for keyboard inputs so that the user can press two directions
             //and go diagonally, and so 2 players can play at once
 
@@ -152,20 +159,20 @@ namespace Nea_Prototype.Pages
             double getUp;
             if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_right))
             {
-                level.MoveCharacter(MainCharacterKeyBind, Direction.Right);
+                level?.MoveCharacter(MainCharacterKeyBind, Direction.Right);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_left))
             {
-                level.MoveCharacter(MainCharacterKeyBind, Direction.Left);
+                level?.MoveCharacter(MainCharacterKeyBind, Direction.Left);
             }
             
             if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_up))
             {
-                level.MoveCharacter(MainCharacterKeyBind, Direction.Up);
+                level?.MoveCharacter(MainCharacterKeyBind, Direction.Up);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player1_down))
             {
-                level.MoveCharacter(MainCharacterKeyBind, Direction.Down);
+                level?.MoveCharacter(MainCharacterKeyBind, Direction.Down);
             }
             
             //Section for overlay menus
@@ -198,20 +205,20 @@ namespace Nea_Prototype.Pages
 
             if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_right))
             {
-                level.MoveCharacter(2, Direction.Right);
+                level?.MoveCharacter(2, Direction.Right);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_left))
             {
-                level.MoveCharacter(2, Direction.Left);
+                level?.MoveCharacter(2, Direction.Left);
             }
             
             if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_up))
             {
-                level.MoveCharacter(2, Direction.Up);
+                level?.MoveCharacter(2, Direction.Up);
             }
             else if (Keyboard.IsKeyDown(KeyBindingsManager.Instance.Player2_down))
             {
-                level.MoveCharacter(2, Direction.Down);
+                level?.MoveCharacter(2, Direction.Down);
             }
 
         }
@@ -306,11 +313,18 @@ namespace Nea_Prototype.Pages
         public void EndGame()
         {
             StopTimers();
+            keyboardInputTimer.Tick -= KeyboardInputTimerTick;
             if (CommunicationManager.Instance.IsNetworked)
             {
                 MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();
             }
+            //Clear all items to prevent memory leak
+            level = null;
+            messageInstance = null;
+            keyboardInputTimer = null;
+            rotationTimer = null;
+            GC.Collect();
         }
 
         public void StartTimers()

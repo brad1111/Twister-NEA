@@ -15,6 +15,7 @@ using Common;
 using Common.Enums;
 using Common.Grid;
 using Common.Level;
+using Nea_Prototype.Pages;
 
 namespace Nea_Prototype.Level
 {
@@ -60,6 +61,9 @@ namespace Nea_Prototype.Level
         {
             
         }
+
+        private EnemyType enemyType;
+        private ProtagonistType protagonistType;
 
         /// <summary>
         /// Sets up the grid in terms of decoding the integer array into items
@@ -200,22 +204,33 @@ namespace Nea_Prototype.Level
                 _gridManager.DebuggingCanvasLeftovers = 0;
             }
 
+            if (GameGridManager.Instance.Characters is null)
+            {
+                //Game is over so return
+                return;
+            }
 
             GridItem characterView = GetCharacterView(characterNo);
             //If character won't collide with the wall
             if (!Collisions.WallCollisionDetection(ref characterView, dir))
             {
+                MoveCharacterInternal(ref characterView, dir);
                 if (GameGridManager.Instance.Characters is null)
                 {
                     //Game is over so return
                     return;
                 }
-                MoveCharacterInternal(ref characterView, dir);
             }
 
             if (Collisions.EnemyCollisionDetection())
             {
-                MessageBox.Show("Enemy killed you.");
+                //Goto the lose page
+                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(this, protagonistType, enemyType));
+                if (GameGridManager.Instance.Characters is null)
+                {
+                    //Game is over so return
+                    return;
+                }
             }
         }
 

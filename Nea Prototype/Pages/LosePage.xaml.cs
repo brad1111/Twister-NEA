@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common.Enums;
 using Nea_Prototype.Grid;
 
 namespace Nea_Prototype.Pages
@@ -20,15 +21,18 @@ namespace Nea_Prototype.Pages
     /// <summary>
     /// Interaction logic for WinPage.xaml
     /// </summary>
-    public partial class WinPage : Page, IKeyboardInputs
+    public partial class LosePage : Page, IKeyboardInputs
     {
+        private Level.Level level;
+        private ProtagonistType pt;
+        private EnemyType et;
+
         /// <summary>
         /// Only call this on the overlay panel
         /// </summary>
-        public WinPage()
+        public LosePage(Level.Level level, ProtagonistType pt, EnemyType et)
         {
             InitializeComponent();
-            open = true;
             //Stop the game
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
@@ -36,13 +40,14 @@ namespace Nea_Prototype.Pages
                 GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
                 gp.EndGame();
             }
+
+            this.level = level;
+            this.pt = pt;
+            this.et = et;
         }
 
-        public static bool open { get; private set; } = false;
-
-        private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
+        private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
         {
-            open = false;
             //Clear the overlay frame
             TopFrameManager.Instance.ClearOverlayFrame();
             //Clear the main frame
@@ -55,6 +60,25 @@ namespace Nea_Prototype.Pages
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
             //No keydown event needed
+        }
+
+        private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                TopFrameManager.Instance.MainFrame.Content = null;
+            }
+
+            //Go back to beginning
+            while (TopFrameManager.Instance.MainFrame.CanGoBack)
+            {
+                TopFrameManager.Instance.MainFrame.GoBack();
+            }
+            //Close the overlay
+            TopFrameManager.Instance.ClearOverlayFrame();
+
+            //Recreate the gamepage
+            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(pt, et, level));
         }
     }
 }
