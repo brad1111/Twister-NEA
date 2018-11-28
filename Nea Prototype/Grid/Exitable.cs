@@ -19,16 +19,17 @@ namespace Nea_Prototype.Grid
             closedSprite = SetupSprite();
             relativeLocation = "ExitableOpen.png";
             openSprite = SetupSprite();
+            Source = closedSprite;
         }
 
-        public new ImageSource Source
-        {
-            get
-            {
-                //if you can exit show open if you cant show closed
-                return (CanExit ? openSprite : closedSprite);
-            }
-        }
+        //public new ImageSource Source
+        //{
+        //    get
+        //    {
+        //        //if you can exit show open if you cant show closed
+        //        return (CanExit ? openSprite : closedSprite);
+        //    }
+        //}
 
         private bool canExit = false;
 
@@ -39,7 +40,7 @@ namespace Nea_Prototype.Grid
             set
             {
                 canExit = value;
-                //GameGridManager.Instance.ExitLocationsViews[arrayIndex].Update();
+                Source = (canExit ? openSprite : closedSprite);
             }
         }
     }
