@@ -225,7 +225,7 @@ namespace Nea_Prototype.Level
             if (Collisions.EnemyCollisionDetection())
             {
                 //Goto the lose page
-                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(this, protagonistType, enemyType));
+                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(this, protagonistType, enemyType, isNetworked:false));
                 if (GameGridManager.Instance.Characters is null)
                 {
                     //Game is over so return

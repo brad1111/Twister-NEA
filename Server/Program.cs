@@ -317,6 +317,21 @@ namespace Server
 
                     CollisionDetectionChecks();
 
+
+                    //-----------Section to send message back --------
+                    if (ServerDataManager.Instance.CharactersCollided)
+                    {
+                        byte[] buffera = encoder.GetBytes("collided");
+                        clientStream.Write(buffera, 0, buffera.Length);
+                        clientStream.Flush();
+                    }
+                    else if (ServerDataManager.Instance.CharactersWon)
+                    {
+                        byte[] buffera = encoder.GetBytes("won");
+                        clientStream.Write(buffera, 0, buffera.Length);
+                        clientStream.Flush();
+                    }
+
                     //Converts character 1 to character 2 and vice versa
                     int otherCharacterNumber = characterNo == 1 ? 2 : 1;
                     double otherCharacterX = otherCharacterNumber == 1
@@ -334,14 +349,14 @@ namespace Server
 
                     byte[] buffer =
                         encoder.GetBytes(
-                            $"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{exits}");
+                            $"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{exits}");
                     clientStream.Write(buffer, 0, buffer.Length);
                     clientStream.Flush();
                     continue;
                 }
                 else if (!mapSent)
                 {
-                    //Send map over (would be in JSON)
+                    //Send map over (in JSON)
                     byte[] buffer = encoder.GetBytes(ServerDataManager.Instance.levelJson);
                     clientStream.Write(buffer, 0, buffer.Length);
                     clientStream.Flush();

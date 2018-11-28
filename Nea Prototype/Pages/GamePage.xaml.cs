@@ -249,12 +249,20 @@ namespace Nea_Prototype.Pages
                     
 
                     string receivedMessage = (e as MessageEventArgs).Message;
-                    //Check if the clients are still alive
-                    if (receivedMessage == "crash" || receivedMessage == "close")
+                    switch (receivedMessage)
                     {
-                        
-                        CommunicationManager.Instance.Disconnect();
-                        MessageBox.Show(receivedMessage == "crash" ? "Other player has exited unexpectedly" : "Other player has willingly quit.");
+                        //Check if the clients are still alive
+                        case "crash":
+                        case "close":
+                            CommunicationManager.Instance.Disconnect();
+                            MessageBox.Show(receivedMessage == "crash" ? "Other player has exited unexpectedly" : "Other player has willingly quit.");
+                            break;
+                        case "collided":
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(level, Protagonist, Enemy, isNetworked:true));
+                            break;
+                        case "won":
+                            TopFrameManager.Instance.OverlayFrame.Navigate(new WinPage());
+                            break;
                     }
                     
                     //break up string
@@ -263,6 +271,8 @@ namespace Nea_Prototype.Pages
                     int characterNumber = int.Parse(messageComponents[0]);
                     double x = double.Parse(messageComponents[1]);
                     double y = double.Parse(messageComponents[2]);
+                    bool collided = bool.Parse(messageComponents[3]);
+                    bool won = bool.Parse(messageComponents[4]);
 
                     //Move characters into position
                     //Get main thread dispatcher

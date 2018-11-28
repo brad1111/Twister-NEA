@@ -26,11 +26,12 @@ namespace Nea_Prototype.Pages
         private Level.Level level;
         private ProtagonistType pt;
         private EnemyType et;
+        private bool isNetworked;
 
         /// <summary>
         /// Only call this on the overlay panel
         /// </summary>
-        public LosePage(Level.Level level, ProtagonistType pt, EnemyType et)
+        public LosePage(Level.Level level, ProtagonistType pt, EnemyType et, bool isNetworked)
         {
             InitializeComponent();
             //Stop the game
@@ -44,6 +45,7 @@ namespace Nea_Prototype.Pages
             this.level = level;
             this.pt = pt;
             this.et = et;
+            this.isNetworked = isNetworked;
         }
 
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
