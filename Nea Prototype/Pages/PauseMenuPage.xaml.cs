@@ -28,7 +28,7 @@ namespace Nea_Prototype.Pages
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            //Keyboard input not needed
         }
 
         private void BtnResume_OnClick(object sender, RoutedEventArgs e)

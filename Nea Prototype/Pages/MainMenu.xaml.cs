@@ -54,7 +54,7 @@ namespace Nea_Prototype.Pages
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            //No keydown needed
         }
     }
 }
