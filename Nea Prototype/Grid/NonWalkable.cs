@@ -11,6 +11,7 @@ namespace Nea_Prototype.Grid
         public NonWalkable()
         {
             relativeLocation = "NonWalkable.png";
+            CurrentWeighting = int.MaxValue; // Current weight is infinity
         }
     }
 }

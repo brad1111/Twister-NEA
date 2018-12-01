@@ -24,6 +24,7 @@
             <StackPanel x:Name="pnlExitableItems">
 
             </StackPanel>
+            <Button x:Name="btnGenPath" Click="BtnGenPath_OnClick" HorizontalAlignment="Left" Background="#66000000">Generate Path</Button>
         </StackPanel>
         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe UI Black" FontSize="50" Foreground="#7F000000" RenderTransformOrigin="0.5,0.5" TextAlignment="Center">
             <TextBlock.RenderTransform>

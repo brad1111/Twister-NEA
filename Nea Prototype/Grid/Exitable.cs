@@ -20,6 +20,7 @@ namespace Nea_Prototype.Grid
             relativeLocation = "ExitableOpen.png";
             openSprite = SetupSprite();
             Source = closedSprite;
+            CurrentWeighting = int.MaxValue; // Current weight is infinity
         }
 
         //public new ImageSource Source

@@ -1,0 +1,188 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Shapes;
+using Common;
+using Common.Grid;
+using Nea_Prototype.Characters;
+using Nea_Prototype.Grid;
+
+namespace Nea_Prototype.Algorithms
+{
+    public static class Pathfinding
+    {
+        public static void ShowPath()
+        {
+            //Get enemy & protagonist
+            CharacterItem protagonistItem = GameGridManager.Instance.CharactersViews[0];
+            CharacterItem enemyItem = GameGridManager.Instance.CharactersViews[1];
+            
+            //Get their positions
+            Position startPos = new Position(Canvas.GetLeft(enemyItem),
+                                             Canvas.GetTop(enemyItem));
+            Position endPos   = new Position(Canvas.GetLeft(protagonistItem),
+                                             Canvas.GetTop(protagonistItem));
+            //Get path stack
+            Stack<GridItem> pathStack = FindPath(startPos, endPos);
+            //Create a rectangles on top of the path
+            while (pathStack.Count > 0)
+            {
+                GridItem currentItem = pathStack.Pop();
+                double gridX = Canvas.GetLeft(currentItem);
+                double gridY = Canvas.GetTop(currentItem);
+                Rectangle rect = new Rectangle()
+                {
+                    Height = Constants.GRID_ITEM_WIDTH,
+                    Width = Constants.GRID_ITEM_WIDTH
+                };
+
+                Canvas.SetLeft(rect, gridX);
+                Canvas.SetTop(rect, gridY);
+                GameGridManager.Instance.GameCanvas.Children.Add(rect);
+            }
+            
+            
+        }
+
+        /// <summary>
+        /// Gets the path from startPos to endPos
+        /// </summary>
+        /// <param name="startPos">The start position (enemy)</param>
+        /// <param name="endPos">The end position (protagonist)</param>
+        /// <returns>The path</returns>
+        public static Stack<GridItem> FindPath(Position startPos, Position endPos)
+        {
+            //Calls A*, should find the last node
+            GridItem endingItem = FindPathAStar(startPos, endPos);
+
+            //Creates a path between start and end node by getting parent spaces
+            Stack<GridItem> pathFromStartToEnd = new Stack<GridItem>();
+
+            //continue until you get to the beginning
+            while (endingItem.Position != startPos)
+            {
+                pathFromStartToEnd.Push(endingItem);
+                endingItem = endingItem.ParentItem;
+            }
+
+            pathFromStartToEnd.Push(endingItem);
+            return pathFromStartToEnd;
+        }
+
+
+        /// <summary>
+        /// Gets the next position
+        /// </summary>
+        /// <param name="from">The position we're coming from</param>
+        /// <param name="to">The postition we're going to</param>
+        /// <returns>The next path item</returns>
+        private static GridItem FindPathAStar(Position from, Position to)
+        {
+            List<GridItem> unvisitedItems = new List<GridItem>();
+            List<GridItem> visitedItems = new List<GridItem>();
+
+            //Get the location there
+            GridItem startItem = GetApproxGridItem(from);
+
+            unvisitedItems.Add(startItem);
+
+            List<Position> neighbours = new List<Position>();
+            neighbours.Add(new Position(-1,0));
+            neighbours.Add(new Position(0,1));
+            neighbours.Add(new Position(1,0));
+            neighbours.Add(new Position(0,-1));
+
+            int maxX = Constants.GRID_TILES_XY;
+            int maxY = Constants.GRID_TILES_XY;
+
+            while (unvisitedItems.Count > 0)
+            {
+                GridItem current = FindLowestWeight(unvisitedItems);
+                if (current.Position == to)
+                {
+                    //End the loop with destination
+                    return current;
+                }
+
+                unvisitedItems.Remove(current);
+                visitedItems.Add(current);
+
+                //Check for the weighting of the neighbours to find next place to go
+                foreach (Position neighbour in neighbours)
+                {
+                    Position nextPos = current.Position + neighbour;
+                    //If the next move is invalid then skip
+                    if (nextPos.x < 0 || nextPos.y < 0 || nextPos.x >= maxX || nextPos.y >= maxY ||
+                        visitedItems.Where(x => x.Position == nextPos).Count() > 0 ||
+                        !(GameGridManager.Instance.GridItems[(int) nextPos.y, (int) nextPos.x] is Walkable))
+                    {
+                        continue;
+                    }
+
+                    GridItem currentItem = null;
+                    if (unvisitedItems.Count > 0)
+                    {
+                        IEnumerable<GridItem> unvisitedItemsWithPosition =
+                            unvisitedItems.Where(x => x.Position == nextPos);
+                        if (unvisitedItemsWithPosition.Count() > 0)
+                        {
+                            currentItem = unvisitedItems.First();
+                        }
+                    }
+                    
+                    if (currentItem == null)
+                    {
+                        //If the item exists then get it
+                        currentItem = GameGridManager.Instance.GridItems[(int) nextPos.y, (int) nextPos.x];
+
+                        //No negative weights
+                        currentItem.PreviousWeight = (int) (Math.Abs(nextPos.x - from.x) + Math.Abs(nextPos.y - from.y));
+                        currentItem.NextWeight = (int) (Math.Abs(nextPos.x - to.x) + Math.Abs(nextPos.y - to.y));
+                        currentItem.SumWeight = currentItem.PreviousWeight + currentItem.NextWeight;
+                        currentItem.ParentItem = current;
+                        unvisitedItems.Add(currentItem);
+                    }
+                    else
+                    {
+                        //Otherwise use it
+                        int fromWeight = (int) (Math.Abs(nextPos.x - from.x) + Math.Abs(nextPos.y - from.y));
+                        if (fromWeight < currentItem.PreviousWeight)
+                        {
+                            currentItem.PreviousWeight = fromWeight;
+                            currentItem.SumWeight = currentItem.PreviousWeight + currentItem.NextWeight;
+                            currentItem.ParentItem = current;
+                        }
+                        
+                    }
+
+
+
+                }
+            }
+            return null;
+        }
+
+        private static GridItem FindLowestWeight(List<GridItem> gridItems)
+        {
+            GridItem smallestWeighted = gridItems[0];
+            foreach (var item in gridItems)
+            {
+                if (item.SumWeight < smallestWeighted.SumWeight || (item.SumWeight == smallestWeighted.SumWeight && item.NextWeight < smallestWeighted.NextWeight))
+                {
+                    smallestWeighted = item;
+                }
+
+            }
+
+            return smallestWeighted;
+        }
+
+        private static GridItem GetApproxGridItem(Position exactPosition)
+        {
+            int x = (int) Math.Truncate(exactPosition.x / Constants.GRID_ITEM_WIDTH);
+            int y = (int) Math.Truncate(exactPosition.y / Constants.GRID_ITEM_WIDTH);
+            return GameGridManager.Instance.GridItems[y, x];
+        } 
+    }
+}
