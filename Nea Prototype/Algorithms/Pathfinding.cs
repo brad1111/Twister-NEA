@@ -36,6 +36,8 @@ namespace Nea_Prototype.Algorithms
                 GameGridManager.Instance.GameCanvas.Children.Remove(visualisations.Pop());
             }
 
+            ThreadUsingVisualisations = Guid.Empty; //No longer using stack
+
             //Get enemy & protagonist
             CharacterItem protagonistItem = GameGridManager.Instance.CharactersViews[0];
             CharacterItem enemyItem = GameGridManager.Instance.CharactersViews[1];
