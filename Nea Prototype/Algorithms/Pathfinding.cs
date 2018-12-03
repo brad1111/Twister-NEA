@@ -48,7 +48,7 @@ namespace Nea_Prototype.Algorithms
             Position endPos   = new Position(Canvas.GetLeft(protagonistItem),
                                              Canvas.GetTop(protagonistItem));
             //Get path stack
-            Stack<GridItem> pathStack = FindPath(startPos, endPos);
+            Stack<GridItem> pathStack = FindPathInternal(startPos, endPos);
             //Create a rectangles on top of the path
             while (pathStack.Count > 0)
             {
@@ -72,12 +72,28 @@ namespace Nea_Prototype.Algorithms
         }
 
         /// <summary>
+        /// Gets the shortest path from enemyCharacter to Protagonist
+        /// </summary>
+        /// <returns>The shortest path as a stack</returns>
+        public static Stack<GridItem> FindPath()
+        {
+            //Gets the characters and their positions and then runs the algorithm internally
+            CharacterItem protagonistItem = GameGridManager.Instance.CharactersViews[0];
+            CharacterItem enemyItem = GameGridManager.Instance.CharactersViews[1];
+            Position startPos = new Position(Canvas.GetLeft(enemyItem),
+                Canvas.GetTop(enemyItem));
+            Position endPos   = new Position(Canvas.GetLeft(protagonistItem),
+                Canvas.GetTop(protagonistItem));
+            return FindPathInternal(startPos, endPos);
+        }
+
+        /// <summary>
         /// Gets the path from startPos to endPos
         /// </summary>
         /// <param name="startPos">The start position (enemy)</param>
         /// <param name="endPos">The end position (protagonist)</param>
         /// <returns>The path</returns>
-        public static Stack<GridItem> FindPath(Position startPos, Position endPos)
+        private static Stack<GridItem> FindPathInternal(Position startPos, Position endPos)
         {
             //Calls A*, should find the last node
             GridItem endingItem = FindPathAStar(startPos, endPos);
@@ -93,7 +109,6 @@ namespace Nea_Prototype.Algorithms
             }
             return pathFromStartToEnd;
         }
-
 
         /// <summary>
         /// Gets the next position

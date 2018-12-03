@@ -24,7 +24,8 @@ namespace Common.Grid
         public override bool Equals(object obj)
         {
             Position pos = obj as Position;
-            return this == pos;
+            return pos?.x == this?.x &&
+                   pos?.y == this?.y;
         }
 
         public static bool operator ==(Position a, Position b)
@@ -35,7 +36,8 @@ namespace Common.Grid
 
         public static bool operator !=(Position a, Position b)
         {
-            return !(a == b);
+            return a?.x != b?.x || 
+                   a?.y != b?.y;
         }
 
         public override int GetHashCode()

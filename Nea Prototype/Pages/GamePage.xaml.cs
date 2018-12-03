@@ -2,12 +2,15 @@
 using Nea_Prototype.Grid;
 using Nea_Prototype.Level;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Common;
 using Common.Enums;
+using Common.Grid;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Keybindings;
 using Nea_Prototype.Network;
@@ -23,6 +26,7 @@ namespace Nea_Prototype.Pages
         //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
         private DispatcherTimer rotationTimer;
+        private DispatcherTimer aiTimer;
 
         private EnemyType Enemy;
         private ProtagonistType Protagonist;
@@ -131,11 +135,33 @@ namespace Nea_Prototype.Pages
 
             }
 
+            //Setups up AI timer if this is a singleplayer game
+            if (gameType == GameType.Singleplayer)
+            {
+                aiTimer = new DispatcherTimer()
+                {
+                    Interval = new TimeSpan(0,0,1)
+                };
+                aiTimer.Tick += AiTimerOnTick;
+            }
+
             //When the page has loaded start the timer
             Loaded += (s, e) =>
             {
                 StartTimers();
             };
+        }
+
+        private void AiTimerOnTick(object sender, EventArgs e)
+        {
+            Stack<GridItem> path = Pathfinding.FindPath();
+            path.Pop();
+            GridItem nextLocation = path.Pop();
+            Position nextPos = nextLocation.Position;
+
+            //Move the item to the position
+            Canvas.SetLeft(GameGridManager.Instance.CharactersViews[1], nextPos.x * Constants.GRID_ITEM_WIDTH);
+            Canvas.SetTop(GameGridManager.Instance.CharactersViews[1], nextPos.y * Constants.GRID_ITEM_WIDTH);
         }
 
         /// <summary>
@@ -302,6 +328,10 @@ namespace Nea_Prototype.Pages
         {
             keyboardInputTimer.Stop();
             rotationTimer.Stop();
+            if (gameType == GameType.Singleplayer)
+            {
+                aiTimer.Stop();
+            }
             //If networked you need to stop the network timer
             if (CommunicationManager.Instance.IsNetworked)
             {
@@ -319,6 +349,7 @@ namespace Nea_Prototype.Pages
                 MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();
             }
+
             //Clear all items to prevent memory leak
             level = null;
             messageInstance = null;
@@ -337,6 +368,11 @@ namespace Nea_Prototype.Pages
             if (CommunicationManager.Instance.IsNetworked)
             {
                 CommunicationManager.Instance.Start();
+            }
+
+            if (gameType == GameType.Singleplayer)
+            {
+                aiTimer.Start();
             }
             allowKeyDown = true;
         }
