@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using Common;
 using Common.Grid;
@@ -12,8 +13,29 @@ namespace Nea_Prototype.Algorithms
 {
     public static class Pathfinding
     {
+        private static Stack<Rectangle> visualisations = new Stack<Rectangle>();
+
+        private static Guid ThreadUsingVisualisations = Guid.Empty;
+
         public static void ShowPath()
         {
+            //Prevent multiple clicks of the button from locking the program
+            Guid thisThread = Guid.NewGuid();
+            if (ThreadUsingVisualisations == Guid.Empty)
+            {
+                //Generate a GUID
+                ThreadUsingVisualisations = thisThread;
+            }
+            else
+            {
+                return;
+            }
+            //Clear any paths already shown
+            while (ThreadUsingVisualisations == thisThread && visualisations.Count > 0)
+            {
+                GameGridManager.Instance.GameCanvas.Children.Remove(visualisations.Pop());
+            }
+
             //Get enemy & protagonist
             CharacterItem protagonistItem = GameGridManager.Instance.CharactersViews[0];
             CharacterItem enemyItem = GameGridManager.Instance.CharactersViews[1];
@@ -34,12 +56,14 @@ namespace Nea_Prototype.Algorithms
                 Rectangle rect = new Rectangle()
                 {
                     Height = Constants.GRID_ITEM_WIDTH,
-                    Width = Constants.GRID_ITEM_WIDTH
+                    Width = Constants.GRID_ITEM_WIDTH,
+                    Fill = new SolidColorBrush(Colors.Brown)
                 };
 
                 Canvas.SetLeft(rect, gridX);
                 Canvas.SetTop(rect, gridY);
                 GameGridManager.Instance.GameCanvas.Children.Add(rect);
+                visualisations.Push(rect);
             }
             
             
@@ -60,13 +84,11 @@ namespace Nea_Prototype.Algorithms
             Stack<GridItem> pathFromStartToEnd = new Stack<GridItem>();
 
             //continue until you get to the beginning
-            while (endingItem.Position != startPos)
+            while (endingItem != null && endingItem.Position != startPos)
             {
                 pathFromStartToEnd.Push(endingItem);
                 endingItem = endingItem.ParentItem;
             }
-
-            pathFromStartToEnd.Push(endingItem);
             return pathFromStartToEnd;
         }
 
@@ -82,6 +104,8 @@ namespace Nea_Prototype.Algorithms
             List<GridItem> unvisitedItems = new List<GridItem>();
             List<GridItem> visitedItems = new List<GridItem>();
 
+            Position toGridSpaces = new Position((int) to.x / Constants.GRID_ITEM_WIDTH,(int) to.y / Constants.GRID_ITEM_WIDTH);
+
             //Get the location there
             GridItem startItem = GetApproxGridItem(from);
 
@@ -93,13 +117,13 @@ namespace Nea_Prototype.Algorithms
             neighbours.Add(new Position(1,0));
             neighbours.Add(new Position(0,-1));
 
-            int maxX = Constants.GRID_TILES_XY;
-            int maxY = Constants.GRID_TILES_XY;
+            int maxX = Constants.GRID_TILES_XY - 1;
+            int maxY = Constants.GRID_TILES_XY - 1;
 
             while (unvisitedItems.Count > 0)
             {
                 GridItem current = FindLowestWeight(unvisitedItems);
-                if (current.Position == to)
+                if (current.Position == toGridSpaces)
                 {
                     //End the loop with destination
                     return current;
