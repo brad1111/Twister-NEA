@@ -101,11 +101,13 @@ namespace Nea_Prototype.Algorithms
             //Creates a path between start and end node by getting parent spaces
             Stack<GridItem> pathFromStartToEnd = new Stack<GridItem>();
 
+            int count = 0;
             //continue until you get to the beginning
-            while (endingItem != null && endingItem.Position != startPos)
+            while (endingItem != null && endingItem.Position != startPos && count <= 10000)
             {
                 pathFromStartToEnd.Push(endingItem);
                 endingItem = endingItem.ParentItem;
+                count++;
             }
             return pathFromStartToEnd;
         }
@@ -122,6 +124,7 @@ namespace Nea_Prototype.Algorithms
             List<GridItem> visitedItems = new List<GridItem>();
 
             Position toGridSpaces = new Position((int) to.x / Constants.GRID_ITEM_WIDTH,(int) to.y / Constants.GRID_ITEM_WIDTH);
+            Position fromGridSpaces = new Position((int) from.x / Constants.GRID_ITEM_WIDTH,(int) from.y / Constants.GRID_ITEM_WIDTH);
 
             //Get the location there
             GridItem startItem = GetApproxGridItem(from);
@@ -178,8 +181,8 @@ namespace Nea_Prototype.Algorithms
                         currentItem = GameGridManager.Instance.GridItems[(int) nextPos.y, (int) nextPos.x];
 
                         //No negative weights
-                        currentItem.PreviousWeight = (int) (Math.Abs(nextPos.x - from.x) + Math.Abs(nextPos.y - from.y));
-                        currentItem.NextWeight = (int) (Math.Abs(nextPos.x - to.x) + Math.Abs(nextPos.y - to.y));
+                        currentItem.PreviousWeight = (int) (Math.Abs(nextPos.x - fromGridSpaces.x) + Math.Abs(nextPos.y - fromGridSpaces.y));
+                        currentItem.NextWeight = (int) (Math.Abs(nextPos.x - toGridSpaces.x) + Math.Abs(nextPos.y - toGridSpaces.y));
                         currentItem.SumWeight = currentItem.PreviousWeight + currentItem.NextWeight;
                         currentItem.ParentItem = current;
                         unvisitedItems.Add(currentItem);
@@ -187,7 +190,7 @@ namespace Nea_Prototype.Algorithms
                     else
                     {
                         //Otherwise use it
-                        int fromWeight = (int) (Math.Abs(nextPos.x - from.x) + Math.Abs(nextPos.y - from.y));
+                        int fromWeight = (int) (Math.Abs(nextPos.x - fromGridSpaces.x) + Math.Abs(nextPos.y - fromGridSpaces.y));
                         if (fromWeight < currentItem.PreviousWeight)
                         {
                             currentItem.PreviousWeight = fromWeight;

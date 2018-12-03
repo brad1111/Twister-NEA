@@ -152,9 +152,11 @@ namespace Nea_Prototype.Pages
             };
         }
 
+        
         private void AiTimerOnTick(object sender, EventArgs e)
         {
             Stack<GridItem> path = Pathfinding.FindPath();
+            path.Pop();
             path.Pop();
             GridItem nextLocation = path.Pop();
             Position nextPos = nextLocation.Position;
