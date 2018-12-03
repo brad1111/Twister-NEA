@@ -152,18 +152,21 @@ namespace Nea_Prototype.Pages
             };
         }
 
-        
+        private int amountToPop = 0;
         private void AiTimerOnTick(object sender, EventArgs e)
         {
             Stack<GridItem> path = Pathfinding.FindPath();
-            path.Pop();
-            path.Pop();
             GridItem nextLocation = path.Pop();
-            Position nextPos = nextLocation.Position;
+            Position nextPos = nextLocation?.Position;
+            if (nextPos is null)
+            {
+                return;
+            }
 
             //Move the item to the position
             Canvas.SetLeft(GameGridManager.Instance.CharactersViews[1], nextPos.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(GameGridManager.Instance.CharactersViews[1], nextPos.y * Constants.GRID_ITEM_WIDTH);
+            amountToPop++;
         }
 
         /// <summary>

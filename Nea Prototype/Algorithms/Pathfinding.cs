@@ -95,19 +95,25 @@ namespace Nea_Prototype.Algorithms
         /// <returns>The path</returns>
         private static Stack<GridItem> FindPathInternal(Position startPos, Position endPos)
         {
+            //Clear previous chain
+
             //Calls A*, should find the last node
             GridItem endingItem = FindPathAStar(startPos, endPos);
 
             //Creates a path between start and end node by getting parent spaces
             Stack<GridItem> pathFromStartToEnd = new Stack<GridItem>();
 
+            Position startPosGridLocation = new Position((int)startPos.x / 20, (int)startPos.y / 20);
+
             int count = 0;
             //continue until you get to the beginning
-            while (endingItem != null && endingItem.Position != startPos && count <= 10000)
+            while (endingItem != null && endingItem.Position != startPosGridLocation && count <= 10000)
             {
+                Console.WriteLine("{0}, {1}", endingItem.Position.x, endingItem.Position.y);
                 pathFromStartToEnd.Push(endingItem);
                 endingItem = endingItem.ParentItem;
                 count++;
+                
             }
             return pathFromStartToEnd;
         }
