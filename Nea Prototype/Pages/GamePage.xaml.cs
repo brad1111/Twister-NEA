@@ -169,10 +169,19 @@ namespace Nea_Prototype.Pages
 
                 //Setup movement
                 Stack<GridItem> path = Pathfinding.FindPath();
-                Console.WriteLine("Popping off the stack");
+                CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
+                switch (path.Count)
+                {
+                        case 0:
+                            return; //Can't do anything else because there is nowhere to go
+                        case 1:
+                            Collisions.EnemyCollisionDetection();//Check to see if they are colliding
+                            break;
+                        //else continue on
+                }
                 GridItem nextLocation = path.Pop();
-                Position currentPos = new Position(Canvas.GetLeft(GameGridManager.Instance.CharactersViews[1]),
-                    Canvas.GetTop(GameGridManager.Instance.CharactersViews[1]));
+                Position currentPos = new Position(Canvas.GetLeft(enemyView),
+                    Canvas.GetTop(enemyView));
                 moveTo = nextLocation?.Position;
                 if (moveTo is null)
                 {
@@ -180,7 +189,6 @@ namespace Nea_Prototype.Pages
                 }
 
                 //Move player
-                CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
                 Canvas.SetLeft(enemyView, moveTo.x * Constants.GRID_ITEM_WIDTH);
                 Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
 
