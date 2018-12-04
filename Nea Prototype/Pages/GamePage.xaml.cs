@@ -140,7 +140,7 @@ namespace Nea_Prototype.Pages
             {
                 aiTimer = new DispatcherTimer()
                 {
-                    Interval = new TimeSpan(0,0,0,1)
+                    Interval = new TimeSpan(0,0,0,0,400)
                 };
                 aiTimer.Tick += AiTimerOnTick;
             }
@@ -150,23 +150,6 @@ namespace Nea_Prototype.Pages
             {
                 StartTimers();
             };
-        }
-
-        private void AITransformStoryboard_Completed(object sender, EventArgs e)
-        {
-            ////Move the item into the place now
-            //CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
-
-            ////These move the item into place
-            //Canvas.SetLeft(enemyView, moveTo.x * Constants.GRID_ITEM_WIDTH);
-            //Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
-
-            ////This undoes the transformation animation and hence lets it go into the right place
-            //if (AITransformStoryboard != null)
-            //{
-            //    AITransformStoryboard.Remove();
-            //    AITransformStoryboard = null;
-            //}
         }
 
         private Storyboard AITransformStoryboard = null;
@@ -203,8 +186,7 @@ namespace Nea_Prototype.Pages
 
                 //Setup storyboard
                 AITransformStoryboard = new Storyboard();
-                AITransformStoryboard.Completed += AITransformStoryboard_Completed;
-                AITransformStoryboard.Duration = new Duration(new TimeSpan(0,0,0,1));
+                AITransformStoryboard.Duration = new Duration(aiTimer.Interval);
                 DoubleAnimation xAnimation = new DoubleAnimation()
                 {
                     From = -(moveTo.x * Constants.GRID_ITEM_WIDTH - currentPos.x),
