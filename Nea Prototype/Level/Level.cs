@@ -62,8 +62,8 @@ namespace Nea_Prototype.Level
             
         }
 
-        private EnemyType enemyType;
-        private ProtagonistType protagonistType;
+        [JsonIgnore] private EnemyType enemyType;
+        [JsonIgnore] private ProtagonistType protagonistType;
 
         /// <summary>
         /// Sets up the grid in terms of decoding the integer array into items
@@ -73,6 +73,9 @@ namespace Nea_Prototype.Level
         /// <param name="enemyType"></param>
         public void SetupGrid(ref Canvas gameCanvas, ref Canvas exitCanvas, ProtagonistType protagonistType, EnemyType enemyType)
         {
+            //setup protagonist types etc so that we know what pages to go etc
+            this.protagonistType = protagonistType;
+            this.enemyType = enemyType;
             DecodeGridStartLocations(protagonistType, enemyType);
             //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)

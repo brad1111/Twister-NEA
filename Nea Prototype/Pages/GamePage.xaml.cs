@@ -91,7 +91,7 @@ namespace Nea_Prototype.Pages
             Enemy = et;
 
             //Sets up the grid by decoding the int array and placing everything on the canvas
-            level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
+            level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, pt, et);
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referenced every tick for the collision detection visualisation to work)
             GameGridManager.Instance.GameCanvas = cvsPlayArea;
