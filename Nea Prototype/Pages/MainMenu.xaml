@@ -7,7 +7,30 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainMenu">
+    <Page.Resources>
+        <Storyboard x:Key="Rectangle">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="rectangle">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-98.609"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="136.174"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" Storyboard.TargetName="rectangle">
+                <EasingDoubleKeyFrame KeyTime="0" Value="42.261"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="-39.13"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Page.Resources>
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Rectangle}"/>
+        </EventTrigger>
+    </Page.Triggers>
     <Grid>
+        <Rectangle x:Name="rectangle" Fill="Brown" Height="20" Width="20" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                    <TranslateTransform X="266.087" Y="10.957"/>
+            </Rectangle.RenderTransform>
+
+        </Rectangle>
         <StackPanel>
             <Button x:Name="btnSinglePlayer" Click="BtnSinglePlayer_OnClick">Singleplayer</Button>
             <Button x:Name="btnMultiPlayer" Click="BtnMultiPlayer_OnClick">Local Multiplayer</Button>

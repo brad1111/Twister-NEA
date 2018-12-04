@@ -1,4 +1,5 @@
-﻿using Nea_Prototype.Characters;
+﻿using System.Windows.Media;
+using Nea_Prototype.Characters;
 
 namespace Nea_Prototype.Grid
 {
@@ -14,6 +15,10 @@ namespace Nea_Prototype.Grid
             this.character = character;
             sprite = character.GetSprite();
             relativeLocation = sprite.ToString();
+            if (character is Enemy)
+            {
+                RenderTransform = new TranslateTransform();
+            }
         }
 
         public Character GetCharacter => character;

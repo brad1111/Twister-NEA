@@ -140,7 +140,7 @@ namespace Nea_Prototype.Pages
             {
                 aiTimer = new DispatcherTimer()
                 {
-                    Interval = new TimeSpan(0,0,1)
+                    Interval = new TimeSpan(0,0,0,1)
                 };
                 aiTimer.Tick += AiTimerOnTick;
             }
@@ -152,21 +152,80 @@ namespace Nea_Prototype.Pages
             };
         }
 
-        private int amountToPop = 0;
+        private void AITransformStoryboard_Completed(object sender, EventArgs e)
+        {
+            ////Move the item into the place now
+            //CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
+
+            ////These move the item into place
+            //Canvas.SetLeft(enemyView, moveTo.x * Constants.GRID_ITEM_WIDTH);
+            //Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
+
+            ////This undoes the transformation animation and hence lets it go into the right place
+            //if (AITransformStoryboard != null)
+            //{
+            //    AITransformStoryboard.Remove();
+            //    AITransformStoryboard = null;
+            //}
+        }
+
+        private Storyboard AITransformStoryboard = null;
+        private Position moveTo = new Position(0,0);
+        private bool canCheckProgress = false;
+
         private void AiTimerOnTick(object sender, EventArgs e)
         {
-            Stack<GridItem> path = Pathfinding.FindPath();
-            GridItem nextLocation = path.Pop();
-            Position nextPos = nextLocation?.Position;
-            if (nextPos is null)
-            {
-                return;
-            }
-
+            
             //Move the item to the position
-            Canvas.SetLeft(GameGridManager.Instance.CharactersViews[1], nextPos.x * Constants.GRID_ITEM_WIDTH);
-            Canvas.SetTop(GameGridManager.Instance.CharactersViews[1], nextPos.y * Constants.GRID_ITEM_WIDTH);
-            amountToPop++;
+            if (AITransformStoryboard is null || (canCheckProgress && AITransformStoryboard.GetCurrentProgress() >= 1))
+            {
+
+                //Setup movement
+                Stack<GridItem> path = Pathfinding.FindPath();
+                Console.WriteLine("Popping off the stack");
+                GridItem nextLocation = path.Pop();
+                Position currentPos = new Position(Canvas.GetLeft(GameGridManager.Instance.CharactersViews[1]),
+                    Canvas.GetTop(GameGridManager.Instance.CharactersViews[1]));
+                moveTo = nextLocation?.Position;
+                if (moveTo is null)
+                {
+                    return;
+                }
+
+                //Move player
+                CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
+                Canvas.SetLeft(enemyView, moveTo.x * Constants.GRID_ITEM_WIDTH);
+                Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
+
+                //Setup storyboard
+                canCheckProgress = true;
+                AITransformStoryboard = new Storyboard();
+                AITransformStoryboard.Completed += AITransformStoryboard_Completed;
+                AITransformStoryboard.Duration = new Duration(new TimeSpan(0,0,0,1));
+                DoubleAnimation xAnimation = new DoubleAnimation()
+                {
+                    From = -(moveTo.x * Constants.GRID_ITEM_WIDTH - currentPos.x),
+                    To = 0,
+                    Duration = AITransformStoryboard.Duration
+                };
+                DoubleAnimation yAnimation = new DoubleAnimation()
+                {
+                    From = -(moveTo.y * Constants.GRID_ITEM_WIDTH - currentPos.y),
+                    To = 0, //Because this is a delta move calculate move
+                    Duration = AITransformStoryboard.Duration
+                };
+                AITransformStoryboard.Children.Add(xAnimation);
+                AITransformStoryboard.Children.Add(yAnimation);
+                Storyboard.SetTarget(xAnimation, GameGridManager.Instance.CharactersViews[1]);
+                Storyboard.SetTargetProperty(xAnimation,
+                    new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+                Storyboard.SetTarget(yAnimation, GameGridManager.Instance.CharactersViews[1]);
+                Storyboard.SetTargetProperty(yAnimation,
+                    new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+
+                //Go
+                AITransformStoryboard.Begin();
+            }
         }
 
         /// <summary>
