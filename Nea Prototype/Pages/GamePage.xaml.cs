@@ -171,14 +171,18 @@ namespace Nea_Prototype.Pages
 
         private Storyboard AITransformStoryboard = null;
         private Position moveTo = new Position(0,0);
-        private bool canCheckProgress = false;
 
         private void AiTimerOnTick(object sender, EventArgs e)
         {
-            
-            //Move the item to the position
-            if (AITransformStoryboard is null || (canCheckProgress && AITransformStoryboard.GetCurrentProgress() >= 1))
+            //If the old storyboard is still there set the speed to be fast so that the next animation can be played
+            if (AITransformStoryboard != null)
             {
+                AITransformStoryboard.SpeedRatio = 10;
+            }
+            //Move the item to the position
+            if (AITransformStoryboard is null || AITransformStoryboard.GetCurrentProgress() > 0)
+            {
+                
 
                 //Setup movement
                 Stack<GridItem> path = Pathfinding.FindPath();
@@ -198,7 +202,6 @@ namespace Nea_Prototype.Pages
                 Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
 
                 //Setup storyboard
-                canCheckProgress = true;
                 AITransformStoryboard = new Storyboard();
                 AITransformStoryboard.Completed += AITransformStoryboard_Completed;
                 AITransformStoryboard.Duration = new Duration(new TimeSpan(0,0,0,1));
