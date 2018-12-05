@@ -19,6 +19,13 @@ namespace Nea_Prototype.Grid
         protected ImageSource sprite;
         protected Position location;
 
+        public int CurrentWeighting { get; protected set; } = 1;
+        //A*
+        public int PreviousWeight { get; set; }
+        public int NextWeight { get; set; }
+        public int SumWeight { get; set; }
+        public GridItem ParentItem { get; set; } //Points to previous item
+
         public virtual ImageSource Sprite
         {
             get => sprite;
@@ -50,6 +57,10 @@ namespace Nea_Prototype.Grid
             return cachedSrc;
         }
 
+        /// <summary>
+        /// When the item has finished loading set it up
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);

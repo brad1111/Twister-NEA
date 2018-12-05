@@ -15,7 +15,7 @@ namespace Nea_Prototype.Grid
     public class GameGridManager
     {
         private Character[] characters;
-        private GridItem[] charactersViews;
+        private CharacterItem[] charactersViews;
         private GridItem[,] gridItems;
         private Exitable[] exitLocations;
         private Storyboard rotationStoryboard = null;
@@ -36,7 +36,7 @@ namespace Nea_Prototype.Grid
         /// <param name="gridItems">The non-view part of the grid items to store</param>
         /// <param name="exitableLocations">The non-view part of the internal exitable locations</param>
         /// <returns>The instance of the new singleton</returns>
-        public static GameGridManager NewGameGrid(Character[] characters, GridItem[] charactersView, GridItem[,] gridItems, Exitable[] exitableLocations)
+        public static GameGridManager NewGameGrid(Character[] characters, CharacterItem[] charactersView, GridItem[,] gridItems, Exitable[] exitableLocations)
         {
             Instance.characters = characters;
             Instance.charactersViews = charactersView;
@@ -101,7 +101,7 @@ namespace Nea_Prototype.Grid
             get => characters;
         }
 
-        public GridItem[] CharactersViews
+        public CharacterItem[] CharactersViews
         {
             get => charactersViews;
         }

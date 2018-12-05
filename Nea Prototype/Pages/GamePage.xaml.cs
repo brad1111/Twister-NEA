@@ -2,12 +2,15 @@
 using Nea_Prototype.Grid;
 using Nea_Prototype.Level;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Common;
 using Common.Enums;
+using Common.Grid;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Keybindings;
 using Nea_Prototype.Network;
@@ -23,6 +26,7 @@ namespace Nea_Prototype.Pages
         //The timer that checks for keyboard input
         private DispatcherTimer keyboardInputTimer;
         private DispatcherTimer rotationTimer;
+        private DispatcherTimer aiTimer;
 
         private EnemyType Enemy;
         private ProtagonistType Protagonist;
@@ -87,7 +91,7 @@ namespace Nea_Prototype.Pages
             Enemy = et;
 
             //Sets up the grid by decoding the int array and placing everything on the canvas
-            level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, ProtagonistType.Local, EnemyType.Local);
+            level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, pt, et);
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referenced every tick for the collision detection visualisation to work)
             GameGridManager.Instance.GameCanvas = cvsPlayArea;
@@ -131,11 +135,87 @@ namespace Nea_Prototype.Pages
 
             }
 
-            //When the page has loaded start the timer
-            Loaded += (s, e) =>
+            //Setups up AI timer if this is a singleplayer game
+            if (gameType == GameType.Singleplayer)
             {
-                StartTimers();
-            };
+                aiTimer = new DispatcherTimer()
+                {
+                    Interval = new TimeSpan(0,0,0,0,400)
+                };
+                aiTimer.Tick += AiTimerOnTick;
+            }       
+
+            //Allow keydown so that starts the game etc
+            allowKeyDown = true;
+        }
+
+        private Storyboard AITransformStoryboard = null;
+        private Position moveTo = new Position(0,0);
+
+        private void AiTimerOnTick(object sender, EventArgs e)
+        {
+            //If the old storyboard is still there set the speed to be fast so that the next animation can be played
+            if (AITransformStoryboard != null)
+            {
+                AITransformStoryboard.SpeedRatio = 10;
+            }
+            //Move the item to the position
+            if (AITransformStoryboard is null || AITransformStoryboard.GetCurrentProgress() > 0)
+            {
+                
+
+                //Setup movement
+                Stack<GridItem> path = Pathfinding.FindPath();
+                CharacterItem enemyView = GameGridManager.Instance.CharactersViews[1];
+                switch (path.Count)
+                {
+                        case 0:
+                            return; //Can't do anything else because there is nowhere to go
+                        case 1:
+                            Collisions.EnemyCollisionDetection();//Check to see if they are colliding
+                            break;
+                        //else continue on
+                }
+                GridItem nextLocation = path.Pop();
+                Position currentPos = new Position(Canvas.GetLeft(enemyView),
+                    Canvas.GetTop(enemyView));
+                moveTo = nextLocation?.Position;
+                if (moveTo is null)
+                {
+                    return;
+                }
+
+                //Move player
+                Canvas.SetLeft(enemyView, moveTo.x * Constants.GRID_ITEM_WIDTH);
+                Canvas.SetTop(enemyView, moveTo.y * Constants.GRID_ITEM_WIDTH);
+
+                //Setup storyboard
+                AITransformStoryboard = new Storyboard();
+                AITransformStoryboard.Duration = new Duration(aiTimer.Interval);
+                DoubleAnimation xAnimation = new DoubleAnimation()
+                {
+                    From = -(moveTo.x * Constants.GRID_ITEM_WIDTH - currentPos.x),
+                    To = 0,
+                    Duration = AITransformStoryboard.Duration
+                };
+                DoubleAnimation yAnimation = new DoubleAnimation()
+                {
+                    From = -(moveTo.y * Constants.GRID_ITEM_WIDTH - currentPos.y),
+                    To = 0, //Because this is a delta move calculate move
+                    Duration = AITransformStoryboard.Duration
+                };
+                AITransformStoryboard.Children.Add(xAnimation);
+                AITransformStoryboard.Children.Add(yAnimation);
+                Storyboard.SetTarget(xAnimation, GameGridManager.Instance.CharactersViews[1]);
+                Storyboard.SetTargetProperty(xAnimation,
+                    new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.X)"));
+                Storyboard.SetTarget(yAnimation, GameGridManager.Instance.CharactersViews[1]);
+                Storyboard.SetTargetProperty(yAnimation,
+                    new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+
+                //Go
+                AITransformStoryboard.Begin();
+            }
         }
 
         /// <summary>
@@ -235,6 +315,11 @@ namespace Nea_Prototype.Pages
         {
             if (allowKeyDown)
             {
+                //And also if a key is pressed and the AI timer hasn't started and it needs to start it
+                if (!timersEnabled)
+                {
+                    StartTimers();
+                }
                 KeyboardInputTimerTick(sender, e);
             }
         }
@@ -302,6 +387,10 @@ namespace Nea_Prototype.Pages
         {
             keyboardInputTimer.Stop();
             rotationTimer.Stop();
+            if (gameType == GameType.Singleplayer)
+            {
+                aiTimer.Stop();
+            }
             //If networked you need to stop the network timer
             if (CommunicationManager.Instance.IsNetworked)
             {
@@ -312,6 +401,7 @@ namespace Nea_Prototype.Pages
 
         public void EndGame()
         {
+            timersEnabled = false;
             StopTimers();
             keyboardInputTimer.Tick -= KeyboardInputTimerTick;
             if (CommunicationManager.Instance.IsNetworked)
@@ -319,6 +409,7 @@ namespace Nea_Prototype.Pages
                 MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();
             }
+
             //Clear all items to prevent memory leak
             level = null;
             messageInstance = null;
@@ -329,14 +420,22 @@ namespace Nea_Prototype.Pages
             GC.Collect();
         }
 
+        private bool timersEnabled = false;
+
         public void StartTimers()
         {
+            timersEnabled = true;
             keyboardInputTimer.Start();
             rotationTimer.Start();
             //If networked you need to start the network timer
             if (CommunicationManager.Instance.IsNetworked)
             {
                 CommunicationManager.Instance.Start();
+            }
+
+            if (gameType == GameType.Singleplayer)
+            {
+                aiTimer.Start();
             }
             allowKeyDown = true;
         }

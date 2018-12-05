@@ -96,6 +96,10 @@ namespace Nea_Prototype.Pages
                 GameGridManager.Instance.ExitLocations[arrayIndex].CanExit = senderCheckBox.IsChecked ?? false;
             }
         }
-           
+
+        private void BtnGenPath_OnClick(object sender, RoutedEventArgs e)
+        {
+            Pathfinding.ShowPath();
+        }
     }
 }

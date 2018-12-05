@@ -62,8 +62,8 @@ namespace Nea_Prototype.Level
             
         }
 
-        private EnemyType enemyType;
-        private ProtagonistType protagonistType;
+        [JsonIgnore] private EnemyType enemyType;
+        [JsonIgnore] private ProtagonistType protagonistType;
 
         /// <summary>
         /// Sets up the grid in terms of decoding the integer array into items
@@ -73,6 +73,9 @@ namespace Nea_Prototype.Level
         /// <param name="enemyType"></param>
         public void SetupGrid(ref Canvas gameCanvas, ref Canvas exitCanvas, ProtagonistType protagonistType, EnemyType enemyType)
         {
+            //setup protagonist types etc so that we know what pages to go etc
+            this.protagonistType = protagonistType;
+            this.enemyType = enemyType;
             DecodeGridStartLocations(protagonistType, enemyType);
             //Add grid items
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
@@ -80,7 +83,7 @@ namespace Nea_Prototype.Level
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
                 {
                     gameCanvas.Children.Add(_gridManager.GridItems[y, x]);
-                    MoveItemToPlace(ref _gridManager.GridItems[y,x], _gridManager.GridItems[y,x].Position);
+                    MoveItemToPlace(_gridManager.GridItems[y,x], _gridManager.GridItems[y,x].Position);
                 }
             }
 
@@ -89,7 +92,7 @@ namespace Nea_Prototype.Level
             {
                 gameCanvas.Children.Add(_gridManager.CharactersViews[i]);
                 //_gridManager.Characters[i].Position = 
-                MoveItemToPlace(ref _gridManager.CharactersViews[i], _gridManager.Characters[i].Position);
+                MoveItemToPlace(_gridManager.CharactersViews[i], _gridManager.Characters[i].Position);
             }
 
             //Add exit rectangle
@@ -105,7 +108,7 @@ namespace Nea_Prototype.Level
         {
             GridItem[,] gridItems = new GridItem[yLength(), xLength()];
             Character[] characters = new Character[2];
-            GridItem[] charactersView = new GridItem[2];
+            CharacterItem[] charactersView = new CharacterItem[2];
             List<Exitable> exitables = new List<Exitable>();
             int exitableIndex = 0;
             for (int y = 0; y < yLength(); y++)
@@ -182,7 +185,7 @@ namespace Nea_Prototype.Level
         /// </summary>
         /// <param name="itemView">The item to move</param>
         /// <param name="location">Where to move it</param>
-        private void MoveItemToPlace(ref GridItem itemView, Position location)
+        private void MoveItemToPlace(GridItem itemView, Position location)
         {
             Canvas.SetLeft(itemView, location.x * Constants.GRID_ITEM_WIDTH);
             Canvas.SetTop(itemView, location.y * Constants.GRID_ITEM_WIDTH);

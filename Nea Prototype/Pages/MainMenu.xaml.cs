@@ -29,7 +29,8 @@ namespace Nea_Prototype.Pages
 
         private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.AI,
+                LevelIO.ReadJSON("testing.json")));
         }
 
         private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
