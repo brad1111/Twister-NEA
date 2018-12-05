@@ -143,13 +143,10 @@ namespace Nea_Prototype.Pages
                     Interval = new TimeSpan(0,0,0,0,400)
                 };
                 aiTimer.Tick += AiTimerOnTick;
-            }
+            }       
 
-            //When the page has loaded start the timer
-            Loaded += (s, e) =>
-            {
-                StartTimers();
-            };
+            //Allow keydown so that starts the game etc
+            allowKeyDown = true;
         }
 
         private Storyboard AITransformStoryboard = null;
@@ -318,6 +315,11 @@ namespace Nea_Prototype.Pages
         {
             if (allowKeyDown)
             {
+                //And also if a key is pressed and the AI timer hasn't started and it needs to start it
+                if (!timersEnabled)
+                {
+                    StartTimers();
+                }
                 KeyboardInputTimerTick(sender, e);
             }
         }
@@ -399,6 +401,7 @@ namespace Nea_Prototype.Pages
 
         public void EndGame()
         {
+            timersEnabled = false;
             StopTimers();
             keyboardInputTimer.Tick -= KeyboardInputTimerTick;
             if (CommunicationManager.Instance.IsNetworked)
@@ -417,8 +420,11 @@ namespace Nea_Prototype.Pages
             GC.Collect();
         }
 
+        private bool timersEnabled = false;
+
         public void StartTimers()
         {
+            timersEnabled = true;
             keyboardInputTimer.Start();
             rotationTimer.Start();
             //If networked you need to start the network timer
