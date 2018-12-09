@@ -321,6 +321,7 @@ namespace Server
                         byte[] buffera = encoder.GetBytes("collided");
                         clientStream.Write(buffera, 0, buffera.Length);
                         clientStream.Flush();
+                        ServerDataManager.Instance.ResetGame();
                     }
                     else if (ServerDataManager.Instance.CharactersWon)
                     {

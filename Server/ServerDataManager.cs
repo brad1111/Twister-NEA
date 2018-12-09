@@ -20,7 +20,7 @@ namespace Server
         public bool CharactersWon { get; private set; } = false;
         public bool ClientCrashed { get; private set; } = false;
         public bool ClientLeft { get; private set; } = false;
-        public bool GameOver => CharactersWon || ClientCrashed || this.ClientLeft;
+        public bool GameOver => CharactersWon || ClientCrashed || ClientLeft;
         public List<bool> ExitsOpen = new List<bool>();
         public Level.Level Level { get; set; }
 
@@ -32,6 +32,16 @@ namespace Server
         public void CharacterReady()
         {
             CharactersReady++;
+        }
+
+        /// <summary>
+        /// Resets the fact that the clients are ready
+        /// </summary>
+        public void ResetGame()
+        {
+            CharactersReady = 0;
+            CharactersCollided = false;
+            CharactersWon = false;
         }
 
         /// <summary>

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Common.Enums;
 using Nea_Prototype.Grid;
+using Nea_Prototype.Network;
 
 namespace Nea_Prototype.Pages
 {
@@ -35,11 +36,15 @@ namespace Nea_Prototype.Pages
         {
             InitializeComponent();
             //Stop the game
-            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage && !isNetworked)
             {
                 GameGridManager.Clear();
                 GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
                 gp.EndGame();
+            }
+            else if (isNetworked)
+            {
+                CommunicationManager.Instance.Stop();
             }
 
             this.level = level;
