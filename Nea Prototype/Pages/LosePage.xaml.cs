@@ -38,9 +38,7 @@ namespace Nea_Prototype.Pages
             //Stop the game
             if (TopFrameManager.Instance.MainFrame.Content is GamePage && !isNetworked)
             {
-                GameGridManager.Clear();
-                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-                gp.EndGame();
+                ClearLevel();
             }
             else if (isNetworked)
             {
@@ -53,8 +51,25 @@ namespace Nea_Prototype.Pages
             this.isNetworked = isNetworked;
         }
 
+        /// <summary>
+        /// Clears the game info (Make sure that you check TFM.Instance.MF.Content is Gamepage)
+        /// </summary>
+        private void ClearLevel()
+        {
+            GameGridManager.Clear();
+            GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+            gp.EndGame();
+        }
+
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
         {
+            //If networked then close everything
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                ClearLevel();
+            }
+
+
             //Clear the overlay frame
             TopFrameManager.Instance.ClearOverlayFrame();
             //Clear the main frame
