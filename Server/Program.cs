@@ -233,7 +233,7 @@ namespace Server
                 }
 
                 //If the client hasn't sent anything and it's not because its waiting then close the socket
-                if (bytesRead == 0 && !clientReady)
+                if (bytesRead == 0 && gameStartedOnThread && !clientReady)
                 {
                     //Client has disconnected so finish the thread.
                     Console.WriteLine("Character has left");
