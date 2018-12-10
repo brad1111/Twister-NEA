@@ -36,13 +36,17 @@ namespace Nea_Prototype.Pages
         {
             InitializeComponent();
             //Stop the game
-            if (TopFrameManager.Instance.MainFrame.Content is GamePage && !isNetworked)
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
-                ClearLevel();
-            }
-            else if (isNetworked)
-            {
-                CommunicationManager.Instance.Stop();
+                if (isNetworked)
+                {
+                    CommunicationManager.Instance.Stop();
+                    (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
+                }
+                else
+                {
+                    ClearLevel();
+                }
             }
 
             this.level = level;
