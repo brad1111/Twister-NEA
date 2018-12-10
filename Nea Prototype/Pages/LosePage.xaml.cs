@@ -88,7 +88,20 @@ namespace Nea_Prototype.Pages
             //No keydown event needed
         }
 
-        private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
+        private void MessageHandler(object sender, EventArgs e)
+        {
+            if (e is MessageEventArgs)
+            {
+                string message = (e as MessageEventArgs).Message;
+                if (message == "start")
+                {
+                    GoBackToGame();
+                    MessageManager.Instance.MessageHandler -= MessageHandler;
+                }
+            }
+        }
+
+        private void GoBackToGame()
         {
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
@@ -100,11 +113,29 @@ namespace Nea_Prototype.Pages
             {
                 TopFrameManager.Instance.MainFrame.GoBack();
             }
+
             //Close the overlay
             TopFrameManager.Instance.ClearOverlayFrame();
 
             //Recreate the gamepage
             TopFrameManager.Instance.MainFrame.Navigate(new GamePage(pt, et, level));
+        }
+
+        private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Check if networked
+            if (isNetworked)
+            {
+                //Then wait until the other client has started
+                btnRetry.Content += " (Waiting)";
+                //Wait until the other player has joined
+                MessageManager.Instance.MessageHandler += MessageHandler;
+            }
+            else
+            {
+                GoBackToGame();
+            }
+
         }
     }
 }
