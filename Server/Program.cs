@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Threading;
 using Common;
 using Common.Algorithms;
@@ -27,9 +28,9 @@ namespace Server
 
         private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2);
 
-        private readonly DispatcherTimer rotationTimer = new DispatcherTimer()
+        private readonly System.Timers.Timer rotationTimer = new System.Timers.Timer()
         {
-            Interval = new TimeSpan(0,0,1)
+            Interval = 1000 //Fire every second
         };
 
         static void Main(string[] args)
@@ -74,6 +75,7 @@ namespace Server
                     level.ExitLocation.HeightFromAnchor + level.ExitLocation.Length,
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()),
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()) + Constants.GRID_ITEM_WIDTH);
+                ServerDataManager.Instance.ExitsOpen.Add(false);
             }
         }
 
@@ -83,12 +85,12 @@ namespace Server
         /// </summary>
         private void SetupRotationTimer()
         {
-            rotationTimer.Tick += RotationTimer_Tick;
+            rotationTimer.Elapsed += RotationTimer_Tick;
         }
 
         private void RotationTimer_Tick(object s, EventArgs e)
         {
-            Console.WriteLine("Tick");
+            Console.WriteLine("Angle = {0} degrees", ServerDataManager.Instance.currentAngle);
             //Check for updates in rotation and hence exits openings
             double[] charactersXPositions = {ServerDataManager.Instance.character1.CharacterPosition.x, ServerDataManager.Instance.character2.CharacterPosition.x};
             Position[] charactersPositions = {ServerDataManager.Instance.character1.CharacterPosition, ServerDataManager.Instance.character2.CharacterPosition};
@@ -96,7 +98,9 @@ namespace Server
             int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
 
             double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
-            angleDelta += angleDelta;
+
+            double newAngle = ServerDataManager.Instance.currentAngle + angleDelta * multiplier;
+
 
             //Check for exit opening/closing
             if (multiplier == 0)
@@ -104,7 +108,6 @@ namespace Server
                 return;
                 //Dont bother if it isn't rotating
             }
-
 
             if (multiplier > 0)
             {
@@ -127,7 +130,7 @@ namespace Server
                 //Negative rotation
                 for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
                 {
-                    if (ExitingManager.Instance.AnglesToClose[i] > ServerDataManager.Instance.currentAngle)
+                    if (ExitingManager.Instance.AnglesToClose[i] > newAngle)
                     {
                         ServerDataManager.Instance.ExitsOpen[i] = true;
                     }
@@ -138,6 +141,9 @@ namespace Server
                     }
                 }
             }
+
+            ServerDataManager.Instance.currentAngle = newAngle;
+            //Update currentangle
         }
 
         /// <summary>
@@ -386,7 +392,7 @@ namespace Server
                 {
                     //If the game has started overall, tell the client and start the game on this thread
                     gameStartedOnThread = true;
-                    if (!rotationTimer.IsEnabled)
+                    if (!rotationTimer.Enabled)
                     {
                         rotationTimer.Start();
                     }
