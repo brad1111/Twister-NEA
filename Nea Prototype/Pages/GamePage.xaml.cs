@@ -289,12 +289,12 @@ namespace Nea_Prototype.Pages
                         {
                             int j = i + 3;
                             //For each is left these are the exit conditions
-                            //bool isGateOpen = GameGridManager.Instance.ExitLocations[i].CanExit;
-                            //if (!bool.TryParse(messageComponents[j], out isGateOpen))
-                            //{
-                            //    Console.WriteLine($"Couldn't resolve messageComponents[{j}] as a boolean. Value: {messageComponents[j]}");
-                            //}
-                            //GameGridManager.Instance.ExitLocations[i].CanExit = isGateOpen;
+                            bool isGateOpen = GameGridManager.Instance.ExitLocations[i].CanExit;
+                            if (!bool.TryParse(messageComponents[j], out isGateOpen))
+                            {
+                                Console.WriteLine($"Couldn't resolve messageComponents[{j}] as a boolean. Value: {messageComponents[j]}");
+                            }
+                            GameGridManager.Instance.ExitLocations[i].CanExit = isGateOpen;
                         }
                     }));
                 }

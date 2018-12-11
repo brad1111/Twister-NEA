@@ -5,6 +5,7 @@ using System.Windows.Media.Animation;
 using Common.Enums;
 using Nea_Prototype.Algorithms;
 using Nea_Prototype.Characters;
+using Nea_Prototype.Network;
 using Newtonsoft.Json;
 
 namespace Nea_Prototype.Grid
@@ -83,8 +84,11 @@ namespace Nea_Prototype.Grid
                 Instance.PreviousAngle = newAngle;
             }
 
-            //Check for updates
-            ExitingManager.CheckForUpdates(Instance.PreviousAngle, angleDiff);
+            //Check for updates for exits (if not networked)
+            if (!CommunicationManager.Instance.IsNetworked)
+            {
+                ExitingManager.CheckForUpdates(Instance.PreviousAngle, angleDiff);
+            }
         }
 
 
