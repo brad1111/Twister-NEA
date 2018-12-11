@@ -198,6 +198,7 @@ namespace Server
             bool gameStartedOnThread = false;
             bool clientConnected = true;
             bool clientReady = false;
+            bool restartingGame = false;
 
             while (clientConnected)
             {
@@ -206,7 +207,7 @@ namespace Server
                 {
                     Console.WriteLine($"Waiting for data from client {debuggingCharacterNo}");
                     //If the client isn't waiting block the thread until the client sends a message
-                    if (gameStartedOnThread || !mapDownloaded)
+                    if (gameStartedOnThread || !mapDownloaded || restartingGame)
                     {
                         bytesRead = clientStream.Read(message, 0, 4096);
                     }
@@ -322,6 +323,9 @@ namespace Server
                         clientStream.Write(buffera, 0, buffera.Length);
                         clientStream.Flush();
                         clientReady = false;
+                        gameStartedOnThread = false;
+                        restartingGame = true;
+                        mapDownloaded = false; //We need this for the character to ready up
                         ServerDataManager.Instance.ResetGame();
                     }
                     else if (ServerDataManager.Instance.CharactersWon)
