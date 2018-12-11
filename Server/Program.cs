@@ -101,6 +101,16 @@ namespace Server
 
             double newAngle = ServerDataManager.Instance.currentAngle + angleDelta * multiplier;
 
+            //If the angle is too large or small set it to the max/min value respectively
+            if(newAngle < -90)
+            {
+                newAngle = -90;
+            }
+            else if (newAngle > 90)
+            {
+                newAngle = 90;
+            }
+
 
             //Check for exit opening/closing
             if (multiplier == 0)
