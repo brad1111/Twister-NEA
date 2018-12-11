@@ -88,23 +88,7 @@ namespace Nea_Prototype.Pages
             //No keydown event needed
         }
 
-        private bool gameLoaded = false;
-
-        private void MessageHandler(object sender, EventArgs e)
-        {
-            if (e is MessageEventArgs)
-            {
-                string message = (e as MessageEventArgs).Message;
-                if (message == "start")
-                {
-                    gameLoaded = true;
-                    GoBackToGame();
-                    MessageManager.Instance.MessageHandler -= MessageHandler;
-                }
-            }
-        }
-
-        private void GoBackToGame()
+        private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
@@ -116,51 +100,11 @@ namespace Nea_Prototype.Pages
             {
                 TopFrameManager.Instance.MainFrame.GoBack();
             }
-
             //Close the overlay
             TopFrameManager.Instance.ClearOverlayFrame();
 
             //Recreate the gamepage
             TopFrameManager.Instance.MainFrame.Navigate(new GamePage(pt, et, level));
-        }
-
-        private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
-        {
-            //Check if networked
-            if (isNetworked)
-            {
-                //Then wait until the other client has started
-                btnRetry.Content += " (Waiting)";
-                btnRetry.IsEnabled = false;
-                //Wait until the other player has joined
-                MessageManager.Instance.MessageHandler += MessageHandler;
-                WaitTimer();
-            }
-            else
-            {
-                GoBackToGame();
-            }
-
-        }
-
-        private void WaitTimer()
-        {
-            Thread waitThread = new Thread(new ThreadStart(() =>
-            {
-                while (!gameLoaded)
-                {
-                    //Tell the server we have already received the map so we should be ready to play
-                    MessageManager.Instance.SendMessage("received");
-                    Thread.Sleep(1000);
-                }
-                //Go back to game
-                this.Dispatcher.Invoke(new Action(() =>
-                {
-                    GoBackToGame();
-                }));
-            }));
-            waitThread.Start();
-
         }
     }
 }
