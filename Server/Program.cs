@@ -26,6 +26,8 @@ namespace Server
         private readonly int PORT_NO = 26332;
         private readonly string levelLocation = String.Empty;
 
+        private ASCIIEncoding encoder = new ASCIIEncoding();
+
         private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2);
 
         private readonly System.Timers.Timer rotationTimer = new System.Timers.Timer()
@@ -261,7 +263,6 @@ namespace Server
                 }
 
                 //msg recieved
-                ASCIIEncoding encoder = new ASCIIEncoding();
 
                 string bufferMessage = encoder.GetString(message, 0, bytesRead);
                 Console.WriteLine(bufferMessage);
@@ -272,20 +273,14 @@ namespace Server
                 {
                     if (ServerDataManager.Instance.ClientCrashed)
                     {
-                        byte[] buffer =
-                            encoder.GetBytes("crash");
-                        clientStream.Write(buffer, 0, buffer.Length);
-                        clientStream.Flush();
+                        SendMessage("crash", ref clientStream);
                         threadClient.Dispose();
                         ClientsStack.Clear();
                         break;
                     }
                     else if(ServerDataManager.Instance.ClientLeft)
                     {
-                        byte[] buffer =
-                            encoder.GetBytes("close");
-                        clientStream.Write(buffer, 0, buffer.Length);
-                        clientStream.Flush();
+                        SendMessage("close", ref clientStream);
                         threadClient.Dispose();
                         ClientsStack.Clear();
                         break;
@@ -335,9 +330,7 @@ namespace Server
                     //-----------Section to send message back --------
                     if (ServerDataManager.Instance.CharactersCollided)
                     {
-                        byte[] buffera = encoder.GetBytes("collided");
-                        clientStream.Write(buffera, 0, buffera.Length);
-                        clientStream.Flush();
+                        SendMessage("collided", ref clientStream);
                         clientReady = false;
                         gameStartedOnThread = false;
                         restartingGame = true;
@@ -346,9 +339,7 @@ namespace Server
                     }
                     else if (ServerDataManager.Instance.CharactersWon)
                     {
-                        byte[] buffera = encoder.GetBytes("won");
-                        clientStream.Write(buffera, 0, buffera.Length);
-                        clientStream.Flush();
+                        SendMessage("won", ref clientStream);
                     }
 
                     //Converts character 1 to character 2 and vice versa
@@ -366,19 +357,14 @@ namespace Server
                         exits += openExit.ToString() + ",";
                     }
 
-                    byte[] buffer =
-                        encoder.GetBytes(
-                            $"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{exits}");
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    SendMessage($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{exits}",
+                                ref clientStream);
                     continue;
                 }
                 else if (!mapSent)
                 {
                     //Send map over (in JSON)
-                    byte[] buffer = encoder.GetBytes(ServerDataManager.Instance.levelJson);
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    SendMessage(ServerDataManager.Instance.levelJson, ref clientStream);
                     mapSent = true;
                     continue;
                 }
@@ -406,9 +392,7 @@ namespace Server
                     {
                         rotationTimer.Start();
                     }
-                    byte[] buffer = encoder.GetBytes("start");
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    SendMessage("start", ref clientStream);
                     Console.WriteLine($"---------Game started on {debuggingCharacterNo}---------");
                 }
             }
@@ -439,6 +423,17 @@ namespace Server
             {
                 ServerDataManager.Instance.CharactersWon = true;
             }
+        }
+
+        /// <summary>
+        /// Sends a message over the network to the client
+        /// </summary>
+        /// <param name="message">The message to be sent</param>
+        /// <param name="clientStream">The stream for the message to be sent on</param>
+        private void SendMessage(string message, ref NetworkStream clientStream)
+        {
+            byte[] buffer = encoder.GetBytes(message);
+            clientStream.Write(buffer, 0, buffer.Length);
         }
     }
 }
