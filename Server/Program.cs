@@ -30,7 +30,7 @@ namespace Server
 
         private readonly System.Timers.Timer rotationTimer = new System.Timers.Timer()
         {
-            Interval = 1000 //Fire every second
+            Interval = 250 //Fire every 1/4 second
         };
 
         static void Main(string[] args)
@@ -97,7 +97,7 @@ namespace Server
             int[] charactersWeights = {1, 1};
             int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
 
-            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
+            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 0.25);
 
             double newAngle = ServerDataManager.Instance.currentAngle + angleDelta * multiplier;
 
