@@ -17,7 +17,7 @@ namespace Server
 
         public bool GameStarted => CharactersReady == 2; //Only start the game if both characters are ready
         public bool CharactersCollided { get; set; } = false;
-        public bool CharactersWon { get; private set; } = false;
+        public bool CharactersWon { get; set; } = false;
         public bool ClientCrashed { get; private set; } = false;
         public bool ClientLeft { get; private set; } = false;
         public bool GameOver => CharactersWon || ClientCrashed || ClientLeft;

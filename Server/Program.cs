@@ -432,6 +432,13 @@ namespace Server
             {
                 ServerDataManager.Instance.CharactersCollided = true;
             }   
+
+            //Exit collision detection
+            if(char1Left < 0 || char1Left > Constants.GRID_WIDTH ||
+               char1Top < 0 || char1Top > Constants.GRID_WIDTH)
+            {
+                ServerDataManager.Instance.CharactersWon = true;
+            }
         }
     }
 }
