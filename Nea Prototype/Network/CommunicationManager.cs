@@ -107,10 +107,7 @@ namespace Nea_Prototype.Network
             //Also move the topframe back to main menu (on a different thread so just do it)
             TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
             {
-                while (TopFrameManager.Instance.MainFrame.CanGoBack)
-                {
-                    TopFrameManager.Instance.MainFrame.GoBack();
-                }
+                TopFrameManager.Instance.GoToMainMenu();
             }));
             MessageManager.Instance.ClearServer();
             ClearEnemyTypes();

@@ -47,20 +47,7 @@ namespace Nea_Prototype.Pages
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
             open = false;
-            //End the game completely
-            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
-            {
-                GameGridManager.Clear();
-                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-                gp.EndGame();
-            }
-            //Clear the overlay frame
-            TopFrameManager.Instance.ClearOverlayFrame();
-            //Clear the main frame
-            while (TopFrameManager.Instance.MainFrame.CanGoBack)
-            {
-                TopFrameManager.Instance.MainFrame.GoBack();
-            }
+            TopFrameManager.Instance.GoToMainMenu();
         }
 
         public void Page_KeyDown(object sender, KeyEventArgs e)

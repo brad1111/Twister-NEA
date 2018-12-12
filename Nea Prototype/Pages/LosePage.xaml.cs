@@ -38,14 +38,10 @@ namespace Nea_Prototype.Pages
             //Stop the game
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
+                (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
                 if (isNetworked)
                 {
                     CommunicationManager.Instance.Stop();
-                    (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
-                }
-                else
-                {
-                    ClearLevel();
                 }
             }
 
@@ -55,32 +51,9 @@ namespace Nea_Prototype.Pages
             this.isNetworked = isNetworked;
         }
 
-        /// <summary>
-        /// Clears the game info (Make sure that you check TFM.Instance.MF.Content is Gamepage)
-        /// </summary>
-        private void ClearLevel()
-        {
-            GameGridManager.Clear();
-            GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-            gp.EndGame();
-        }
-
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
         {
-            //If networked then close everything
-            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
-            {
-                ClearLevel();
-            }
-
-
-            //Clear the overlay frame
-            TopFrameManager.Instance.ClearOverlayFrame();
-            //Clear the main frame
-            while (TopFrameManager.Instance.MainFrame.CanGoBack)
-            {
-                TopFrameManager.Instance.MainFrame.GoBack();
-            }
+            TopFrameManager.Instance.GoToMainMenu();
         }
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
@@ -90,19 +63,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
-            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
-            {
-                TopFrameManager.Instance.MainFrame.Content = null;
-            }
-
-            //Go back to beginning
-            while (TopFrameManager.Instance.MainFrame.CanGoBack)
-            {
-                TopFrameManager.Instance.MainFrame.GoBack();
-            }
-            //Close the overlay
-            TopFrameManager.Instance.ClearOverlayFrame();
-
+            TopFrameManager.Instance.GoToMainMenu();
             //Recreate the gamepage
             TopFrameManager.Instance.MainFrame.Navigate(new GamePage(pt, et, level));
         }

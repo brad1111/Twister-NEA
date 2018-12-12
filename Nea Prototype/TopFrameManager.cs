@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Controls;
+using Nea_Prototype.Grid;
+using Nea_Prototype.Pages;
 
 namespace Nea_Prototype
 {
@@ -70,6 +72,24 @@ namespace Nea_Prototype
         public void Focus()
         {
             MainWindow.Focus();
+        }
+
+        public void GoToMainMenu()
+        {
+            //End the game completely if running
+            if (MainFrame.Content is GamePage)
+            {
+                GameGridManager.Clear();
+                GamePage gp = (GamePage) MainFrame.Content;
+                gp.EndGame();
+            }
+            //Clear the overlay frame
+            ClearOverlayFrame();
+            //Clear the main frame
+            while (MainFrame.CanGoBack)
+            {
+                MainFrame.GoBack();
+            }
         }
 
         /// <summary>

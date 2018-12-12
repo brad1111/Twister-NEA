@@ -108,15 +108,8 @@ namespace Nea_Prototype.Network
                 if (IsConnected)
                 {
                     //The server has crashed or something has happened
-                    TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(() =>
-                    {
-
-                        while (TopFrameManager.Instance.MainFrame.CanGoBack)
-                        {
-                            TopFrameManager.Instance.MainFrame.GoBack();
-                            //Go back to the beginning.
-                        }
-                    }));
+                    TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(
+                        () => TopFrameManager.Instance.GoToMainMenu()));
                     MessageBox.Show($"Server has disconnected: {e}", "Error");
                     //Close the game
                 }
