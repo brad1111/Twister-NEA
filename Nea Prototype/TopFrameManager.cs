@@ -54,7 +54,7 @@ namespace Nea_Prototype
         /// </summary>
         public void TryKillServer()
         {
-            if (ServerProcess != null)
+            if (ServerProcess != null && !ServerProcess.HasExited)
             {
                 serverProcess.Kill();
             }

@@ -30,11 +30,15 @@ namespace Nea_Prototype.Pages
             InitializeComponent();
             open = true;
             //Stop the game
+            //if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            //{
+            //    GameGridManager.Clear();
+            //    GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+            //    gp.EndGame();
+            //}
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
-                GameGridManager.Clear();
-                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-                gp.EndGame();
+                (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
             }
         }
 
@@ -43,6 +47,13 @@ namespace Nea_Prototype.Pages
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
             open = false;
+            //End the game completely
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                GameGridManager.Clear();
+                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+                gp.EndGame();
+            }
             //Clear the overlay frame
             TopFrameManager.Instance.ClearOverlayFrame();
             //Clear the main frame
