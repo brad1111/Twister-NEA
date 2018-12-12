@@ -118,10 +118,9 @@ namespace Nea_Prototype.Pages
                 //If server is not found then stop and tell the user
                 MessageBox.Show("Could not find server.exe", "Error");
             }
-            Process.Start("server.exe", "26332 testing.json");
-            Focus();
-            //Wait a sec and try to connect
 
+            TopFrameManager.Instance.ServerProcess = Process.Start("server.exe", "26332 testing.json");
+            //Wait a sec and try to connect
             Thread connectThread = new Thread(new ThreadStart(() =>
             {
                 while (!MessageManager.Instance.IsConnected)
@@ -153,6 +152,7 @@ namespace Nea_Prototype.Pages
                 //Start the waiting for the game
                 Dispatcher.Invoke(new Action(() =>
                 {
+                    TopFrameManager.Instance.Focus();
                     WaitPage wp = new WaitPage(pt:ProtagonistType.Local, et:EnemyType.Remote, level: levelFile);
                     TopFrameManager.Instance.MainFrame.Navigate(wp);
                 }));

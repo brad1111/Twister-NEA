@@ -27,6 +27,7 @@ namespace Nea_Prototype
         public MainWindow()
         {
             InitializeComponent();
+            TopFrameManager.Instance.MainWindow = this;
             TopFrameManager.Instance.MainFrame = frmMainFrame;
             TopFrameManager.Instance.OverlayFrame = frmOverlay;
             frmMainFrame.Navigate(menu);
@@ -35,6 +36,22 @@ namespace Nea_Prototype
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             (frmMainFrame.Content as IKeyboardInputs)?.Page_KeyDown(sender, e);
+        }
+
+        private void MainWindow_OnClosed(object sender, EventArgs e)
+        {
+            //Kill the server
+            TopFrameManager.Instance.TryKillServer();
+            //Try to kill connecting etc.
+
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                (TopFrameManager.Instance.MainFrame.Content as GamePage).EndGame();
+            }
+            else if (TopFrameManager.Instance.MainFrame.Content is WaitPage)
+            {
+                (TopFrameManager.Instance.MainFrame.Content as WaitPage).CancelWaiting();
+            }
         }
     }
 }
