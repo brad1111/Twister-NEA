@@ -9,7 +9,7 @@
         Closed="MainWindow_OnClosed">
     <Grid>
         <!--The frame for the game/menus-->
-        <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden"  IsTabStop="False"/>
+        <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden"  IsTabStop="False" Navigated="FrmMainFrame_OnNavigated"/>
         <!--The frame for overlays such as debug overlay or pause menu-->
         <Frame x:Name="frmOverlay" NavigationUIVisibility="Hidden" IsTabStop="False"/>
     </Grid>

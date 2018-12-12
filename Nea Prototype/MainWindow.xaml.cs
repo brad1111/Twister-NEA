@@ -53,5 +53,14 @@ namespace Nea_Prototype
                 (TopFrameManager.Instance.MainFrame.Content as WaitPage).CancelWaiting();
             }
         }
+
+        private void FrmMainFrame_OnNavigated(object sender, NavigationEventArgs e)
+        {
+            if (e.Content is MainMenu)
+            {
+                //Going back to the main menu should try to close the server.
+                TopFrameManager.Instance.TryCloseServer();
+            }
+        }
     }
 }
