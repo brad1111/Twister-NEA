@@ -118,8 +118,16 @@ namespace Nea_Prototype.Pages
                 //If server is not found then stop and tell the user
                 MessageBox.Show("Could not find server.exe", "Error");
             }
+            
+            Process process = new Process();
 
-            TopFrameManager.Instance.ServerProcess = Process.Start("server.exe", "26332 testing.json");
+            process.StartInfo.FileName = "server.exe";
+            process.StartInfo.Arguments = "26332 testing.json";
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+            process.Start();
+
+            TopFrameManager.Instance.ServerProcess = process;
+
             //Wait a sec and try to connect
             Thread connectThread = new Thread(new ThreadStart(() =>
             {
