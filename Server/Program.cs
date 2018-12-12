@@ -340,6 +340,10 @@ namespace Server
                     else if (ServerDataManager.Instance.CharactersWon)
                     {
                         SendMessage("won", ref clientStream);
+                        clientReady = false;
+                        gameStartedOnThread = false;
+                        mapDownloaded = false;
+                        ServerDataManager.Instance.ResetGame();
                     }
 
                     //Converts character 1 to character 2 and vice versa
