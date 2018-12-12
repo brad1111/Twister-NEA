@@ -49,7 +49,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnExit_OnClick(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
+            TopFrameManager.Instance.CloseGame();
         }
 
         public void Page_KeyDown(object sender, KeyEventArgs e)

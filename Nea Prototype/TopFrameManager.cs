@@ -60,6 +60,11 @@ namespace Nea_Prototype
             }
         }
 
+        public void CloseGame()
+        {
+            MainWindow.Close();
+        }
+
         public MainWindow MainWindow { private get; set; }
 
         public void Focus()

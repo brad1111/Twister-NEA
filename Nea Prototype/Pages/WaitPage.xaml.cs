@@ -74,7 +74,6 @@ namespace Nea_Prototype.Pages
                 {
                     gameStarted = true;
                 }
-                
             }
         }
 
