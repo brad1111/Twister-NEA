@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using Common;
 using Common.Grid;
 using Common.Level;
 using Newtonsoft.Json;
@@ -23,11 +24,24 @@ namespace Server.Level
             {
                 for (int x = 0; x < gridStartLocations.GetLength(1); x++)
                 {
-                    //If grid is an exitable block add it to InternalExits with the relevant information
-                    if (gridStartLocations[y, x] == 5)
+                    switch (gridStartLocations[y, x])
                     {
-                        InternalExit exit = new InternalExit(new Position(x, y));
-                        exits.Add(exit);
+                        //Protagonist
+                        case 2:
+                            ServerDataManager.Instance.character1 = new Character(1,x * Constants.GRID_ITEM_WIDTH,
+                                                                                    y * Constants.GRID_ITEM_WIDTH);
+                            break;
+                        //Enemy
+                        case 3:
+                            ServerDataManager.Instance.character2 = new Character(2,x * Constants.GRID_ITEM_WIDTH,
+                                y * Constants.GRID_ITEM_WIDTH);
+                            break;
+                        //If grid is an exitable block add it to InternalExits with the relevant information
+                        case 5:
+                            InternalExit exit = new InternalExit(new Position(x, y));
+                            exits.Add(exit);
+                            break;
+                        
                     }
                 }
             }

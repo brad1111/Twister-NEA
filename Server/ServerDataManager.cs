@@ -12,8 +12,8 @@ namespace Server
 
         public static ServerDataManager Instance { get; } = new ServerDataManager();
 
-        public Character character1 = new Character(1);
-        public Character character2 = new Character(2);
+        public Character character1 = null;
+        public Character character2 = null;
 
         public bool GameStarted => CharactersReady == 2; //Only start the game if both characters are ready
         public bool CharactersCollided { get; set; } = false;

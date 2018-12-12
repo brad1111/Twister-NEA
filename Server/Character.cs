@@ -5,11 +5,10 @@ namespace Server
 {
     public class Character
     {
-        public Character(int charNumber)
+        public Character(int charNumber, int startX, int startY)
         {
             characterNumber = charNumber;
-            int tempPos = charNumber == 1 ? Constants.GRID_ITEM_WIDTH : Constants.GRID_WIDTH - Constants.GRID_ITEM_WIDTH;
-            CharacterPosition = new Position(tempPos,tempPos);
+            CharacterPosition = new Position(startX,startY);
         }
 
         private int characterNumber { get; }
