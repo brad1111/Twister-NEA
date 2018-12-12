@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Threading;
 using Common;
 using Common.Algorithms;
@@ -25,11 +26,13 @@ namespace Server
         private readonly int PORT_NO = 26332;
         private readonly string levelLocation = String.Empty;
 
+        private ASCIIEncoding encoder = new ASCIIEncoding();
+
         private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2);
 
-        private readonly DispatcherTimer rotationTimer = new DispatcherTimer()
+        private readonly System.Timers.Timer rotationTimer = new System.Timers.Timer()
         {
-            Interval = new TimeSpan(0,0,1)
+            Interval = 250 //Fire every 1/4 second
         };
 
         static void Main(string[] args)
@@ -74,6 +77,7 @@ namespace Server
                     level.ExitLocation.HeightFromAnchor + level.ExitLocation.Length,
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()),
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()) + Constants.GRID_ITEM_WIDTH);
+                ServerDataManager.Instance.ExitsOpen.Add(false);
             }
         }
 
@@ -83,66 +87,75 @@ namespace Server
         /// </summary>
         private void SetupRotationTimer()
         {
-            rotationTimer.Tick += (s, e) =>
+            rotationTimer.Elapsed += RotationTimer_Tick;
+        }
+
+        private void RotationTimer_Tick(object s, EventArgs e)
+        {
+            Console.WriteLine("Angle = {0} degrees", ServerDataManager.Instance.currentAngle);
+            //Check for updates in rotation and hence exits openings
+            double[] charactersXPositions = {ServerDataManager.Instance.character1.CharacterPosition.x, ServerDataManager.Instance.character2.CharacterPosition.x};
+            Position[] charactersPositions = {ServerDataManager.Instance.character1.CharacterPosition, ServerDataManager.Instance.character2.CharacterPosition};
+            int[] charactersWeights = {1, 1};
+            int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
+
+            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 0.25);
+
+            double newAngle = ServerDataManager.Instance.currentAngle + angleDelta * multiplier;
+
+            //If the angle is too large or small set it to the max/min value respectively
+            if(newAngle < -90)
             {
-                //Check for updates in rotation and hence exits openings
-                double[] charactersXPositions =
-                {
-                    ServerDataManager.Instance.character1.CharacterPosition.x,
-                    ServerDataManager.Instance.character2.CharacterPosition.x
-                };
-                Position[] charactersPositions =
-                {
-                    ServerDataManager.Instance.character1.CharacterPosition,
-                    ServerDataManager.Instance.character2.CharacterPosition
-                };
-                int[] charactersWeights = {1, 1};
-                int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights,
-                    ref ServerDataManager.Instance.currentAngle);
-
-                double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 1);
-                angleDelta += angleDelta;
-
-                //Check for exit opening/closing
-                if (multiplier == 0)
-                {
-                    return;
-                    //Dont bother if it isn't rotating
-                }
+                newAngle = -90;
+            }
+            else if (newAngle > 90)
+            {
+                newAngle = 90;
+            }
 
 
-                if (multiplier > 0)
+            //Check for exit opening/closing
+            if (multiplier == 0)
+            {
+                return;
+                //Dont bother if it isn't rotating
+            }
+
+            if (multiplier > 0)
+            {
+                //Positive rotation
+                for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
                 {
-                    //Positive rotation
-                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    if (ExitingManager.Instance.AnglesToOpen[i] < ServerDataManager.Instance.currentAngle)
                     {
-                        if (ExitingManager.Instance.AnglesToOpen[i] < ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = true;
-                        }
-                        if (ExitingManager.Instance.AnglesToClose[i] < ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = false;
-                        }
+                        ServerDataManager.Instance.ExitsOpen[i] = true;
+                    }
+
+                    if (ExitingManager.Instance.AnglesToClose[i] < ServerDataManager.Instance.currentAngle)
+                    {
+                        ServerDataManager.Instance.ExitsOpen[i] = false;
                     }
                 }
-                else /*if (rotationMultiplier > 0)*/
+            }
+            else /*if (rotationMultiplier > 0)*/
+            {
+                //Negative rotation
+                for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
                 {
-                    //Negative rotation
-                    for (int i = 0; i < ExitingManager.Instance.AnglesToOpen.Count; i++)
+                    if (ExitingManager.Instance.AnglesToClose[i] > newAngle)
                     {
-                        if (ExitingManager.Instance.AnglesToClose[i] > ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = true;
-                        }
-                        if (ExitingManager.Instance.AnglesToOpen[i] > ServerDataManager.Instance.currentAngle)
-                        {
-                            ServerDataManager.Instance.ExitsOpen[i] = false;
-                        }
+                        ServerDataManager.Instance.ExitsOpen[i] = true;
+                    }
 
+                    if (ExitingManager.Instance.AnglesToOpen[i] > ServerDataManager.Instance.currentAngle)
+                    {
+                        ServerDataManager.Instance.ExitsOpen[i] = false;
                     }
                 }
-            };
+            }
+
+            ServerDataManager.Instance.currentAngle = newAngle;
+            //Update currentangle
         }
 
         /// <summary>
@@ -153,6 +166,8 @@ namespace Server
             level = LevelIO.ReadJSON(levelLocation);
             level.SetupLevel();
             SetupExits();
+            SetupRotationTimer();
+            ServerDataManager.Instance.Level = level;
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
             //New thread
             this.listenThread = new Thread(new ThreadStart(ClientConnection));
@@ -201,6 +216,7 @@ namespace Server
             bool gameStartedOnThread = false;
             bool clientConnected = true;
             bool clientReady = false;
+            bool restartingGame = false;
 
             while (clientConnected)
             {
@@ -209,7 +225,7 @@ namespace Server
                 {
                     Console.WriteLine($"Waiting for data from client {debuggingCharacterNo}");
                     //If the client isn't waiting block the thread until the client sends a message
-                    if (gameStartedOnThread || !mapDownloaded)
+                    if (gameStartedOnThread || !mapDownloaded || restartingGame)
                     {
                         bytesRead = clientStream.Read(message, 0, 4096);
                     }
@@ -236,7 +252,7 @@ namespace Server
                 }
 
                 //If the client hasn't sent anything and it's not because its waiting then close the socket
-                if (bytesRead == 0 && !clientReady)
+                if (bytesRead == 0 && gameStartedOnThread && !clientReady)
                 {
                     //Client has disconnected so finish the thread.
                     Console.WriteLine("Character has left");
@@ -247,7 +263,6 @@ namespace Server
                 }
 
                 //msg recieved
-                ASCIIEncoding encoder = new ASCIIEncoding();
 
                 string bufferMessage = encoder.GetString(message, 0, bytesRead);
                 Console.WriteLine(bufferMessage);
@@ -258,20 +273,14 @@ namespace Server
                 {
                     if (ServerDataManager.Instance.ClientCrashed)
                     {
-                        byte[] buffer =
-                            encoder.GetBytes("crash");
-                        clientStream.Write(buffer, 0, buffer.Length);
-                        clientStream.Flush();
+                        SendMessage("crash", ref clientStream);
                         threadClient.Dispose();
                         ClientsStack.Clear();
                         break;
                     }
                     else if(ServerDataManager.Instance.ClientLeft)
                     {
-                        byte[] buffer =
-                            encoder.GetBytes("close");
-                        clientStream.Write(buffer, 0, buffer.Length);
-                        clientStream.Flush();
+                        SendMessage("close", ref clientStream);
                         threadClient.Dispose();
                         ClientsStack.Clear();
                         break;
@@ -317,6 +326,26 @@ namespace Server
 
                     CollisionDetectionChecks();
 
+
+                    //-----------Section to send message back --------
+                    if (ServerDataManager.Instance.CharactersCollided)
+                    {
+                        SendMessage("collided", ref clientStream);
+                        clientReady = false;
+                        gameStartedOnThread = false;
+                        restartingGame = true;
+                        mapDownloaded = false; //We need this for the character to ready up
+                        ServerDataManager.Instance.ResetGame();
+                    }
+                    else if (ServerDataManager.Instance.CharactersWon)
+                    {
+                        SendMessage("won", ref clientStream);
+                        clientReady = false;
+                        gameStartedOnThread = false;
+                        mapDownloaded = false;
+                        ServerDataManager.Instance.ResetGame();
+                    }
+
                     //Converts character 1 to character 2 and vice versa
                     int otherCharacterNumber = characterNo == 1 ? 2 : 1;
                     double otherCharacterX = otherCharacterNumber == 1
@@ -332,19 +361,14 @@ namespace Server
                         exits += openExit.ToString() + ",";
                     }
 
-                    byte[] buffer =
-                        encoder.GetBytes(
-                            $"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{ServerDataManager.Instance.CharactersCollided},{ServerDataManager.Instance.CharactersWon},{exits}");
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    SendMessage($"{otherCharacterNumber},{otherCharacterX},{otherCharacterY},{exits}",
+                                ref clientStream);
                     continue;
                 }
                 else if (!mapSent)
                 {
-                    //Send map over (would be in JSON)
-                    byte[] buffer = encoder.GetBytes(ServerDataManager.Instance.levelJson);
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    //Send map over (in JSON)
+                    SendMessage(ServerDataManager.Instance.levelJson, ref clientStream);
                     mapSent = true;
                     continue;
                 }
@@ -368,13 +392,11 @@ namespace Server
                 {
                     //If the game has started overall, tell the client and start the game on this thread
                     gameStartedOnThread = true;
-                    if (!rotationTimer.IsEnabled)
+                    if (!rotationTimer.Enabled)
                     {
                         rotationTimer.Start();
                     }
-                    byte[] buffer = encoder.GetBytes("start");
-                    clientStream.Write(buffer, 0, buffer.Length);
-                    clientStream.Flush();
+                    SendMessage("start", ref clientStream);
                     Console.WriteLine($"---------Game started on {debuggingCharacterNo}---------");
                 }
             }
@@ -397,7 +419,25 @@ namespace Server
                 char2Left, char2Top))
             {
                 ServerDataManager.Instance.CharactersCollided = true;
+            }   
+
+            //Exit collision detection
+            if(char1Left < 0 || char1Left > Constants.GRID_WIDTH ||
+               char1Top < 0 || char1Top > Constants.GRID_WIDTH)
+            {
+                ServerDataManager.Instance.CharactersWon = true;
             }
+        }
+
+        /// <summary>
+        /// Sends a message over the network to the client
+        /// </summary>
+        /// <param name="message">The message to be sent</param>
+        /// <param name="clientStream">The stream for the message to be sent on</param>
+        private void SendMessage(string message, ref NetworkStream clientStream)
+        {
+            byte[] buffer = encoder.GetBytes(message);
+            clientStream.Write(buffer, 0, buffer.Length);
         }
     }
 }

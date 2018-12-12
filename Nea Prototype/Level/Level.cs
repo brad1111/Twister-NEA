@@ -15,6 +15,7 @@ using Common;
 using Common.Enums;
 using Common.Grid;
 using Common.Level;
+using Nea_Prototype.Network;
 using Nea_Prototype.Pages;
 
 namespace Nea_Prototype.Level
@@ -225,10 +226,10 @@ namespace Nea_Prototype.Level
                 }
             }
 
-            if (Collisions.EnemyCollisionDetection())
+            if (Collisions.EnemyCollisionDetection() && !CommunicationManager.Instance.IsNetworked)
             {
                 //Goto the lose page
-                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(this, protagonistType, enemyType));
+                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(this, protagonistType, enemyType, isNetworked:false));
                 if (GameGridManager.Instance.Characters is null)
                 {
                     //Game is over so return

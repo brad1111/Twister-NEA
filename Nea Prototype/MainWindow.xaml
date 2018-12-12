@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Nea_Prototype"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" KeyDown="Window_KeyDown">
+        Title="MainWindow" Height="450" Width="800" KeyDown="Window_KeyDown"
+        Closed="MainWindow_OnClosed">
     <Grid>
         <!--The frame for the game/menus-->
-        <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden"  IsTabStop="False"/>
+        <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden"  IsTabStop="False" Navigated="FrmMainFrame_OnNavigated"/>
         <!--The frame for overlays such as debug overlay or pause menu-->
         <Frame x:Name="frmOverlay" NavigationUIVisibility="Hidden" IsTabStop="False"/>
     </Grid>

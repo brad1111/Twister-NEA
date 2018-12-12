@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Common.Enums;
 using Nea_Prototype.Grid;
+using Nea_Prototype.Network;
 
 namespace Nea_Prototype.Pages
 {
@@ -26,28 +27,53 @@ namespace Nea_Prototype.Pages
         private Level.Level level;
         private ProtagonistType pt;
         private EnemyType et;
+        private bool isNetworked;
 
         /// <summary>
         /// Only call this on the overlay panel
         /// </summary>
-        public LosePage(Level.Level level, ProtagonistType pt, EnemyType et)
+        public LosePage(Level.Level level, ProtagonistType pt, EnemyType et, bool isNetworked)
         {
             InitializeComponent();
             //Stop the game
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
-                GameGridManager.Clear();
-                GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-                gp.EndGame();
+                if (isNetworked)
+                {
+                    CommunicationManager.Instance.Stop();
+                    (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
+                }
+                else
+                {
+                    ClearLevel();
+                }
             }
 
             this.level = level;
             this.pt = pt;
             this.et = et;
+            this.isNetworked = isNetworked;
+        }
+
+        /// <summary>
+        /// Clears the game info (Make sure that you check TFM.Instance.MF.Content is Gamepage)
+        /// </summary>
+        private void ClearLevel()
+        {
+            GameGridManager.Clear();
+            GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
+            gp.EndGame();
         }
 
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
         {
+            //If networked then close everything
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                ClearLevel();
+            }
+
+
             //Clear the overlay frame
             TopFrameManager.Instance.ClearOverlayFrame();
             //Clear the main frame

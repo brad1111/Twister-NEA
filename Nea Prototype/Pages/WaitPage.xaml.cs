@@ -29,6 +29,7 @@ namespace Nea_Prototype.Pages
         private readonly Level.Level level; 
 
         private bool gameStarted = false;
+        private Thread waitingThread = null;
 
         public WaitPage(ProtagonistType pt, EnemyType et, Level.Level level)
         {
@@ -44,7 +45,7 @@ namespace Nea_Prototype.Pages
             MessageManager.Instance.MessageHandler += StartHandler;
             Loaded += (s, e) =>
             {
-                Thread waitingThread = new Thread(new ThreadStart(() =>
+                waitingThread = new Thread(new ThreadStart(() =>
                 {
                     //Wait until the start message has been received
                     while (!gameStarted)
@@ -73,8 +74,16 @@ namespace Nea_Prototype.Pages
                 {
                     gameStarted = true;
                 }
-                
             }
+        }
+
+        /// <summary>
+        /// Stops the client from waiting for the game to start
+        /// </summary>
+        public void CancelWaiting()
+        {
+            //Kill the waiting thread
+            waitingThread?.Abort();
         }
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
