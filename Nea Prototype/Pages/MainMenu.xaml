@@ -8,11 +8,28 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainMenu">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF009BFF" Offset="0.777"/>
+                    <GradientStop Color="#00000000" Offset="0.928"/>
+                    <GradientStop Color="#FF16C5E4" Offset="0.006"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="70">Twister</Label>
+        </Grid>
+        <StackPanel HorizontalAlignment="Center" MinWidth="300"  Grid.Row="1">
             <Button x:Name="btnSinglePlayer" Click="BtnSinglePlayer_OnClick">Singleplayer</Button>
             <Button x:Name="btnMultiPlayer" Click="BtnMultiPlayer_OnClick">Local Multiplayer</Button>
             <Button x:Name="btnNetworked" Click="BtnNetworked_OnClick">Networked Multiplayer</Button>
+            <Grid Height="10"></Grid>
             <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
+            <Button x:Name="btnHelp" Click="BtnHelp_OnClick">Help</Button>
             <Button x:Name="btnExit" Click="BtnExit_OnClick">Exit</Button>
         </StackPanel>
     </Grid>

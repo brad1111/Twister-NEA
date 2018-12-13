@@ -57,5 +57,10 @@ namespace Nea_Prototype.Pages
         {
             //No keydown needed
         }
+
+        private void BtnHelp_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

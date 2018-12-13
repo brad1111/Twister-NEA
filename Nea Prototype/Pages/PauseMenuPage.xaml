@@ -9,7 +9,21 @@
       Title="PauseMenuPage">
 
     <Grid>
-        <StackPanel>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#99666666" Offset="0"/>
+                <GradientStop Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid MaxHeight="100" VerticalAlignment="Stretch">
+            <Label Foreground="White" FontSize="50" HorizontalAlignment="Center">Paused</Label>
+        </Grid>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" MinWidth="200">
             <Button x:Name="btnResume" Click="BtnResume_OnClick">Resume</Button>
             <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
             <Button x:Name="btnExit" Click="BtnExit_OnClick">Exit</Button>
