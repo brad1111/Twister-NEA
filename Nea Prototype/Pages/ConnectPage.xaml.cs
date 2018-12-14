@@ -46,6 +46,10 @@ namespace Nea_Prototype.Pages
 
         private void BtnConnect_OnClick(object sender, RoutedEventArgs e)
         {
+            //Show loading bar
+            prgLoading.IsEnabled = true;
+            prgLoading.Visibility = Visibility.Visible;
+            btnBack.IsEnabled = false;
             //Setup networking
             int portNo = 0;
             
@@ -53,6 +57,7 @@ namespace Nea_Prototype.Pages
             {
                 //Invalid
                 MessageBox.Show("Port is too great (>65535).");
+                HideProgressBar();
                 return;
             }
 
@@ -60,6 +65,7 @@ namespace Nea_Prototype.Pages
             {
                 //If it hasn't started tell the user
                 MessageBox.Show("Unable to connect to server (either incorrect IP or connection didn't go through).", "Error");
+                HideProgressBar();
             }
             else
             {
@@ -82,6 +88,8 @@ namespace Nea_Prototype.Pages
                     {
                         GamePage gp = new GamePage(pt: ProtagonistType.Remote, et: EnemyType.Local, _level: levelFile);
                         TopFrameManager.Instance.MainFrame.Navigate(gp);
+                        //Hide loading bar
+                        HideProgressBar();
                     }));
                 }));
                 waitThread.Start();
@@ -113,6 +121,11 @@ namespace Nea_Prototype.Pages
 
         private void BtnCreateServer_OnClick(object sender, RoutedEventArgs e)
         {
+            //Show loading bar
+            prgLoading.IsEnabled = true;
+            prgLoading.Visibility = Visibility.Visible;
+            btnBack.IsEnabled = false;
+
             if (!File.Exists("server.exe"))
             {
                 //If server is not found then stop and tell the user
@@ -143,6 +156,7 @@ namespace Nea_Prototype.Pages
                     }
                     catch (Exception ex)
                     {
+                        HideProgressBar();
                         Console.WriteLine(ex);
                         throw;
                     }
@@ -164,12 +178,29 @@ namespace Nea_Prototype.Pages
                 //Start the waiting for the game
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    TopFrameManager.Instance.Focus();
                     WaitPage wp = new WaitPage(pt:ProtagonistType.Local, et:EnemyType.Remote, level: levelFile);
                     TopFrameManager.Instance.MainFrame.Navigate(wp);
+                    //Hide loading bar
+                    HideProgressBar();
                 }));
             }));
             connectThread.Start();
+        }
+
+        /// <summary>
+        /// Hides the loading bar
+        /// </summary>
+        private void HideProgressBar()
+        {
+            //Hide loading bar
+            prgLoading.IsEnabled = false;
+            prgLoading.Visibility = Visibility.Hidden;
+            btnBack.IsEnabled = true;
+        }
+
+        private void BtnBack_OnClick(object sender, RoutedEventArgs e)
+        {
+            TopFrameManager.Instance.GoToMainMenu();
         }
     }
 }

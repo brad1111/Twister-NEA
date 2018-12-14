@@ -9,15 +9,33 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ConnectPage">
 
-    <Grid>
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
+        <Grid Grid.ColumnSpan="3">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF009BFF" Offset="0.777"/>
+                    <GradientStop Color="#00000000" Offset="0.928"/>
+                    <GradientStop Color="#FF16C5E4" Offset="0.006"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackPanel VerticalAlignment="Center">
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="70">Connect</Label>
+                <Label HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20">To a server</Label>
+            </StackPanel>
+            <Button x:Name="btnBack" VerticalAlignment="Top" HorizontalAlignment="Left" Click="BtnBack_OnClick">←</Button>
+        </Grid>
         <!--Server Connect-->
-        <Grid Grid.Column="1" VerticalAlignment="Center">
+        <Grid Grid.Column="1" VerticalAlignment="Center" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -28,7 +46,9 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+          
+
+
             <Button x:Name="btnCreateServer" Grid.ColumnSpan="2" Click="BtnCreateServer_OnClick">Host server</Button>
             <!--<Rectangle Grid.Row="1" Grid.ColumnSpan="2" Height="4"></Rectangle>-->
             <controls:RegexTextBox x:Name="txtIP" Width="120" Watermark="IP Address" Grid.Row="2"/>
@@ -36,5 +56,7 @@
             <controls:RegexTextBox x:Name="txtPort" Grid.Column="1" Width="80" Watermark="Port" Grid.Row="2"/>
             <Button x:Name="btnConnect" Grid.Row="3" Grid.ColumnSpan="2" Click="BtnConnect_OnClick">Connect</Button>
         </Grid>
+        <ProgressBar x:Name="prgLoading" IsEnabled="False" IsIndeterminate="True" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Visibility="Hidden" Grid.Row="2"
+                     Grid.ColumnSpan="3" Height="24"></ProgressBar>
     </Grid>
 </Page>
