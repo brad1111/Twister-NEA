@@ -9,14 +9,25 @@
       Title="WaitPage">
 
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FF009BFF" Offset="0.41"/>
+                <GradientStop Color="#00000000" Offset="0.928"/>
+                <GradientStop Color="#FF16C5E4" Offset="0.006"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Button x:Name="btnBack" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnBack_OnClick">
+            ←
+        </Button>
         <StackPanel>
-            <TextBlock>
-                Waiting for a second player to connect.
-                <LineBreak/>
+            <TextBlock Foreground="White" FontSize="30" HorizontalAlignment="Center">
+                Waiting for a second player to connect:
+            </TextBlock>
+            <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="20">
                 Use the port 26332
             </TextBlock>
-            <TextBlock>If you are on the same network (same WiFi etc.) then try to join using these IPs (they should look similar to the other client):</TextBlock>
-            <TextBlock x:Name="txtLocalIps"/>
+            <TextBlock Foreground="White">If you are on the same network (same WiFi etc.) then try to join using these IPs (they should look similar to the other client):</TextBlock>
+            <TextBlock x:Name="txtLocalIps" Foreground="White"/>
         </StackPanel>
     </Grid>
 </Page>

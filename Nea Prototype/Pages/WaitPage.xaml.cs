@@ -90,5 +90,18 @@ namespace Nea_Prototype.Pages
         {
             //No key events needed
         }
+
+        private void BtnBack_OnClick(object sender, RoutedEventArgs e)
+        {
+            //So that the handler can be disabled
+            gameStarted = true;
+            CancelWaiting();
+            gameStarted = false;
+            TopFrameManager.Instance.TryCloseServer();
+            if (TopFrameManager.Instance.MainFrame.CanGoBack)
+            {
+                TopFrameManager.Instance.MainFrame.GoBack();
+            }
+        }
     }
 }
