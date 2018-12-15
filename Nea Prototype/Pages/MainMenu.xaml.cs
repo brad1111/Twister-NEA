@@ -26,23 +26,27 @@ namespace Nea_Prototype.Pages
         public MainMenu()
         {
             InitializeComponent();
-            Loaded += async (s, e) => thisLevel = await LevelSelect.GetLevelSelection();
         }
 
-        private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
-        {
-            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.AI,
-                LevelIO.ReadJSON("testing.json")));
-        }
+        //private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.AI,
+        //        LevelIO.ReadJSON("testing.json")));
+        //}
 
-        private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
-        {
-            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
-        }
+        //private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
+        //}
 
-        private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
+        //private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
+        //}
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
+            TopFrameManager.Instance.MainFrame.Navigate(new SetupGame());
         }
 
         private void BtnSettings_OnClick(object sender, RoutedEventArgs e)
@@ -64,5 +68,6 @@ namespace Nea_Prototype.Pages
         {
             throw new NotImplementedException();
         }
+
     }
 }

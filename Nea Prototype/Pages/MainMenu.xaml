@@ -24,11 +24,9 @@
             <Label HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="70">Twister</Label>
         </Grid>
         <StackPanel HorizontalAlignment="Center" MinWidth="300"  Grid.Row="1">
-            <Button x:Name="btnSinglePlayer" Click="BtnSinglePlayer_OnClick">
-                Singleplayer
+            <Button x:Name="btnPlay" Click="BtnPlay_Click">
+                Play Game
             </Button>
-            <Button x:Name="btnMultiPlayer" Click="BtnMultiPlayer_OnClick">Local Multiplayer</Button>
-            <Button x:Name="btnNetworked" Click="BtnNetworked_OnClick">Networked Multiplayer</Button>
             <Grid Height="10"></Grid>
             <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
             <Button x:Name="btnHelp" Click="BtnHelp_OnClick">Help</Button>

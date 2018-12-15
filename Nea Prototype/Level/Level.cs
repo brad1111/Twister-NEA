@@ -65,6 +65,7 @@ namespace Nea_Prototype.Level
 
         [JsonIgnore] private EnemyType enemyType;
         [JsonIgnore] private ProtagonistType protagonistType;
+        [JsonIgnore] public string Name { get; set; }
 
         /// <summary>
         /// Sets up the grid in terms of decoding the integer array into items

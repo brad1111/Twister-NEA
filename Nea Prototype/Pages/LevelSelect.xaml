@@ -17,23 +17,25 @@
         <Grid>
             <Button x:Name="btnBack" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnBack_OnClick">←</Button>
             <Label Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
-                   FontSize="30">Select A Level</Label>
+                   FontSize="30">Select a Level</Label>
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#FF009BFF" Offset="0.777"/>
-                    <GradientStop Color="#AAffffff" Offset="0.928"/>
+                    <GradientStop Color="#FFffffff" Offset="0.928"/>
                     <GradientStop Color="#FF16C5E4" Offset="0.006"/>
                 </LinearGradientBrush>
             </Grid.Background>
             
         </Grid>
-        <ListView x:Name="lstLevels" Grid.Row="1" Background="#AAffffff" SelectionMode="Single">
+        <ListView x:Name="lstLevels" Grid.Row="1" Background="#FFffffff" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button x:Name="btnPlay" Grid.Row="2" Click="BtnPlay_OnClick">Play</Button>
+        <Grid Grid.Row="2" Background="#ffffffff">
+            <Button x:Name="btnPlay" Click="BtnPlay_OnClick">Play</Button>
+        </Grid>
     </Grid>
 </Page>

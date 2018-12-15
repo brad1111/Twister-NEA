@@ -71,8 +71,6 @@ namespace Nea_Prototype.Pages
 
         private IEnumerable<string> FindLevels()
         {
-
-            //return Directory.GetFiles(App.AppDir, "*.level", SearchOption.TopDirectoryOnly);
             return new DirectoryInfo(App.AppDir).GetFiles("*.level",SearchOption.TopDirectoryOnly).Select(x => x.Name.Remove(x.Name.Length - 6));
         }
 
@@ -93,6 +91,7 @@ namespace Nea_Prototype.Pages
             //Convert selected string to Level file
             string fullFileName = string.Format("{0}\\{1}.level", App.AppDir, lstLevels.SelectedItem);
             selectedLevel = LevelIO.ReadJSON(fullFileName);
+            selectedLevel.Name = lstLevels.SelectedItem.ToString();
             //Send back to previous page
             goBack = true;
         }

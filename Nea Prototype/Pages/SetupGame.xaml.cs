@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Common.Enums;
 
 namespace Nea_Prototype.Pages
 {
@@ -23,6 +24,63 @@ namespace Nea_Prototype.Pages
         public SetupGame()
         {
             InitializeComponent();
+        }
+
+        private Level.Level levelItem = null;
+
+        private void BtnBack_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (TopFrameManager.Instance.MainFrame.CanGoBack)
+            {
+                TopFrameManager.Instance.MainFrame.GoBack();
+            }
+        }
+
+        private async void BtnLevelSelect_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Awaited so that code runs in the right order
+            await BtnLevelSelect_OnClickAsync();
+        }
+
+        private async Task BtnLevelSelect_OnClickAsync()
+        {
+            //Get the new level selection (if it is null don't update the value)
+            levelItem = await LevelSelect.GetLevelSelection() ?? levelItem;
+            if (levelItem == null)
+            {
+                grdGameType.IsEnabled = false;
+                btnLevelSelect.Content = $"Select Level";
+            }
+            else
+            {
+                //Level is ready to setup
+                grdGameType.IsEnabled = true;
+                btnLevelSelect.Content = $"Select Level: '{levelItem.Name}' currently selected";
+            }
+        }
+
+        private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
+        {
+            PlayLocallyCommon(EnemyType.AI);
+        }
+
+        private void BtnLocalMultiPlayer_OnClick(object sender, RoutedEventArgs e)
+        {
+            PlayLocallyCommon(EnemyType.Local);
+        }
+
+        private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
+        {
+            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
+        }
+
+        /// <summary>
+        /// Combines the code for Single Player and Local Multi Player
+        /// </summary>
+        /// <param name="et">Enemy Type</param>
+        private void PlayLocallyCommon(EnemyType et)
+        {
+            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, et, levelItem));
         }
     }
 }
