@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Nea_Prototype.Level;
@@ -35,5 +37,7 @@ namespace Nea_Prototype
                 app.Run();
             }
         }
+
+        public static string AppDir { get; } = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
     }
 }

@@ -22,9 +22,11 @@ namespace Nea_Prototype.Pages
     /// </summary>
     public partial class MainMenu : Page, IKeyboardInputs
     {
+        private Level.Level thisLevel = null;
         public MainMenu()
         {
             InitializeComponent();
+            Loaded += async (s, e) => thisLevel = await LevelSelect.GetLevelSelection();
         }
 
         private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
