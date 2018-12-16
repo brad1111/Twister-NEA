@@ -1,0 +1,34 @@
+﻿<Page x:Class="Twister.Pages.LosePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="WinPage">
+    <Grid>
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#AA993100" Offset="0"/>
+                    <GradientStop Color="#AAFFFFFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackPanel HorizontalAlignment="Center"  VerticalAlignment="Top" Margin="0,40,0,0">
+                <Label Foreground="White" FontSize="40"  HorizontalAlignment="Center">
+                    You have died!
+                </Label>
+                <Label HorizontalContentAlignment="Center" Foreground="White">Times Died: {}</Label>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                <Button x:Name="btnRetry" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnRetry_OnClick">
+                    Retry
+                </Button>
+                <Button x:Name="btnEnd" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnEnd_OnClick">
+                    Leave
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Page>

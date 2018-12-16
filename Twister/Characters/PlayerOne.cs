@@ -1,0 +1,29 @@
+﻿using System;
+using System.Windows.Media.Imaging;
+using Common.Enums;
+
+namespace Twister.Characters
+{
+    /// <summary>
+    /// Player 1 attempts to avoid the enemy and get to the exit
+    /// </summary>
+    public class PlayerOne : Character
+    {
+        public PlayerOne()
+        {
+            weight = 1;
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri("PlayerOne.png", UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            sprite = src;
+
+        }
+
+        public void Move(Direction direction)
+        {
+
+        }
+    }
+}

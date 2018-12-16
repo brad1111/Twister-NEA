@@ -1,0 +1,15 @@
+﻿<Window x:Class="Twister.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Twister" Height="450" Width="800" KeyDown="Window_KeyDown"
+        Closed="MainWindow_OnClosed">
+    <Grid>
+        <!--The frame for the game/menus-->
+        <Frame x:Name="frmMainFrame" NavigationUIVisibility="Hidden"  IsTabStop="False" Navigated="FrmMainFrame_OnNavigated"/>
+        <!--The frame for overlays such as debug overlay or pause menu-->
+        <Frame x:Name="frmOverlay" NavigationUIVisibility="Hidden" IsTabStop="False"/>
+    </Grid>
+</Window>

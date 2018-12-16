@@ -1,0 +1,32 @@
+﻿<Page x:Class="Twister.Pages.WaitPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="WaitPage">
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FF009BFF" Offset="0.41"/>
+                <GradientStop Color="#00000000" Offset="0.928"/>
+                <GradientStop Color="#FF16C5E4" Offset="0.006"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Button x:Name="btnBack" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnBack_OnClick">
+            ←
+        </Button>
+        <StackPanel>
+            <TextBlock Foreground="White" FontSize="30" HorizontalAlignment="Center">
+                Waiting for a second player to connect:
+            </TextBlock>
+            <TextBlock Foreground="White" HorizontalAlignment="Center" FontSize="20">
+                Use the port 26332
+            </TextBlock>
+            <TextBlock Foreground="White">If you are on the same network (same WiFi etc.) then try to join using these IPs (they should look similar to the other client):</TextBlock>
+            <TextBlock x:Name="txtLocalIps" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</Page>
