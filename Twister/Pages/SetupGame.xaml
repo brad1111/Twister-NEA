@@ -34,7 +34,7 @@
                 </StackPanel>
             </Grid>
             <Button x:Name="btnLevelSelect" Click="BtnLevelSelect_OnClick">Select Level</Button>
-            <CheckBox x:Name="chkVisualiseTurningMoments">Visualise turning moments</CheckBox>
+            <CheckBox x:Name="chkVisualiseTurningMoments" Visibility="Collapsed">Visualise turning moments</CheckBox>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -53,7 +53,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock>Character acceleration</TextBlock>
-                <TextBox x:Name="txtCharAcceleration" Grid.Column="1">1</TextBox>
+                <TextBox x:Name="txtCharAcceleration" Grid.Column="1" Visibility="Collapsed">1</TextBox>
             </Grid>
         </StackPanel>
         <Grid Grid.Row="2">
