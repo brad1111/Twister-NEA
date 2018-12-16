@@ -131,6 +131,9 @@ namespace Twister.Pages
                 messageInstance.MessageHandler += HandleMessage;
                 messageInstance.SendMessage("received");
 
+
+                //Also start the timers
+                StartTimers();
             }
 
             //Setups up AI timer if this is a singleplayer game
@@ -314,6 +317,7 @@ namespace Twister.Pages
             if (allowKeyDown)
             {
                 //And also if a key is pressed and the AI timer hasn't started and it needs to start it
+                //Only for local games
                 if (!timersEnabled)
                 {
                     StartTimers();
