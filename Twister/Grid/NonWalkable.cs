@@ -7,7 +7,7 @@
     {
         public NonWalkable()
         {
-            relativeLocation = "NonWalkable.png";
+            absoluteLocation = $@"{App.AppDir}\Assets\NonWalkable.png";
             CurrentWeighting = int.MaxValue; // Current weight is infinity
         }
     }

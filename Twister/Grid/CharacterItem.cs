@@ -14,7 +14,7 @@ namespace Twister.Grid
         {
             this.character = character;
             sprite = character.GetSprite();
-            relativeLocation = sprite.ToString();
+            absoluteLocation = sprite.ToString();
             if (character is Enemy)
             {
                 RenderTransform = new TranslateTransform();

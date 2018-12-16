@@ -39,17 +39,16 @@ namespace Twister.Grid
             }
         }
 
-        protected string relativeLocation = "";
+        protected string absoluteLocation = "";
 
         /// <summary>
         /// Converts a relative string into a bitmap that is stored in sprite
         /// </summary>
-        /// <param name="relativeLocation">The relative location where the bitmap file is stored</param>
         protected ImageSource SetupSprite()
         {
             BitmapImage src = new BitmapImage();
             src.BeginInit();
-            src.UriSource = new Uri(relativeLocation == "" ? "Error.png" : relativeLocation, UriKind.Relative);
+            src.UriSource = new Uri(string.IsNullOrEmpty(absoluteLocation) ? $@"{App.AppDir}\Assets\Error.png" : absoluteLocation, UriKind.Absolute);
             src.CacheOption = BitmapCacheOption.OnLoad;
             src.EndInit();
             CachedBitmap cachedSrc = new CachedBitmap(src, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);

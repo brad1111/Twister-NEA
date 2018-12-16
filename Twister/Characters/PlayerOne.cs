@@ -14,7 +14,7 @@ namespace Twister.Characters
             weight = 1;
             BitmapImage src = new BitmapImage();
             src.BeginInit();
-            src.UriSource = new Uri("PlayerOne.png", UriKind.Relative);
+            src.UriSource = new Uri($@"{App.AppDir}\Assets\PlayerOne.png", UriKind.Absolute);
             src.CacheOption = BitmapCacheOption.OnLoad;
             src.EndInit();
             sprite = src;

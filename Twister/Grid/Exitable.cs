@@ -14,9 +14,9 @@ namespace Twister.Grid
         public Exitable(int arrayIndex)
         {
             this.arrayIndex = arrayIndex;
-            relativeLocation = "ExitableClosed.png";
+            absoluteLocation = $@"{App.AppDir}\Assets\ExitableClosed.png";
             closedSprite = SetupSprite();
-            relativeLocation = "ExitableOpen.png";
+            absoluteLocation = $@"{App.AppDir}\Assets\ExitableOpen.png";
             openSprite = SetupSprite();
             Source = closedSprite;
             CurrentWeighting = int.MaxValue; // Current weight is infinity

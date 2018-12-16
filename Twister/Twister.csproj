@@ -209,25 +209,25 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Enemy.png">
+    <Content Include="Assets\ExitableClosed.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Error.png">
+    <Content Include="Assets\ExitableOpen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ExitableClosed.png">
+    <Content Include="Assets\NonWalkable.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ExitableOpen.png">
+    <Content Include="Assets\Walkable.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="NonWalkable.png">
+    <Content Include="Assets\Enemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="PlayerOne.png">
+    <Content Include="Assets\Error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Walkable.png">
+    <Content Include="Assets\PlayerOne.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

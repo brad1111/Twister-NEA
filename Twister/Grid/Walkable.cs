@@ -7,7 +7,7 @@
     {
         public Walkable()
         {
-            relativeLocation = "Walkable.png";
+            absoluteLocation = $@"{App.AppDir}\Assets\Walkable.png";
         }        
     }
 }
