@@ -80,7 +80,7 @@ namespace Twister.Pages
         /// </summary>
         /// <param name="pt">The type of protagonist to generate</param>
         /// <param name="et">The type of enemy to generate</param>
-        public GamePage(ProtagonistType pt, EnemyType et, Level.Level _level)
+        public GamePage(ProtagonistType pt, EnemyType et, Level.Level _level, double protagonistWeight = 1, double enemyWeight = 1)
         {
             InitializeComponent();
             level = _level;
@@ -90,6 +90,11 @@ namespace Twister.Pages
 
             //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, pt, et);
+
+            //Set the characters weights (for turning moments)
+            GameGridManager.Instance.Characters[0].Weight = protagonistWeight;
+            GameGridManager.Instance.Characters[1].Weight = enemyWeight;
+
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referenced every tick for the collision detection visualisation to work)
             GameGridManager.Instance.GameCanvas = cvsPlayArea;

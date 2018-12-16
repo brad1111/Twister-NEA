@@ -142,7 +142,8 @@ namespace Twister.Pages
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "server.exe",
-                    Arguments = String.Format("{0} {1}.level", portValid ? portNo : 26332, inputtedLevelFile.Name),
+                    Arguments = String.Format("{0} {1}.level {2} {3}", portValid ? portNo : 26332, inputtedLevelFile.Name,
+                                            inputtedLevelFile.characterWeights[0], inputtedLevelFile.characterWeights[1]),
                     WindowStyle = ProcessWindowStyle.Minimized
                 }
             };

@@ -67,6 +67,12 @@ namespace Twister.Controls
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
+            if (string.IsNullOrEmpty(Watermark))
+            {
+                //No watermark so stop this section because it is unneccesary and will crash
+                return;
+            }
+
             int caretLocation = SelectionStart;
             if (e.Key == Key.Back && Text == "")
             {
@@ -83,20 +89,25 @@ namespace Twister.Controls
             base.OnKeyUp(e);
         }
 
+        public bool IsValid { get; private set; } = false;
+
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
             if (Text == Watermark)
             {
                 Foreground = Gray;
+                IsValid = false;
             }
             else if (Regex.IsMatch(Text, RegularExpression))
             {
                 Foreground = Green;
+                IsValid = true;
             }
             else
             {
                 Foreground = Red;
+                IsValid = false;
             }
         }
     }

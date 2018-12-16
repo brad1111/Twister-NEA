@@ -9,7 +9,7 @@ namespace Common.Algorithms
         /// Finds out the direction that the rotation will be
         /// </summary>
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
-        public static int RotationMultiplier(double[] charactersXPos, int[] charactersWeight, ref double rotationAngle)
+        public static int RotationMultiplier(double[] charactersXPos, double[] charactersWeight, ref double rotationAngle)
         {
             double totalMomentFromCentre = 0;
             //Absolute because it does not matter which way it goes
@@ -36,15 +36,16 @@ namespace Common.Algorithms
             }
         }
 
-        public static double AbsAngleDelta(Position[] charactersPos, double time)
+        public static double AbsAngleDelta(Position[] charactersPos, double time, double[] weights)
         {
-            double velocity = 9.8; //Assume velocity = acceleration * time = 1
+            double velocity = 9.8; //assume velocity = acceleration * time = 1, assume acceleration is due to gravity
             double totalDeltaRadians = 0;
 
             for (int i = 0; i < charactersPos.Length; i++)
             {
-                double radiusFromCentrex = 200 - charactersPos[i].x;
-                double radiusFromCentrey = 200 - charactersPos[i].y;
+                //Weights are included to simulate effect of heavier characters causing more rotation
+                double radiusFromCentrex = 200 - charactersPos[i].x * weights[i];
+                double radiusFromCentrey = 200 - charactersPos[i].y * weights[i];
                 //c=sqrt(a^2+b^2) (pythagoras)
                 double radiusFromCentre = Math.Sqrt(Math.Pow(radiusFromCentrex, 2) + Math.Pow(radiusFromCentrey, 2));
                 totalDeltaRadians += (velocity * time) / radiusFromCentre;

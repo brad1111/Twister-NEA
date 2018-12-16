@@ -14,11 +14,11 @@ namespace Twister.Algorithms
         public static double RotationMultiplier(Character[] characters, ref double rotationAngle)
         {
             double[] charactersXPos = new double[characters.Length];
-            int[] weights = new int[characters.Length];
+            double[] weights = new double[characters.Length];
             for (int i = 0; i < characters.Length; i++)
             {
                 charactersXPos[i] = Canvas.GetLeft(GameGridManager.Instance.CharactersViews[i]);
-                weights[i] = characters[i].GetWeight;
+                weights[i] = characters[i].Weight;
             }
 
             return Common.Algorithms.Rotation.RotationMultiplier(charactersXPos, weights, ref rotationAngle);
@@ -35,7 +35,9 @@ namespace Twister.Algorithms
                     y:Canvas.GetTop(GameGridManager.Instance.CharactersViews[i]));
             }
 
-            return Common.Algorithms.Rotation.AbsAngleDelta(charPositions, 0.25);
+            double[] weights =
+                {GameGridManager.Instance.Characters[0].Weight, GameGridManager.Instance.Characters[1].Weight};
+            return Common.Algorithms.Rotation.AbsAngleDelta(charPositions, 0.25, weights);
         }
     }
 }

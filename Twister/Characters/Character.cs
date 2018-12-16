@@ -9,7 +9,7 @@ namespace Twister.Characters
     public class Character
     {
         //Mass of character for rotation calculations
-        protected int weight;
+        protected double weight;
         //The characters image
         protected ImageSource sprite;
         //The charcaters 'score'
@@ -20,7 +20,11 @@ namespace Twister.Characters
         /// <summary>
         /// Gets the weight for location calculations
         /// </summary>
-        public int GetWeight => weight;
+        public double Weight
+        {
+            get => weight;
+            set => weight = value;
+        }
 
         /// <summary>
         /// Gets the sprite of the charcaters
