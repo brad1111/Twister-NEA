@@ -62,7 +62,7 @@ namespace Twister.Controls
         public override void EndInit()
         {
             base.EndInit();
-            Text = Watermark;
+            Text = Watermark ?? Text; //Overwrite content with watermark or keep content
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
