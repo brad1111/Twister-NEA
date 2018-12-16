@@ -56,15 +56,15 @@
                 <TextBox x:Name="txtCharAcceleration" Grid.Column="1">1</TextBox>
             </Grid>
         </StackPanel>
-        <Grid x:Name="grdGameType" Grid.Row="2" IsEnabled="False">
+        <Grid Grid.Row="2">
             <!--Type of game to start-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btnSinglePlayer" Grid.Column="0" Click="BtnSinglePlayer_OnClick">Single player</Button>
-            <Button x:Name="btnLocalMultiPlayer" Grid.Column="1" Click="BtnLocalMultiPlayer_OnClick">Local Multi player</Button>
+            <Button x:Name="btnSinglePlayer" Grid.Column="0" Click="BtnSinglePlayer_OnClick" IsEnabled="False">Single player</Button>
+            <Button x:Name="btnLocalMultiPlayer" Grid.Column="1" Click="BtnLocalMultiPlayer_OnClick" IsEnabled="False">Local Multi player</Button>
             <Button x:Name="btnNetworked" Grid.Column="2" Click="BtnNetworked_OnClick">Network Multi Player (LAN)</Button>
         </Grid>
     </Grid>

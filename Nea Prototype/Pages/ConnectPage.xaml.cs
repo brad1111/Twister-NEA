@@ -35,13 +35,18 @@ namespace Nea_Prototype.Pages
 
         private Level.Level levelFile = null;
         
-        public ConnectPage()
+        public ConnectPage(Level.Level levelFileGiven)
         {
             InitializeComponent();
 
             
             txtIP.RegularExpression = IPRegex;
-            
+            levelFile = levelFileGiven;
+            if (levelFile is null)
+            {
+                btnCreateServer.IsEnabled = false;
+                btnCreateServer.Content = "Host (No level selected)";
+            }
         }
 
         private void BtnConnect_OnClick(object sender, RoutedEventArgs e)
@@ -132,6 +137,15 @@ namespace Nea_Prototype.Pages
                 MessageBox.Show("Could not find server.exe", "Error");
             }
 
+            bool portValid = false;
+            int portNo;
+
+            //Check if the port is valid
+            if(int.TryParse(txtPort.Text, out portNo) && portNo < 65536)
+            {
+                portValid = true;
+            }
+
             //The server is in a seperate process to make the client/server model simpler, but also allows the user
             //still to host their own server easily
             TopFrameManager.Instance.ServerProcess = new Process()
@@ -139,17 +153,20 @@ namespace Nea_Prototype.Pages
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "server.exe",
-                    Arguments = "26332 testing.json",
+                    Arguments = String.Format("{0} {1}.level", portValid ? portNo : 26332, levelFile.Name),
                     WindowStyle = ProcessWindowStyle.Minimized
                 }
             };
             TopFrameManager.Instance.ServerProcess.Start();
 
+
+            int attempts = 0;
             //Wait a sec and try to connect
             Thread connectThread = new Thread(new ThreadStart(() =>
             {
-                while (!MessageManager.Instance.IsConnected)
+                while (!MessageManager.Instance.IsConnected && attempts < 5)
                 {
+                    attempts++;
                     try
                     {
                         MessageManager.Instance.Connect("127.0.0.1", 26332);

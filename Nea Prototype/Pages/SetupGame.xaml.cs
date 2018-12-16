@@ -48,13 +48,15 @@ namespace Nea_Prototype.Pages
             levelItem = await LevelSelect.GetLevelSelection() ?? levelItem;
             if (levelItem == null)
             {
-                grdGameType.IsEnabled = false;
+                btnSinglePlayer.IsEnabled = false;
+                btnLocalMultiPlayer.IsEnabled = false;
                 btnLevelSelect.Content = $"Select Level";
             }
             else
             {
                 //Level is ready to setup
-                grdGameType.IsEnabled = true;
+                btnSinglePlayer.IsEnabled = true;
+                btnLocalMultiPlayer.IsEnabled = true;
                 btnLevelSelect.Content = $"Select Level: '{levelItem.Name}' currently selected";
             }
         }
@@ -71,7 +73,7 @@ namespace Nea_Prototype.Pages
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
+            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage(levelItem));
         }
 
         /// <summary>
