@@ -33,6 +33,7 @@ namespace Nea_Prototype.Pages
                 @"((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))";
                // /*domain name*/ "(([a-zA-Z0-9].)*([a-zA-Z0-9]))";
 
+        private Level.Level inputtedLevelFile = null;
         private Level.Level levelFile = null;
         
         public ConnectPage(Level.Level levelFileGiven)
@@ -41,8 +42,8 @@ namespace Nea_Prototype.Pages
 
             
             txtIP.RegularExpression = IPRegex;
-            levelFile = levelFileGiven;
-            if (levelFile is null)
+            inputtedLevelFile = levelFileGiven;
+            if (inputtedLevelFile is null)
             {
                 btnCreateServer.IsEnabled = false;
                 btnCreateServer.Content = "Host (No level selected)";
@@ -153,7 +154,7 @@ namespace Nea_Prototype.Pages
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "server.exe",
-                    Arguments = String.Format("{0} {1}.level", portValid ? portNo : 26332, levelFile.Name),
+                    Arguments = String.Format("{0} {1}.level", portValid ? portNo : 26332, inputtedLevelFile.Name),
                     WindowStyle = ProcessWindowStyle.Minimized
                 }
             };
@@ -164,7 +165,7 @@ namespace Nea_Prototype.Pages
             //Wait a sec and try to connect
             Thread connectThread = new Thread(new ThreadStart(() =>
             {
-                while (!MessageManager.Instance.IsConnected && attempts < 5)
+                while (!MessageManager.Instance.IsConnected)
                 {
                     attempts++;
                     try
@@ -180,7 +181,12 @@ namespace Nea_Prototype.Pages
                     
                     
                     Thread.Sleep(1000);
+                    if (attempts >= 5)
+                    {
+                        return;
+                    }
                 }
+
                 //Setup handlemessage so the map gets downloaded
                 MessageManager.Instance.MessageHandler += HandleMessage;
                 //Wait for map to be downloaded
