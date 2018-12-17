@@ -160,6 +160,12 @@ namespace Twister.Pages
 
         private void AiTimerOnTick(object sender, EventArgs e)
         {
+            //Make sure you check for collisions
+            if (Collisions.EnemyCollisionDetection())
+            {
+                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(level, Protagonist, Enemy,
+                    CommunicationManager.Instance.IsNetworked));
+            }
             //If the old storyboard is still there set the speed to be fast so that the next animation can be played
             if (AITransformStoryboard != null)
             {
