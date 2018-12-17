@@ -149,6 +149,8 @@ namespace Twister.Pages
                     Interval = new TimeSpan(0,0,0,0,400)
                 };
                 aiTimer.Tick += AiTimerOnTick;
+                //Also show path tickbox
+                chkShowPath.Visibility = Visibility.Visible;
             }       
 
             //Allow keydown so that starts the game etc
@@ -227,6 +229,11 @@ namespace Twister.Pages
 
                 //Go
                 AITransformStoryboard.Begin();
+                //Make sure you show the path if the user wants to see it
+                if (GameGridManager.Instance.ShowPath)
+                {
+                    Pathfinding.ShowPath();
+                }
             }
         }
 
@@ -448,6 +455,7 @@ namespace Twister.Pages
             rotationTimer = null;
             cvsPlayArea.Children.Clear();
             cvsExitArea.Children.Clear();
+            GameGridManager.Instance.ShowPath = false;
             GC.Collect();
         }
 
@@ -469,6 +477,12 @@ namespace Twister.Pages
                 aiTimer.Start();
             }
             allowKeyDown = true;
+        }
+
+        private void ChkShowPath_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Depending on whether the show path item is checked, show the path
+            GameGridManager.Instance.ShowPath = chkShowPath.IsChecked ?? false;
         }
     }
 }

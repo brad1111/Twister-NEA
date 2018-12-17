@@ -129,6 +129,7 @@ namespace Twister.Grid
         public int DebuggingCanvasLeftovers { get; set; }
         public bool WallCollisionRectangles { get; set; }
         public bool EnemyCollisionRectangles { get; set; }
+        public bool ShowPath { get; set; }
 
         #endregion
 

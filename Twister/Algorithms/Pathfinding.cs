@@ -16,7 +16,7 @@ namespace Twister.Algorithms
 
         private static Guid ThreadUsingVisualisations = Guid.Empty;
 
-        public static void ShowPath()
+        public static void ClearPath()
         {
             //Prevent multiple clicks of the button from locking the program
             Guid thisThread = Guid.NewGuid();
@@ -36,6 +36,13 @@ namespace Twister.Algorithms
             }
 
             ThreadUsingVisualisations = Guid.Empty; //No longer using stack
+        }
+
+
+        public static void ShowPath()
+        {
+            //Clear the path before using
+            ClearPath();
 
             //Get enemy & protagonist
             CharacterItem protagonistItem = GameGridManager.Instance.CharactersViews[0];
@@ -58,7 +65,7 @@ namespace Twister.Algorithms
                 {
                     Height = Constants.GRID_ITEM_WIDTH,
                     Width = Constants.GRID_ITEM_WIDTH,
-                    Fill = new SolidColorBrush(Colors.Brown)
+                    Fill = new SolidColorBrush(Colors.Chartreuse)
                 };
 
                 Canvas.SetLeft(rect, gridX);

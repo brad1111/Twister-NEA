@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using Common.Enums;
+using Twister.Grid;
 using Twister.Network;
 
 namespace Twister.Pages
@@ -50,6 +51,7 @@ namespace Twister.Pages
 
         private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
+            GameGridManager.Clear();
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
                 (TopFrameManager.Instance.MainFrame.Content as GamePage).EndGame(disconnect:false);
