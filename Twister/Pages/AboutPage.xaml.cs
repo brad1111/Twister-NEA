@@ -31,15 +31,10 @@ namespace Twister.Pages
             TopFrameManager.Instance.GoToMainMenu();
         }
 
-        /// <summary>
-        /// Takes you to website
-        /// </summary>
-        /// <param name="sender">The hyperlink</param>
-        /// <param name="e">The argumetns</param>
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void Hyperlink_OnClick(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
+            //Takes you to the website
+            Process.Start(new ProcessStartInfo("https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md"));
         }
     }
 }

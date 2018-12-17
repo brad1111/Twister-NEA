@@ -31,7 +31,7 @@
         <StackPanel Grid.Row="1">
             <Label HorizontalAlignment="Center" Foreground="Black" FontSize="12">This software uses Newtonsoft.Json</Label>
             <TextBlock HorizontalAlignment="Center" Foreground="Black" FontSize="12" TextWrapping="WrapWithOverflow">License:
-                <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate">https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md</Hyperlink>
+                <Hyperlink Click="Hyperlink_OnClick">https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md</Hyperlink>
             </TextBlock>
         </StackPanel>
     </Grid>
