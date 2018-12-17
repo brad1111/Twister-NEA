@@ -39,6 +39,7 @@ namespace Twister.Pages
             {
                 btnSinglePlayer.IsEnabled = false;
                 btnLocalMultiPlayer.IsEnabled = false;
+                btnNetworked.IsEnabled = false;
                 btnLevelSelect.Content = $"Select Level";
             }
             else
@@ -46,6 +47,7 @@ namespace Twister.Pages
                 //Level is ready to setup
                 btnSinglePlayer.IsEnabled = true;
                 btnLocalMultiPlayer.IsEnabled = true;
+                btnNetworked.IsEnabled = true;
                 btnLevelSelect.Content = $"Select Level: '{levelItem.Name}' currently selected";
             }
         }

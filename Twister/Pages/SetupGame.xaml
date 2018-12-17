@@ -65,7 +65,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="btnSinglePlayer" Grid.Column="0" Click="BtnSinglePlayer_OnClick" IsEnabled="False">Single player</Button>
             <Button x:Name="btnLocalMultiPlayer" Grid.Column="1" Click="BtnLocalMultiPlayer_OnClick" IsEnabled="False">Local Multi player</Button>
-            <Button x:Name="btnNetworked" Grid.Column="2" Click="BtnNetworked_OnClick">Network Multi Player (LAN)</Button>
+            <Button x:Name="btnNetworked" Grid.Column="2" Click="BtnNetworked_OnClick" IsEnabled="false">Network Multi Player (LAN)</Button>
         </Grid>
     </Grid>
 </Page>
