@@ -36,6 +36,10 @@ namespace Twister.Pages
             this.pt = pt;
             this.et = et;
             this.isNetworked = isNetworked;
+            if (isNetworked)
+            {
+                btnRetry.IsEnabled = false;
+            }
         }
 
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
