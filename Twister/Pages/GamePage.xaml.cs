@@ -408,9 +408,10 @@ namespace Twister.Pages
             }
         }
 
-
+        
         public void StopTimers()
         {
+            Console.WriteLine("Timers stopped");
             keyboardInputTimer.Stop();
             rotationTimer.Stop();
             if (gameType == GameType.Singleplayer)
@@ -425,12 +426,16 @@ namespace Twister.Pages
             allowKeyDown = false;
         }
 
-        public void EndGame()
+        /// <summary>
+        /// Ends the game
+        /// </summary>
+        /// <param name="disconnect">If connected to server autodisconnect</param>
+        public void EndGame(bool disconnect = true)
         {
             timersEnabled = false;
             StopTimers();
             keyboardInputTimer.Tick -= KeyboardInputTimerTick;
-            if (CommunicationManager.Instance.IsNetworked)
+            if (CommunicationManager.Instance.IsNetworked && disconnect)
             {
                 MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();

@@ -36,10 +36,6 @@ namespace Twister.Pages
             this.pt = pt;
             this.et = et;
             this.isNetworked = isNetworked;
-            if (isNetworked)
-            {
-                btnRetry.IsEnabled = false;
-            }
         }
 
         private void BtnEnd_OnClick(object sender, RoutedEventArgs e)
@@ -54,9 +50,14 @@ namespace Twister.Pages
 
         private void BtnRetry_OnClick(object sender, RoutedEventArgs e)
         {
-            TopFrameManager.Instance.GoToMainMenu();
+            if (TopFrameManager.Instance.MainFrame.Content is GamePage)
+            {
+                (TopFrameManager.Instance.MainFrame.Content as GamePage).EndGame(disconnect:false);
+            }
             //Recreate the gamepage
             TopFrameManager.Instance.MainFrame.Navigate(new GamePage(pt, et, level));
+            //Close the overlay
+            TopFrameManager.Instance.ClearOverlayFrame();
         }
     }
 }
