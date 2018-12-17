@@ -99,7 +99,7 @@ namespace Twister.Algorithms
             }
 
             //Rectangle variable is to check to see if it intersects
-            Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 2 , Constants.GRID_ITEM_WIDTH - 2);
+            Rect characterRect = new Rect(x + 1, y + 1, Constants.GRID_ITEM_WIDTH - 4 , Constants.GRID_ITEM_WIDTH - 4);
 
             //Only display the rectangles if they are wanted
             if (_gridManager.WallCollisionRectangles)
