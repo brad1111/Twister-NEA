@@ -26,8 +26,9 @@
             <Button x:Name="btnPlay" Click="BtnPlay_Click">
                 Play Game
             </Button>
+            <Button x:Name="btnNetworked" Click="BtnNetworked_OnClick">Join Game</Button>
             <Grid Height="10"></Grid>
-            <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
+            <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Controls</Button>
             <Button x:Name="btnHelp" Click="BtnHelp_OnClick">Help</Button>
             <Button x:Name="btnExit" Click="BtnExit_OnClick">Exit</Button>
         </StackPanel>

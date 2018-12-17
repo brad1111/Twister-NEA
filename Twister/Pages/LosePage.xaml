@@ -18,7 +18,7 @@
                 <Label Foreground="White" FontSize="40"  HorizontalAlignment="Center">
                     You have died!
                 </Label>
-                <Label HorizontalContentAlignment="Center" Foreground="White">Times Died: {}</Label>
+                <!--<Label HorizontalContentAlignment="Center" Foreground="White">Times Died: {}</Label>-->
             </StackPanel>
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
                 <Button x:Name="btnRetry" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnRetry_OnClick">
