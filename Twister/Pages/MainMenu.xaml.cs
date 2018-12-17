@@ -54,7 +54,7 @@ namespace Twister.Pages
 
         private void BtnHelp_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TopFrameManager.Instance.MainFrame.Navigate(new AboutPage());
         }
 
     }
