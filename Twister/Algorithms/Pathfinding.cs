@@ -58,7 +58,7 @@ namespace Twister.Algorithms
                 {
                     Height = Constants.GRID_ITEM_WIDTH,
                     Width = Constants.GRID_ITEM_WIDTH,
-                    Fill = new SolidColorBrush(Colors.Brown)
+                    Fill = new SolidColorBrush(Colors.White)
                 };
 
                 Canvas.SetLeft(rect, gridX);
