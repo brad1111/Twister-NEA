@@ -24,7 +24,7 @@
         </Grid>
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" MinWidth="200">
             <Button x:Name="btnResume" Click="BtnResume_OnClick">Resume</Button>
-            <Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>
+            <!--<Button x:Name="btnSettings" Click="BtnSettings_OnClick">Settings</Button>-->
             <Button x:Name="btnExit" Click="BtnExit_OnClick">Exit</Button>
         </StackPanel>
     </Grid>

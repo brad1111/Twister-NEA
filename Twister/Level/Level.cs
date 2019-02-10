@@ -63,6 +63,8 @@ namespace Twister.Level
         [JsonIgnore] private ProtagonistType protagonistType;
         [JsonIgnore] public string Name { get; set; }
 
+        public double[] characterWeights { get; set; } = null;
+
         /// <summary>
         /// Sets up the grid in terms of decoding the integer array into items
         /// and sets up the canvas.
@@ -89,8 +91,13 @@ namespace Twister.Level
             for (int i = 0; i < 2; i++)
             {
                 gameCanvas.Children.Add(_gridManager.CharactersViews[i]);
-                //_gridManager.Characters[i].Position = 
                 MoveItemToPlace(_gridManager.CharactersViews[i], _gridManager.Characters[i].Position);
+                //Add the characters weight if specified in level file (used in client/server to communicate
+                //the weights to the clients)
+                if (characterWeights != null && characterWeights.Length == 2)
+                {
+                    GameGridManager.Instance.Characters[i].Weight = characterWeights[i];
+                }
             }
 
             //Add exit rectangle

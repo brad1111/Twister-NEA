@@ -20,6 +20,7 @@ namespace Twister.Pages
                 /*IPV4*/
                 @"((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))";
                // /*domain name*/ "(([a-zA-Z0-9].)*([a-zA-Z0-9]))";
+        private string PortRegex = @"^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$";
 
         private Level.Level inputtedLevelFile = null;
         private Level.Level levelFile = null;
@@ -30,6 +31,7 @@ namespace Twister.Pages
 
             
             txtIP.RegularExpression = IPRegex;
+            txtPort.RegularExpression = PortRegex;
             inputtedLevelFile = levelFileGiven;
             if (inputtedLevelFile is null)
             {
@@ -142,7 +144,8 @@ namespace Twister.Pages
                 StartInfo = new ProcessStartInfo()
                 {
                     FileName = "server.exe",
-                    Arguments = String.Format("{0} {1}.level", portValid ? portNo : 26332, inputtedLevelFile.Name),
+                    Arguments = String.Format("{0} {1}.level {2} {3}", portValid ? portNo : 26332, inputtedLevelFile.Name,
+                                            inputtedLevelFile.characterWeights[0], inputtedLevelFile.characterWeights[1]),
                     WindowStyle = ProcessWindowStyle.Minimized
                 }
             };

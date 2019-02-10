@@ -80,7 +80,7 @@ namespace Twister.Pages
         /// </summary>
         /// <param name="pt">The type of protagonist to generate</param>
         /// <param name="et">The type of enemy to generate</param>
-        public GamePage(ProtagonistType pt, EnemyType et, Level.Level _level)
+        public GamePage(ProtagonistType pt, EnemyType et, Level.Level _level, double protagonistWeight = 1, double enemyWeight = 1)
         {
             InitializeComponent();
             level = _level;
@@ -90,6 +90,11 @@ namespace Twister.Pages
 
             //Sets up the grid by decoding the int array and placing everything on the canvas
             level.SetupGrid(ref cvsPlayArea, ref cvsExitArea, pt, et);
+
+            //Set the characters weights (for turning moments)
+            GameGridManager.Instance.Characters[0].Weight = protagonistWeight;
+            GameGridManager.Instance.Characters[1].Weight = enemyWeight;
+
             //Set the canvas of the singleton for easier access to the canvas (so the canvas does
             //not need to be referenced every tick for the collision detection visualisation to work)
             GameGridManager.Instance.GameCanvas = cvsPlayArea;
@@ -144,6 +149,8 @@ namespace Twister.Pages
                     Interval = new TimeSpan(0,0,0,0,400)
                 };
                 aiTimer.Tick += AiTimerOnTick;
+                //Also show path tickbox
+                chkShowPath.Visibility = Visibility.Visible;
             }       
 
             //Allow keydown so that starts the game etc
@@ -155,6 +162,12 @@ namespace Twister.Pages
 
         private void AiTimerOnTick(object sender, EventArgs e)
         {
+            //Make sure you check for collisions
+            if (Collisions.EnemyCollisionDetection())
+            {
+                TopFrameManager.Instance.OverlayFrame.Navigate(new LosePage(level, Protagonist, Enemy,
+                    CommunicationManager.Instance.IsNetworked));
+            }
             //If the old storyboard is still there set the speed to be fast so that the next animation can be played
             if (AITransformStoryboard != null)
             {
@@ -216,6 +229,11 @@ namespace Twister.Pages
 
                 //Go
                 AITransformStoryboard.Begin();
+                //Make sure you show the path if the user wants to see it
+                if (GameGridManager.Instance.ShowPath)
+                {
+                    Pathfinding.ShowPath();
+                }
             }
         }
 
@@ -397,9 +415,10 @@ namespace Twister.Pages
             }
         }
 
-
+        
         public void StopTimers()
         {
+            Console.WriteLine("Timers stopped");
             keyboardInputTimer.Stop();
             rotationTimer.Stop();
             if (gameType == GameType.Singleplayer)
@@ -414,12 +433,16 @@ namespace Twister.Pages
             allowKeyDown = false;
         }
 
-        public void EndGame()
+        /// <summary>
+        /// Ends the game
+        /// </summary>
+        /// <param name="disconnect">If connected to server autodisconnect</param>
+        public void EndGame(bool disconnect = true)
         {
             timersEnabled = false;
             StopTimers();
             keyboardInputTimer.Tick -= KeyboardInputTimerTick;
-            if (CommunicationManager.Instance.IsNetworked)
+            if (CommunicationManager.Instance.IsNetworked && disconnect)
             {
                 MessageManager.Instance.MessageHandler -= HandleMessage;
                 CommunicationManager.Instance.Disconnect();
@@ -432,6 +455,7 @@ namespace Twister.Pages
             rotationTimer = null;
             cvsPlayArea.Children.Clear();
             cvsExitArea.Children.Clear();
+            GameGridManager.Instance.ShowPath = false;
             GC.Collect();
         }
 
@@ -453,6 +477,12 @@ namespace Twister.Pages
                 aiTimer.Start();
             }
             allowKeyDown = true;
+        }
+
+        private void ChkShowPath_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Depending on whether the show path item is checked, show the path
+            GameGridManager.Instance.ShowPath = chkShowPath.IsChecked ?? false;
         }
     }
 }

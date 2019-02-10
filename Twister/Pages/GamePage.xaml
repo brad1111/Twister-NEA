@@ -13,7 +13,7 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <!--ScoreInformation-->
+            <CheckBox x:Name="chkShowPath" Click="ChkShowPath_OnClick" Visibility="Hidden">Show AI Path</CheckBox>
         </Grid>
         <Grid Grid.Row="1">
             <Canvas x:Name="cvsExitArea" Height="400" Width="400">
@@ -31,7 +31,7 @@
             </Canvas>
         </Grid>
         <Grid Grid.Row="2">
-            <!--Other interactions with the game-->
+            
         </Grid>
     </Grid>
 </Page>

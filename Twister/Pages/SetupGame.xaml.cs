@@ -39,6 +39,7 @@ namespace Twister.Pages
             {
                 btnSinglePlayer.IsEnabled = false;
                 btnLocalMultiPlayer.IsEnabled = false;
+                btnNetworked.IsEnabled = false;
                 btnLevelSelect.Content = $"Select Level";
             }
             else
@@ -46,6 +47,7 @@ namespace Twister.Pages
                 //Level is ready to setup
                 btnSinglePlayer.IsEnabled = true;
                 btnLocalMultiPlayer.IsEnabled = true;
+                btnNetworked.IsEnabled = true;
                 btnLevelSelect.Content = $"Select Level: '{levelItem.Name}' currently selected";
             }
         }
@@ -62,6 +64,20 @@ namespace Twister.Pages
 
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
         {
+            //Inject weights into level file
+            if (!txtWeightP1.IsValid || !txtWeightP2.IsValid)
+            {
+                //Not valid input therefore don't continue
+                MessageBox.Show("Invalid weights received");
+                return;
+            }
+            levelItem.characterWeights = new double[]
+            {
+                double.Parse(txtWeightP1.Text),
+                double.Parse(txtWeightP2.Text)
+            };
+            
+
             TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage(levelItem));
         }
 
@@ -71,7 +87,19 @@ namespace Twister.Pages
         /// <param name="et">Enemy Type</param>
         private void PlayLocallyCommon(EnemyType et)
         {
-            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, et, levelItem));
+            //Interpret intputs
+            bool visualiseMechanics = chkVisualiseTurningMoments.IsChecked ?? false;
+            if (!txtWeightP1.IsValid || !txtWeightP2.IsValid)
+            {
+                //Not valid input therefore don't continue
+                MessageBox.Show("Invalid weights received");
+                return;
+            }
+
+            double protagonistWeight = double.Parse(txtWeightP1.Text);
+            double enemyWeight = double.Parse(txtWeightP2.Text);
+
+            TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, et, levelItem, protagonistWeight, enemyWeight));
         }
     }
 }

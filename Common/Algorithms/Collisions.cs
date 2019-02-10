@@ -16,8 +16,8 @@ namespace Common.Algorithms
         {
 
             //Create both character rectangles
-            rectangle1 = new Rect(character1GetLeft + 1, character1GetTop + 1, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
-            rectangle2 = new Rect(character2GetLeft + 1, character2GetTop + 1, Constants.GRID_ITEM_WIDTH, Constants.GRID_ITEM_WIDTH);
+            rectangle1 = new Rect(character1GetLeft + 1, character1GetTop + 1, Constants.GRID_ITEM_WIDTH - 2, Constants.GRID_ITEM_WIDTH - 2);
+            rectangle2 = new Rect(character2GetLeft + 1, character2GetTop + 1, Constants.GRID_ITEM_WIDTH - 2, Constants.GRID_ITEM_WIDTH - 2);
 
             //Returns whether they intersect
             return rectangle1.IntersectsWith(rectangle2);

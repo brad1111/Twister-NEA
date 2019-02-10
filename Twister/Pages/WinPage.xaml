@@ -18,7 +18,7 @@
                 <Label Foreground="White" FontSize="40"  HorizontalAlignment="Center">
                     You have won!
                 </Label>
-                <Label HorizontalContentAlignment="Center" Foreground="White">In Time: {}</Label>
+                <!--<Label HorizontalContentAlignment="Center" Foreground="White">In Time: {}</Label>-->
             </StackPanel>
             <Button x:Name="btnContinue" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="BtnContinue_OnClick">
                 Quit

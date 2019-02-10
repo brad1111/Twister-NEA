@@ -27,10 +27,10 @@ namespace Twister.Pages
         //    TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
         //}
 
-        //private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage());
-        //}
+        private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
+        {
+            TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage(null));
+        }
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
@@ -54,7 +54,7 @@ namespace Twister.Pages
 
         private void BtnHelp_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            TopFrameManager.Instance.MainFrame.Navigate(new AboutPage());
         }
 
     }

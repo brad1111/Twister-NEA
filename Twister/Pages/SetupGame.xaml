@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="clr-namespace:Twister.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SetupGame">
@@ -33,7 +34,7 @@
                 </StackPanel>
             </Grid>
             <Button x:Name="btnLevelSelect" Click="BtnLevelSelect_OnClick">Select Level</Button>
-            <CheckBox x:Name="chkVisualiseTurningMoments">Visualise turning moments</CheckBox>
+            <CheckBox x:Name="chkVisualiseTurningMoments" Visibility="Collapsed">Visualise turning moments</CheckBox>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -42,11 +43,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock>Protagonist weight (N)</TextBlock>
-                    <TextBox x:Name="txtWeightP1" Grid.Column="1">1</TextBox>
+                    <controls:RegexTextBox x:Name="txtWeightP1" Grid.Column="1" RegularExpression="^([0-9]+)(\.([0-9])+)?$">1</controls:RegexTextBox>
                     <TextBlock Grid.Column="2">Enemy weight (N)</TextBlock>
-                    <TextBox x:Name="txtWeightP2" Grid.Column="3">1</TextBox>
+                    <controls:RegexTextBox x:Name="txtWeightP2" Grid.Column="3" RegularExpression="^([0-9]+)(\.([0-9])+)?$">1</controls:RegexTextBox>
                 </Grid>
-            <Grid>
+            <Grid Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -64,7 +65,7 @@
             </Grid.ColumnDefinitions>
             <Button x:Name="btnSinglePlayer" Grid.Column="0" Click="BtnSinglePlayer_OnClick" IsEnabled="False">Single player</Button>
             <Button x:Name="btnLocalMultiPlayer" Grid.Column="1" Click="BtnLocalMultiPlayer_OnClick" IsEnabled="False">Local Multi player</Button>
-            <Button x:Name="btnNetworked" Grid.Column="2" Click="BtnNetworked_OnClick">Network Multi Player (LAN)</Button>
+            <Button x:Name="btnNetworked" Grid.Column="2" Click="BtnNetworked_OnClick" IsEnabled="false">Network Multi Player (LAN)</Button>
         </Grid>
     </Grid>
 </Page>

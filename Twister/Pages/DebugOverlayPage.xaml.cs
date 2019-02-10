@@ -25,19 +25,21 @@ namespace Twister.Pages
                 //Check to see if the opiton is already on and set that to the value
                 WallToggleButton.IsChecked = GameGridManager.Instance.WallCollisionRectangles;
                 EnemyToggleButton.IsChecked = GameGridManager.Instance.EnemyCollisionRectangles;
-                foreach (Exitable exitableItem in GameGridManager.Instance.ExitLocations)
-                {
-                    //Place all of the exitable items in a list
-                    CheckBox exitableCheckBox = new CheckBox()
-                    {
-                        Content = count,
-                        IsTabStop = false,
-                        IsChecked = exitableItem.CanExit,
-                    };
-                    exitableCheckBox.Click += ExitableToggleButton_OnClick;
-                    pnlExitableItems.Children.Add(exitableCheckBox);
-                    count++;
-                }
+                //////////////// No Longer need to manually override exit locations
+                //foreach (Exitable exitableItem in GameGridManager.Instance.ExitLocations)
+                //{
+                //    //Place all of the exitable items in a list
+                //    CheckBox exitableCheckBox = new CheckBox()
+                //    {
+                //        Content = count,
+                //        IsTabStop = false,
+                //        IsChecked = exitableItem.CanExit,
+                //    };
+                //    exitableCheckBox.Click += ExitableToggleButton_OnClick;
+                //    pnlExitableItems.Children.Add(exitableCheckBox);
+                //    count++;
+                //}
+                /////////////////
 
                 //Add all of the angles to the display
                 for(int i = 0; i < ExitingManager.AnglesToOpen.Count; i++)

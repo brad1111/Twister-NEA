@@ -13,11 +13,13 @@ namespace Server.Level
         public ExitPlacement ExitLocation { get; set; }
 
         public InternalExit[] InternalExits { get; private set; }
+        
+        public double[] characterWeights { get; set; } = new double[2];
 
         /// <summary>
         /// Sets up the exits etc so that the level can do stuff
         /// </summary>
-        public void SetupLevel()
+        public void SetupLevel(double protagonistWeight, double enemyWeight)
         {
             List<InternalExit> exits = new List<InternalExit>();
             for (int y = 0; y < gridStartLocations.GetLength(0); y++)
@@ -47,6 +49,10 @@ namespace Server.Level
             }
 
             InternalExits = exits.ToArray();
+
+            //Setup enemy weights in level file
+            characterWeights[0] = protagonistWeight;
+            characterWeights[1] = enemyWeight;
         }
 
     }

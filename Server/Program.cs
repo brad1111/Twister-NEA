@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using Common;
 using Common.Algorithms;
 using Common.Grid;
+using Newtonsoft.Json;
 using Server.Level;
 
 namespace Server
@@ -66,6 +67,14 @@ namespace Server
                 Thread.Sleep(1000);
                 Environment.Exit(1);
             }
+
+            if (!(args.Length >= 4 && double.TryParse(args[2], out protagonistWeight)
+                                 && double.TryParse(args[3], out enemyWeight)))
+            {
+                Console.WriteLine("Needs the weights for the characters");
+                Thread.Sleep(1000);
+                Environment.Exit(1);
+            }
         }
 
         private void SetupExits()
@@ -90,16 +99,18 @@ namespace Server
             rotationTimer.Elapsed += RotationTimer_Tick;
         }
 
+        private double protagonistWeight = 1, enemyWeight = 1;
+
         private void RotationTimer_Tick(object s, EventArgs e)
         {
             Console.WriteLine("Angle = {0} degrees", ServerDataManager.Instance.currentAngle);
             //Check for updates in rotation and hence exits openings
             double[] charactersXPositions = {ServerDataManager.Instance.character1.CharacterPosition.x, ServerDataManager.Instance.character2.CharacterPosition.x};
             Position[] charactersPositions = {ServerDataManager.Instance.character1.CharacterPosition, ServerDataManager.Instance.character2.CharacterPosition};
-            int[] charactersWeights = {1, 1};
+            double[] charactersWeights = {protagonistWeight, enemyWeight};
             int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
 
-            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 0.25);
+            double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 0.25, charactersWeights);
 
             double newAngle = ServerDataManager.Instance.currentAngle + angleDelta * multiplier;
 
@@ -164,7 +175,9 @@ namespace Server
         private void ServerStart()
         {
             level = LevelIO.ReadJSON(levelLocation);
-            level.SetupLevel();
+            level.SetupLevel(protagonistWeight, enemyWeight);
+            //Update levelLocation to include weights
+            ServerDataManager.Instance.levelJson = JsonConvert.SerializeObject(level);
             SetupExits();
             SetupRotationTimer();
             ServerDataManager.Instance.Level = level;
