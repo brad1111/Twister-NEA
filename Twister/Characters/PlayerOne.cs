@@ -20,5 +20,10 @@ namespace Twister.Characters
             sprite = src;
 
         }
+
+        public void Move(Direction direction)
+        {
+
+        }
     }
 }
