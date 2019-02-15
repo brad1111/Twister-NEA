@@ -47,25 +47,32 @@ namespace Twister.Grid
             return Instance;
         }
 
+        /// <summary>
+        /// Rotation storyboard setup for the canvas
+        /// </summary>
+        /// <param name="angleDiff">The how much to rotate in what direction</param>
         public static void RotateStoryBoard(int angleDiff)
         {
+            //Get the angle that the grid will change to
             int newAngle = Instance.PreviousAngle + angleDiff;
+            //Make sure that it doesn't rotate past +/- 90 degrees
             if (newAngle >= 90)
             {
-
-
                 newAngle = 90;
-                //Should ideally change the time but dont bother yet
             }
             else if (newAngle <= -90)
             {
                 newAngle = -90;
             }
 
-            if (Instance.rotationStoryboard is null || Instance.rotationStoryboard?.GetCurrentProgress() >= 0/*.8*/)
+            //Make sure the rotation storyboard is available to be overwritten (if above 90% complete that is assumed to be
+            //a good time to do this)
+            if (Instance.rotationStoryboard is null || Instance.rotationStoryboard?.GetCurrentProgress() >= 0.9)
             {
+                //Create a storyboard and set its time
                 Instance.rotationStoryboard = new Storyboard();
                 Instance.rotationStoryboard.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 250));
+                //Make sure the animation goes from the current to the next angle smoothly and set its length
                 DoubleAnimation animation = new DoubleAnimation()
                 {
                     From = Instance.PreviousAngle,
@@ -73,16 +80,19 @@ namespace Twister.Grid
                     Duration = Instance.rotationStoryboard.Duration
                 };
                 Instance.rotationStoryboard.Children.Add(animation);
+                //Actually set the storyboard to work on the canvas
                 Storyboard.SetTarget(animation, Instance.GameCanvas);
                 Storyboard.SetTargetProperty(animation,
                     new PropertyPath("(UIElement.RenderTransform).(RotateTransform.Angle)"));
 
+                //Start the storyboard
                 Instance.rotationStoryboard.Begin();
 
+                //Set the current angle to be the next angle for future calculations
                 Instance.PreviousAngle = newAngle;
             }
 
-            //Check for updates for exits (if not networked)
+            //Check to see if the exits need to be updated (unnecessary in networked since this is sent with every transmission)
             if (!CommunicationManager.Instance.IsNetworked)
             {
                 ExitingManager.CheckForUpdates(Instance.PreviousAngle, angleDiff);
