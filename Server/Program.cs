@@ -108,7 +108,7 @@ namespace Server
             double[] charactersXPositions = {ServerDataManager.Instance.character1.CharacterPosition.x, ServerDataManager.Instance.character2.CharacterPosition.x};
             Position[] charactersPositions = {ServerDataManager.Instance.character1.CharacterPosition, ServerDataManager.Instance.character2.CharacterPosition};
             double[] charactersWeights = {protagonistWeight, enemyWeight};
-            int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights, ref ServerDataManager.Instance.currentAngle);
+            int multiplier = Rotation.RotationMultiplier(charactersXPositions, charactersWeights);
 
             double angleDelta = Rotation.AbsAngleDelta(charactersPositions, 0.25, charactersWeights);
 

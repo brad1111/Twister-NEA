@@ -8,25 +8,27 @@ namespace Common.Algorithms
         /// <summary>
         /// Finds out the direction that the rotation will be
         /// </summary>
+        /// <param name="charactersXPos">The array of X positions for the characters</param>
+        /// <param name="charactersWeight">The array of weights for the characters</param>
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
-        public static int RotationMultiplier(double[] charactersXPos, double[] charactersWeight, ref double rotationAngle)
+        public static int RotationMultiplier(double[] charactersXPos, double[] charactersWeight)
         {
             double totalMomentFromCentre = 0;
-            //Absolute because it does not matter which way it goes
-            double rotationAngleRadians = Math.Abs((Math.PI / 180) * rotationAngle);
-
             for (int i = 0; i < charactersXPos.Length; i++)
             {
                 //The distance from the centre line of the board relative to the rotation
                 double relativeDistanceFromPivot = 200 - charactersXPos[i];
 
+                //Figure out the turning moment for this item
                 double moment = relativeDistanceFromPivot * charactersWeight[i];
 
+                //Sum the turning moments
                 totalMomentFromCentre += moment;
             }
 
             if (totalMomentFromCentre == 0)
             {
+                //If there's no moment, don't try to divide by 0
                 return 0;
             }
             else
@@ -36,6 +38,13 @@ namespace Common.Algorithms
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="charactersPos"></param>
+        /// <param name="time"></param>
+        /// <param name="weights"></param>
+        /// <returns></returns>
         public static double AbsAngleDelta(Position[] charactersPos, double time, double[] weights)
         {
             double velocity = 9.8; //assume velocity = acceleration * time = 1, assume acceleration is due to gravity

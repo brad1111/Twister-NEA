@@ -11,7 +11,7 @@ namespace Twister.Algorithms
         /// Finds out the direction that the rotation will be
         /// </summary>
         /// <returns>The multiplier for direction of rotation (1 or -1)</returns>
-        public static double RotationMultiplier(Character[] characters, ref double rotationAngle)
+        public static double RotationMultiplier(Character[] characters)
         {
             double[] charactersXPos = new double[characters.Length];
             double[] weights = new double[characters.Length];
@@ -21,7 +21,7 @@ namespace Twister.Algorithms
                 weights[i] = characters[i].Weight;
             }
 
-            return Common.Algorithms.Rotation.RotationMultiplier(charactersXPos, weights, ref rotationAngle);
+            return Common.Algorithms.Rotation.RotationMultiplier(charactersXPos, weights);
         }
 
         public static double AbsAngleDelta()

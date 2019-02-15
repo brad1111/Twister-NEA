@@ -117,11 +117,8 @@ namespace Twister.Pages
             };
             rotationTimer.Tick += (s, e) =>
             {
-
-                double rotationAbs = GameGridManager.Instance.PreviousAngle;
                 double rotation = Rotation.AbsAngleDelta() *
-                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.Instance.Characters,
-                                            ref rotationAbs);
+                                        Algorithms.Rotation.RotationMultiplier(GameGridManager.Instance.Characters);
 
                 GameGridManager.RotateStoryBoard((int) rotation);
             };
