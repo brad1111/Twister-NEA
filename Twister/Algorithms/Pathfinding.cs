@@ -135,14 +135,17 @@ namespace Twister.Algorithms
             List<GridItem> unvisitedItems = new List<GridItem>();
             List<GridItem> visitedItems = new List<GridItem>();
 
+            //The position of the grid position to go to or from
             Position toGridSpaces = new Position((int) to.x / Constants.GRID_ITEM_WIDTH,(int) to.y / Constants.GRID_ITEM_WIDTH);
             Position fromGridSpaces = new Position((int) from.x / Constants.GRID_ITEM_WIDTH,(int) from.y / Constants.GRID_ITEM_WIDTH);
 
-            //Get the location there
+            //Get the location at the start (which will be the destiniation item)
             GridItem startItem = GetApproxGridItem(from);
 
+            //Start at the starting item
             unvisitedItems.Add(startItem);
 
+            //Add all of the neighbours that you want to check
             List<Position> neighbours = new List<Position>();
             neighbours.Add(new Position(-1,0));
             neighbours.Add(new Position(0,1));
@@ -152,8 +155,10 @@ namespace Twister.Algorithms
             int maxX = Constants.GRID_TILES_XY - 1;
             int maxY = Constants.GRID_TILES_XY - 1;
 
+            //Continue until you have no unvisited items left
             while (unvisitedItems.Count > 0)
             {
+                //Find the current lowest next item
                 GridItem current = FindLowestWeight(unvisitedItems);
                 if (current.Position == toGridSpaces)
                 {
@@ -161,6 +166,7 @@ namespace Twister.Algorithms
                     return current;
                 }
 
+                //We've now visited the current item
                 unvisitedItems.Remove(current);
                 visitedItems.Add(current);
 
@@ -176,6 +182,7 @@ namespace Twister.Algorithms
                         continue;
                     }
 
+                    //Get the next neighbour item to perform calculations on
                     GridItem currentItem = null;
                     if (unvisitedItems.Count > 0)
                     {
@@ -189,10 +196,11 @@ namespace Twister.Algorithms
                     
                     if (currentItem == null)
                     {
-                        //If the item exists then get it
+                        //If the item exists then get it from the grid
                         currentItem = GameGridManager.Instance.GridItems[(int) nextPos.y, (int) nextPos.x];
 
-                        //No negative weights
+                        //Setup the ParentItem for the pointer system, and the sum, previous and next weights to determine the best path.
+                        //No negative weights allowed
                         currentItem.PreviousWeight = (int) (Math.Abs(nextPos.x - fromGridSpaces.x) + Math.Abs(nextPos.y - fromGridSpaces.y));
                         currentItem.NextWeight = (int) (Math.Abs(nextPos.x - toGridSpaces.x) + Math.Abs(nextPos.y - toGridSpaces.y));
                         currentItem.SumWeight = currentItem.PreviousWeight + currentItem.NextWeight;
@@ -201,7 +209,7 @@ namespace Twister.Algorithms
                     }
                     else
                     {
-                        //Otherwise use it
+                        //Otherwise use the values you already have
                         int fromWeight = (int) (Math.Abs(nextPos.x - fromGridSpaces.x) + Math.Abs(nextPos.y - fromGridSpaces.y));
                         if (fromWeight < currentItem.PreviousWeight)
                         {
@@ -211,26 +219,31 @@ namespace Twister.Algorithms
                         }
                         
                     }
-
-
-
                 }
             }
+            //Only occurs when a path isn't found
             return null;
         }
 
+        /// <summary>
+        /// Finds the lowest weighted items out of a given set of griditems
+        /// </summary>
+        /// <param name="gridItems">The griditems to check against</param>
+        /// <returns>The lowest weighted griditem (aka the next path item to choose)</returns>
         private static GridItem FindLowestWeight(List<GridItem> gridItems)
         {
             GridItem smallestWeighted = gridItems[0];
+            //Go through all of the items
             foreach (var item in gridItems)
             {
-                if (item.SumWeight < smallestWeighted.SumWeight || (item.SumWeight == smallestWeighted.SumWeight && item.NextWeight < smallestWeighted.NextWeight))
+                //If the next item has a smaller total weight then it is the best choice,
+                //also if it has the same total weight but the next item has a lower weight then it is also the best choice
+                if (item.SumWeight < smallestWeighted.SumWeight || 
+                    (item.SumWeight == smallestWeighted.SumWeight && item.NextWeight < smallestWeighted.NextWeight))
                 {
                     smallestWeighted = item;
                 }
-
             }
-
             return smallestWeighted;
         }
 

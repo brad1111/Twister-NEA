@@ -68,13 +68,15 @@ namespace Twister.Pages
                 //Wait for the map to be downloaded
                 //Connect to the listener and wait for the map to be downloaded
                 MessageManager.Instance.MessageHandler += HandleMessage;
+                //Threading used to stop the UI thread from being blocked whilst waiting
+                //for the map to be sent
                 Thread waitThread = new Thread(new ThreadStart(() =>
                 {
                     while (levelFile is null)
                     {
                         //Wait until level file is populated
                         MessageManager.Instance.SendMessage("send");
-                        //Make sure the client is not rude
+                        //Make sure the client is not rude by sending out too many messages
                         Thread.Sleep(1000);
                     }
                     //Unsubscribe this message handler
@@ -137,7 +139,7 @@ namespace Twister.Pages
                 portValid = true;
             }
 
-            //The server is in a seperate process to make the client/server model simpler, but also allows the user
+            //The server is in a separate process to make the client/server model simpler, but also allows the user
             //still to host their own server easily
             TopFrameManager.Instance.ServerProcess = new Process()
             {
@@ -153,12 +155,14 @@ namespace Twister.Pages
 
 
             int attempts = 0;
-            //Wait a sec and try to connect
+            //Attempt to connect, but wait a few seconds to see if it does connect
+            //Do this without blocking the UI thread
             Thread connectThread = new Thread(new ThreadStart(() =>
             {
                 while (!MessageManager.Instance.IsConnected)
                 {
                     attempts++;
+                    //Attempt to connect
                     try
                     {
                         MessageManager.Instance.Connect("127.0.0.1", 26332);
@@ -170,8 +174,8 @@ namespace Twister.Pages
                         throw;
                     }
                     
-                    
                     Thread.Sleep(1000);
+                    //Don't attempt more than 5 times
                     if (attempts >= 5)
                     {
                         return;
@@ -186,10 +190,11 @@ namespace Twister.Pages
                     MessageManager.Instance.SendMessage("send");
                     Thread.Sleep(1000);
                 }
-                //Remove handlemessage so that junk is not sent to the server
+                //Remove handlemessage so that map requests are no longer sent to the server
                 MessageManager.Instance.MessageHandler -= HandleMessage;
 
-                //Start the waiting for the game
+                //Start the waiting page for the game
+                //Dispatcher is needed since the controls on the page need to be initialised on the UI thread.
                 Dispatcher.Invoke(new Action(() =>
                 {
                     WaitPage wp = new WaitPage(pt:ProtagonistType.Local, et:EnemyType.Remote, level: levelFile);

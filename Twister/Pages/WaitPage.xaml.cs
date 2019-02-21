@@ -34,6 +34,8 @@ namespace Twister.Pages
             MessageManager.Instance.MessageHandler += StartHandler;
             Loaded += (s, e) =>
             {
+                //Create a thread to waiting until a start message has been received without blocking
+                //the ui thread
                 waitingThread = new Thread(new ThreadStart(() =>
                 {
                     //Wait until the start message has been received
