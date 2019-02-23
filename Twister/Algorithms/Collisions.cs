@@ -31,7 +31,7 @@ namespace Twister.Algorithms
             int xApprox, yApprox = 0;
             const double half_GRID_ITEM_WIDTH = Constants.GRID_ITEM_WIDTH / 2;
             Queue<GridItem> ItemsToCheckForCollision = new Queue<GridItem>(3);
-            //Get approx co-ords
+            //Get approx coordinates for the items
             xApprox = (int) Math.Floor((x + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
             yApprox = (int) Math.Floor((y + half_GRID_ITEM_WIDTH) / Constants.GRID_ITEM_WIDTH);
             switch (movementDirection)
@@ -40,6 +40,7 @@ namespace Twister.Algorithms
                     //get three possible collisionable items above
                     if (yApprox <= 0 && y < 0)
                     {
+                        //If outside of map then win
                         return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
@@ -68,7 +69,7 @@ namespace Twister.Algorithms
                     //get three possible collisionable items below
                     if (xApprox <= 0 && x <= 0)
                     {
-                        //If they are outside the map
+                        //If outside of map then win
                         return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
@@ -84,6 +85,7 @@ namespace Twister.Algorithms
                     //get three possible collisionable items below
                     if (xApprox >= Constants.GRID_TILES_XY && (x + Constants.GRID_ITEM_WIDTH) >= Constants.GRID_WIDTH)
                     {
+                        //If outside of map then win
                         return RunWinDialogIfNeeded(ref characterView);
                     }
                     else
@@ -195,7 +197,7 @@ namespace Twister.Algorithms
                            break;
                 }
 
-                //If outside the _gridManager
+                //If outside the _gridManager then stop looking
                 if (xApprox + xcheck < 0 || yApprox + ycheck < 0 || xApprox + xcheck > (Constants.GRID_TILES_XY - 1) ||
                     yApprox + ycheck > (Constants.GRID_TILES_XY - 1))
                 {
