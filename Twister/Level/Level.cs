@@ -16,21 +16,32 @@ using Twister.Pages;
 
 namespace Twister.Level
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Level
     {
+        public Level(int[,] GridStartLocations, ExitPlacement exitLocation)
+        {
+            GridStartLocations = GridStartLocations;
+            ExitLocation = exitLocation;
+        }
+
+
         /// <summary>
         /// The singleton that stores everything to do with the game grid
         /// </summary>
-        [JsonIgnore] private GameGridManager _gridManager;
+        private GameGridManager _gridManager;
+
 
         //These need to be public Properties so that JSON.net can fill these values from the json file.
         /// <summary>
         /// The integer array which represents the layout of the grid
         /// </summary>
-        [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
+        [JsonProperty("StartLocations")]
+        private int[,] GridStartLocations { get; set; }
         /// <summary>
         /// The location of the exit
         /// </summary>
+        [JsonProperty]
         public ExitPlacement ExitLocation { get; set; }
 
         
@@ -38,19 +49,19 @@ namespace Twister.Level
         /// <summary>
         ///  y
         /// </summary>
-        /// <returns>The yLength of the gridStartLocations array</returns>
+        /// <returns>The yLength of the GridStartLocations array</returns>
         private int yLength()
         {
-            return gridStartLocations.GetLength(0);
+            return GridStartLocations.GetLength(0);
         }
 
         /// <summary>
         /// x
         /// </summary>
-        /// <returns>The yLength of the gridStartLocations array</returns>
+        /// <returns>The yLength of the GridStartLocations array</returns>
         private int xLength()
         {
-            return gridStartLocations.GetLength(1); 
+            return GridStartLocations.GetLength(1); 
         }
 
        
@@ -59,9 +70,9 @@ namespace Twister.Level
             
         }
 
-        [JsonIgnore] private EnemyType enemyType;
-        [JsonIgnore] private ProtagonistType protagonistType;
-        [JsonIgnore] public string Name { get; set; }
+        private EnemyType enemyType;
+        private ProtagonistType protagonistType;
+        public string Name { get; set; }
 
         public double[] characterWeights { get; set; } = null;
 
@@ -78,9 +89,9 @@ namespace Twister.Level
             this.enemyType = enemyType;
             DecodeGridStartLocations(protagonistType, enemyType);
             //Add grid items
-            for (int y = 0; y < gridStartLocations.GetLength(0); y++)
+            for (int y = 0; y < GridStartLocations.GetLength(0); y++)
             {
-                for (int x = 0; x < gridStartLocations.GetLength(1); x++)
+                for (int x = 0; x < GridStartLocations.GetLength(1); x++)
                 {
                     gameCanvas.Children.Add(_gridManager.GridItems[y, x]);
                     MoveItemToPlace(_gridManager.GridItems[y,x], _gridManager.GridItems[y,x].Position);
@@ -120,7 +131,7 @@ namespace Twister.Level
             {
                 for (int x = 0; x < xLength(); x++)
                 {
-                    switch (gridStartLocations[y,x])
+                    switch (GridStartLocations[y,x])
                     {
                           //walkable object
                           case 0:
@@ -178,7 +189,7 @@ namespace Twister.Level
                               exitables.Add(exitable);
                               break;
                           default:
-                              throw new NotImplementedException($"The value of {gridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
+                              throw new NotImplementedException($"The value of {GridStartLocations[y,x]} is not implemented in Level.Level.GridStartLocation()");
                     }
                 }
             }

@@ -24,11 +24,10 @@ namespace Twister.Level
                     4, 5, 6, 7
                 }
             };
-            Level level = new Level()
-            {
-                gridStartLocations = tempInt,
-                ExitLocation = new ExitPlacement(100,Side.Right, 80)
-            };
+            Level level = new Level(
+                tempInt,
+                new ExitPlacement(100,Side.Right, 80)
+            );
             
             json = JsonConvert.SerializeObject(level);
             sw.Write(json);
