@@ -41,6 +41,12 @@ namespace Twister.Network
         //Gets whether the client is connected, if the client is null then it is not connected
         public bool IsConnected => serverClient?.Connected ?? false;
 
+        /// <summary>
+        /// Connects to the server of IP, port
+        /// </summary>
+        /// <param name="IP">The IP address of the server</param>
+        /// <param name="port">The port to connect on</param>
+        /// <returns>Whether the connection was successful</returns>
         public bool Connect(string IP, int port)
         {
             IPstring = IP;
@@ -53,16 +59,19 @@ namespace Twister.Network
 
             try
             {
+                //Attempt to connect to the server
                 serverClient = new TcpClient();
                 
                 serverClient.Connect(IP, port);
             }
             catch (SocketException e)
             {
+                //SocketExceptions are expected if the server is not available on that port so just inform the user
                 MessageBox.Show(e.ToString(), "Error");
             }
             catch (Exception e)
             {
+                //All other exceptions are unexpected so disconnect from the server
                 MessageBox.Show(e.ToString(), "Error");
                 serverClient.Close();
                 throw;
@@ -121,8 +130,13 @@ namespace Twister.Network
             }
         }
 
+        /// <summary>
+        /// Sends a message to the server
+        /// </summary>
+        /// <param name="message">The message to send</param>
         public void SendMessage(string message)
         {
+            //If the server is no longer connected tell the Communication Manager that it should stop sending sendmessage requests and disconnect
             if (!IsConnected)
             {
                 CommunicationManager.Instance.Disconnect();
@@ -132,25 +146,30 @@ namespace Twister.Network
             NetworkStream serverStream = null;
             try
             {
+                //Attempt to send the message
                 serverStream = serverClient.GetStream();
                 byte[] buffer = encoder.GetBytes(message);
                 serverStream.Write(buffer, 0, buffer.Length);
             }
             catch(IOException ex)
             {
+                //There was an error reading/writing to the stream (usually occurs when the server has disconnected)
                 MessageBox.Show(ex.ToString(), "Error");
             }
             catch (InvalidOperationException ex)
             {
+                //There was an error performing something, can also occur on a disconnect
                 MessageBox.Show(ex.ToString(), "Error");
             }
             catch (Exception ex)
             {
+                //Unexpected error occured
                 MessageBox.Show(ex.ToString(), "Error");
                 throw;
             }
             finally
             {
+                //Make sure we always flush the stream if its there
                 serverStream?.Flush();
             }
 

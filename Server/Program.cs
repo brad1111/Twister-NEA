@@ -387,7 +387,7 @@ namespace Server
                 }
                 else if (mapSent && !mapDownloaded)
                 {
-                    //Check to see if the client says they have recieved it
+                    //Check to see if the client says they have received it
                     if (bufferMessage == "received")
                     {
                         //If they have received the map then map is downloaded

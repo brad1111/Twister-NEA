@@ -55,8 +55,15 @@ namespace Twister.Pages
             };
         }
 
+        /// <summary>
+        /// Handles the game start event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void StartHandler(object sender, EventArgs e)
         {
+            //Checks to see if the event is of the correct type and has the correct message.
+            //If it does then the gameStarted variable becomes true
             if (e is MessageEventArgs)
             {
                 MessageEventArgs eventArgs = (MessageEventArgs) e;
