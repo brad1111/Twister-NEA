@@ -182,7 +182,7 @@ namespace Server
             SetupRotationTimer();
             ServerDataManager.Instance.Level = level;
             this.listener = new TcpListener(IPAddress.Any, PORT_NO);
-            //New thread
+            //Run Client listining on a different thread so that it does not block the main thread
             this.listenThread = new Thread(new ThreadStart(ClientConnection));
             listenThread.Start();
         }
