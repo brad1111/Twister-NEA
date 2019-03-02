@@ -17,12 +17,6 @@ namespace Twister.Pages
             InitializeComponent();
             open = true;
             //Stop the game
-            //if (TopFrameManager.Instance.MainFrame.Content is GamePage)
-            //{
-            //    GameGridManager.Clear();
-            //    GamePage gp = (GamePage) TopFrameManager.Instance.MainFrame.Content;
-            //    gp.EndGame();
-            //}
             if (TopFrameManager.Instance.MainFrame.Content is GamePage)
             {
                 (TopFrameManager.Instance.MainFrame.Content as GamePage).StopTimers();
