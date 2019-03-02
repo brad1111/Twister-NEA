@@ -16,17 +16,6 @@ namespace Twister.Pages
             InitializeComponent();
         }
 
-        //private void BtnSinglePlayer_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.AI,
-        //        LevelIO.ReadJSON("testing.json")));
-        //}
-
-        //private void BtnMultiPlayer_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    TopFrameManager.Instance.MainFrame.Navigate(new GamePage(ProtagonistType.Local, EnemyType.Local, LevelIO.ReadJSON("testing.json")));
-        //}
-
         private void BtnNetworked_OnClick(object sender, RoutedEventArgs e)
         {
             TopFrameManager.Instance.MainFrame.Navigate(new ConnectPage(null));
