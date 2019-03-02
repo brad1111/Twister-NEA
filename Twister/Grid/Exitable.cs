@@ -22,15 +22,6 @@ namespace Twister.Grid
             CurrentWeighting = int.MaxValue; // Current weight is infinity
         }
 
-        //public new ImageSource Source
-        //{
-        //    get
-        //    {
-        //        //if you can exit show open if you cant show closed
-        //        return (CanExit ? openSprite : closedSprite);
-        //    }
-        //}
-
         private bool canExit = false;
 
         //By default can't exit
