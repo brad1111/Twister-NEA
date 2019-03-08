@@ -7,13 +7,19 @@ using Newtonsoft.Json;
 
 namespace Server.Level
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Level
     {
-        [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
-        public ExitPlacement ExitLocation { get; set; }
 
+        // The grid items stored as an integer enum array
+        [JsonProperty("StartLocations")] public int[,] gridStartLocations { get; internal set; }
+        //Where the exit information is stored in the JSON file
+        [JsonProperty] public ExitPlacement ExitLocation { get; set; }
+
+        //The exit storage for the game
         public InternalExit[] InternalExits { get; private set; }
         
+        //Stores the characters weights for rotation calculations
         public double[] characterWeights { get; set; } = new double[2];
 
         /// <summary>
