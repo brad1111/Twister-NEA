@@ -113,12 +113,12 @@ namespace Twister.Network
             }
             catch (IOException e)
             {
-                if (IsConnected)
+                if (!IsConnected)
                 {
                     //The server has crashed or something has happened
                     TopFrameManager.Instance.MainFrame.Dispatcher.Invoke(new Action(
                         () => TopFrameManager.Instance.GoToMainMenu()));
-                    MessageBox.Show($"Server has disconnected: {e}", "Error");
+                    MessageBox.Show($"Server has disconnected: {e.Message}", "Error");
                     //Close the game
                 }
                 //else This client has quit

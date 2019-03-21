@@ -416,16 +416,16 @@ namespace Twister.Pages
         public void StopTimers()
         {
             Console.WriteLine("Timers stopped");
-            keyboardInputTimer.Stop();
-            rotationTimer.Stop();
+            keyboardInputTimer?.Stop();
+            rotationTimer?.Stop();
             if (gameType == GameType.Singleplayer)
             {
-                aiTimer.Stop();
+                aiTimer?.Stop();
             }
             //If networked you need to stop the network timer
-            if (CommunicationManager.Instance.IsNetworked)
+            if (CommunicationManager.Instance?.IsNetworked ?? false)
             {
-                CommunicationManager.Instance.Stop();
+                CommunicationManager.Instance?.Stop();
             }
             allowKeyDown = false;
         }
@@ -438,6 +438,11 @@ namespace Twister.Pages
         {
             timersEnabled = false;
             StopTimers();
+            if (level == null)
+            {
+                //Stop game crashing
+                return;
+            }
             keyboardInputTimer.Tick -= KeyboardInputTimerTick;
             if (CommunicationManager.Instance.IsNetworked && disconnect)
             {
