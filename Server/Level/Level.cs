@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace Server.Level
 {
+    //Make sure that only properties we want are used in JSON serialization
     [JsonObject(MemberSerialization.OptIn)]
     public class Level
     {
