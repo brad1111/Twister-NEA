@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Common.Grid
+﻿namespace Common.Grid
 {
     /// <summary>
     /// The position of a grid item within the maze
