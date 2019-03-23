@@ -12,7 +12,7 @@ namespace Twister.Characters
         protected double weight;
         //The characters image
         protected ImageSource sprite;
-        //The charcaters 'score'
+        //The characters 'score'
         protected int score;
         //The characters location
         private Position location;
@@ -27,7 +27,7 @@ namespace Twister.Characters
         }
 
         /// <summary>
-        /// Gets the sprite of the charcaters
+        /// Gets the sprite of the characters
         /// </summary>
         /// <returns>The sprite</returns>
         public ImageSource GetSprite()
