@@ -10,8 +10,14 @@ namespace Server.Level
             this.GridPos = gridPos;
         }
 
+        /// <summary>
+        /// Stores the x and y co-ordinates of the Exit GridItem on the Grid
+        /// </summary>
         public Position GridPos { get; }
 
+        /// <summary>
+        /// Converts from Grid location to a canvas position for exit calculations
+        /// </summary>
         public Position CanvasPos
         {
             get

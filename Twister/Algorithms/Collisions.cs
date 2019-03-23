@@ -201,7 +201,7 @@ namespace Twister.Algorithms
                 if (xApprox + xcheck < 0 || yApprox + ycheck < 0 || xApprox + xcheck > (Constants.GRID_TILES_XY - 1) ||
                     yApprox + ycheck > (Constants.GRID_TILES_XY - 1))
                 {
-                    break;
+                    continue;
                 }
                 //Check for right-above, right and right-below, and if they are non-walkable or they are a closed exit
                 GridItem item = _gridManager.GridItems[yApprox + ycheck, xApprox + xcheck];

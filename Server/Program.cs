@@ -15,16 +15,16 @@ namespace Server
 {
     class Program
     {
-        private TcpListener listener;
+        private TcpListener listener; //The threads and listeners
         private Thread listenThread;
         private Level.Level level;
 
-        private readonly int PORT_NO = 26332;
+        private readonly int PORT_NO = 26332; //Default port
         private readonly string levelLocation = String.Empty;
 
         private ASCIIEncoding encoder = new ASCIIEncoding();
 
-        private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2);
+        private Stack<TcpClient> ClientsStack = new Stack<TcpClient>(2); //Stores each TCP client
 
         private readonly System.Timers.Timer rotationTimer = new System.Timers.Timer()
         {
@@ -33,10 +33,15 @@ namespace Server
 
         static void Main(string[] args)
         {
+            //Start the program
             Program p = new Program(ref args);
             p.ServerStart();
         }
 
+        /// <summary>
+        /// The setup section of the program
+        /// </summary>
+        /// <param name="args">The arguments given to the app</param>
         private Program(ref string[] args)
         {
 
@@ -46,6 +51,7 @@ namespace Server
             }
             else
             {
+                //Error msg
                 Console.WriteLine("Can't load level file");
                 Thread.Sleep(1000);
                 Environment.Exit(1);
@@ -58,6 +64,7 @@ namespace Server
             }
             else
             {
+                //Error msg
                 Console.WriteLine("Can't load level file.");
                 Thread.Sleep(1000);
                 Environment.Exit(1);
@@ -66,21 +73,27 @@ namespace Server
             if (!(args.Length >= 4 && double.TryParse(args[2], out protagonistWeight)
                                  && double.TryParse(args[3], out enemyWeight)))
             {
+                //We need to know the chracter weight
                 Console.WriteLine("Needs the weights for the characters");
                 Thread.Sleep(1000);
                 Environment.Exit(1);
             }
         }
 
+        /// <summary>
+        /// Sets up the exits
+        /// </summary>
         private void SetupExits()
         {
             for (int i = 0; i < level.InternalExits.Length; i++)
             {
+                //Find the angle needed to open/close the exit
                 ExitingManager.Instance.FindAnglesNeededToOpenInternal(
                     level.ExitLocation.HeightFromAnchor,
                     level.ExitLocation.HeightFromAnchor + level.ExitLocation.Length,
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()),
                     int.Parse(level.InternalExits[i].CanvasPos.y.ToString()) + Constants.GRID_ITEM_WIDTH);
+                //Store it
                 ServerDataManager.Instance.ExitsOpen.Add(false);
             }
         }
@@ -94,8 +107,13 @@ namespace Server
             rotationTimer.Elapsed += RotationTimer_Tick;
         }
 
-        private double protagonistWeight = 1, enemyWeight = 1;
+        private double protagonistWeight = 1, enemyWeight = 1; //Default weights
 
+        /// <summary>
+        /// Every 1/4 second we check for the new angle of the maze to determine wheter to open/close exits
+        /// </summary>
+        /// <param name="s">The sender object (unused)</param>
+        /// <param name="e">The arguments (used)</param>
         private void RotationTimer_Tick(object s, EventArgs e)
         {
             Console.WriteLine("Angle = {0} degrees", ServerDataManager.Instance.currentAngle);
@@ -212,6 +230,7 @@ namespace Server
         /// </summary>
         private void ClientCommunication()
         {
+            //Find out variables and setup default ones
             TcpClient threadClient = ClientsStack.Peek();
             NetworkStream clientStream = threadClient.GetStream();
             int debuggingCharacterNo = ClientsStack.Count;
@@ -228,6 +247,7 @@ namespace Server
 
             while (clientConnected)
             {
+                //As long as the client is still connected still wait for data
                 bytesRead = 0;
                 try
                 {
@@ -255,6 +275,7 @@ namespace Server
                 }
                 catch (Exception e)
                 {
+                    //General error, tell the user
                     Console.WriteLine(e);
                     throw;
                 }
@@ -297,9 +318,11 @@ namespace Server
                 
                 if (gameStartedOnThread)
                 {
+
                     string[] messageSections = bufferMessage.Split(',');
                     try
                     {
+                        //Converts decodes the data from the message string and stores the data 
                         characterNo = int.Parse(messageSections[0]);
                         double xCoord = double.Parse(messageSections[1]);
                         double yCoord = double.Parse(messageSections[2]);

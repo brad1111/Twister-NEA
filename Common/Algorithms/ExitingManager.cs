@@ -35,11 +35,13 @@ namespace Common.Algorithms
 
             if (angle1 < angle2)
             {
+                //Angle 1 is positive
                 AnglesToOpenInClockwiseDirection.Add(angle1);
                 AnglesToCloseInClockwiseDirection.Add(angle2);
             }
             else
             {
+                //Angle 1 is negative
                 AnglesToOpenInClockwiseDirection.Add(-angle1);
                 AnglesToCloseInClockwiseDirection.Add(angle2);
             }
