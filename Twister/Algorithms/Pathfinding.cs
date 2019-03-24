@@ -247,6 +247,11 @@ namespace Twister.Algorithms
             return smallestWeighted;
         }
 
+        /// <summary>
+        /// Gets the griditem based on the position given
+        /// </summary>
+        /// <param name="exactPosition">The position the griditem is in</param>
+        /// <returns>The griditem object</returns>
         private static GridItem GetApproxGridItem(Position exactPosition)
         {
             int x = (int) Math.Truncate(exactPosition.x / Constants.GRID_ITEM_WIDTH);
