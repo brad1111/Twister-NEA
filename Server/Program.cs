@@ -199,6 +199,7 @@ namespace Server
             this.listenThread = new Thread(new ThreadStart(ClientConnection));
             listenThread.Start();
         }
+
         /// <summary>
         /// Goes through and checks for new clients to connect
         /// </summary>
