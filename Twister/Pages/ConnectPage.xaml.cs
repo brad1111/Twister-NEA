@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Common.Enums;
 using Newtonsoft.Json;
+using Server;
 using Twister.Network;
 
 namespace Twister.Pages
@@ -130,6 +131,8 @@ namespace Twister.Pages
                 MessageBox.Show("Could not find server.exe", "Error");
             }
 
+            
+
             bool portValid = false;
             int portNo;
 
@@ -139,21 +142,21 @@ namespace Twister.Pages
                 portValid = true;
             }
 
-            //The server is in a separate process to make the client/server model simpler, but also allows the user
-            //still to host their own server easily
-            TopFrameManager.Instance.ServerProcess = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    FileName = "server.exe",
-                    Arguments = String.Format("{0} {1}.level {2} {3}", portValid ? portNo : 26332, inputtedLevelFile.Name,
-                                            inputtedLevelFile.characterWeights[0], inputtedLevelFile.characterWeights[1]),
-                    WindowStyle = ProcessWindowStyle.Minimized
-                }
-            };
-            TopFrameManager.Instance.ServerProcess.Start();
+            // The server is in a separate process to make the client/server model simpler, but also allows the user
+            // still to host their own server easily
+             TopFrameManager.Instance.ServerProcess = new Process()
+             {
+                 StartInfo = new ProcessStartInfo()
+                 {
+                     FileName = "server.exe",
+                     Arguments = String.Format("{0} {1}.level {2} {3}", portValid ? portNo : 26332, inputtedLevelFile.Name,
+                                             inputtedLevelFile.characterWeights[0], inputtedLevelFile.characterWeights[1]),
+                     WindowStyle = ProcessWindowStyle.Minimized
+                 }
+             };
+             TopFrameManager.Instance.ServerProcess.Start();
 
-
+            // Server.Program.Main(new [] { portNo.ToString(), $"{inputtedLevelFile.Name}.level", inputtedLevelFile.characterWeights[0].ToString(), inputtedLevelFile.characterWeights[1].ToString() });
             int attempts = 0;
             //Attempt to connect, but wait a few seconds to see if it does connect
             //Do this without blocking the UI thread

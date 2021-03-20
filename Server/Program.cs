@@ -13,7 +13,7 @@ using Server.Level;
 
 namespace Server
 {
-    class Program
+    public class Program
     {
         private TcpListener listener; //The threads and listeners
         private Thread listenThread;
@@ -31,7 +31,7 @@ namespace Server
             Interval = 250 //Fire every 1/4 second
         };
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //Start the program
             Program p = new Program(ref args);

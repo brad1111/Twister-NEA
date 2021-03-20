@@ -81,7 +81,7 @@ namespace Twister.Pages
         public void CancelWaiting()
         {
             //Kill the waiting thread
-            waitingThread?.Abort();
+            waitingThread?.Interrupt();
         }
 
         public void Page_KeyDown(object sender, KeyEventArgs e)
